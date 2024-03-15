@@ -1,7 +1,7 @@
-import AppBar from "@web/components/global/app-bar";
-import SideBar from "@web/components/global/side-bar";
-import SideBarProvider from "@web/components/contexts/side-bar-provider";
+import SidebarProvider from "@web/components/contexts/sidebar-provider";
 import { ThemeProvider } from "@web/components/contexts/theme-provider";
+import AppSidebar from "@web/components/global/app-sidebar";
+import AppBar from "@web/components/global/app-topbar";
 import { TooltipProvider } from "@web/components/ui/tooltip";
 import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
@@ -38,16 +38,16 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <TooltipProvider>
-            <SideBarProvider>
+            <SidebarProvider>
               <div className="flex w-full">
-                <SideBar />
+                <AppSidebar user={null} />
 
                 <div className="flex flex-col w-full ">
                   <AppBar />
                   {children}
                 </div>
               </div>
-            </SideBarProvider>
+            </SidebarProvider>
           </TooltipProvider>
         </ThemeProvider>
       </body>

@@ -1,30 +1,23 @@
 "use client";
 
-import { ReactNode, use } from "react";
-import { SideBarContext } from "../contexts/side-bar-provider";
-import { ModeToggle } from "../ui/ModeToggle";
-import { Separator } from "../ui/separator";
-import { Button, buttonVariants } from "../ui/button";
 import { Bell, Menu, Plus, Search } from "lucide-react";
+import { ReactNode, use } from "react";
+import { SidebarContext } from "../contexts/sidebar-provider";
+import { ModeToggle } from "../ui/ModeToggle";
+import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { UserNav } from "./user-nav";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
-import Link from "next/link";
-import { cn } from "@web/lib/utils";
 import { LinkButton } from "../ui/link-button";
+import { Separator } from "../ui/separator";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { UserNav } from "./user-nav";
 
 export default function AppBar() {
-  const { isCollapsed, setIsCollapsed } = use(SideBarContext);
-
+  const { toggleCollapsed } = use(SidebarContext);
   return (
     <div className="w-full flex flex-col">
       <div className="w-full flex items-center gap-2 p-2">
         <div>
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => setIsCollapsed(!isCollapsed)}
-          >
+          <Button variant="outline" size="icon" onClick={toggleCollapsed}>
             <Menu className="h-4 w-4" />
           </Button>
         </div>
@@ -60,9 +53,8 @@ export default function AppBar() {
             }
             title="Create Question"
           />
-          <div>
-            <UserNav />
-          </div>
+          <ModeToggle />
+          <UserNav />
         </div>
       </div>
       <Separator />
