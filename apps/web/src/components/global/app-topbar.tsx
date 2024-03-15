@@ -10,8 +10,10 @@ import { LinkButton } from "../ui/link-button";
 import { Separator } from "../ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { UserNav } from "./user-nav";
+import useMediaQuery from "../hooks/useMediaQuery";
 
 export default function AppBar() {
+  const isMobile = useMediaQuery("(max-width: 768px)");
   const { toggleCollapsed } = use(SidebarContext);
   return (
     <div className="w-full flex flex-col">
@@ -45,10 +47,11 @@ export default function AppBar() {
               <LinkButton
                 href="/hello"
                 variant="outline"
-                className="flex items-center gap-2 px-4"
+                className="flex items-center gap-2"
+                size={isMobile ? "icon" : "default"}
               >
                 <Plus className="h-4 w-4" />
-                <span>Create</span>
+                {!isMobile && <span className="">Create</span>}
               </LinkButton>
             }
             title="Create Question"

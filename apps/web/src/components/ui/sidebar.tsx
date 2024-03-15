@@ -1,7 +1,12 @@
 "use client";
 
 import { JSXElementConstructor, ReactElement, ReactNode, use } from "react";
-import { Menu, MenuItem, Sidebar as ProSidebar } from "react-pro-sidebar";
+import {
+  Menu,
+  MenuItem,
+  Sidebar as ProSidebar,
+  SubMenu,
+} from "react-pro-sidebar";
 import { SidebarContext } from "../contexts/sidebar-provider";
 
 import {
@@ -10,32 +15,40 @@ import {
   TooltipTrigger,
 } from "@web/components/ui/tooltip";
 import { cn } from "@web/lib/utils";
+import { Separator } from "./separator";
 
-interface NavProps {
+interface NavItemProps {
   LinkComponent:
     | string
     | ReactElement<any, string | JSXElementConstructor<any>>
     | undefined;
-  icon: ReactNode;
+  Icon: React.ElementType<any, keyof JSX.IntrinsicElements>;
   label?: string;
   variant: "default" | "ghost";
   children: ReactNode;
 }
-
+interface SubNavProps {
+  Icon: React.ElementType<any, keyof JSX.IntrinsicElements>;
+  label?: string;
+  variant: "default" | "ghost";
+  children: ReactNode;
+}
 export function NavItem({
   LinkComponent,
   label,
-  icon,
+  Icon,
   children,
   variant,
-}: NavProps) {
+}: NavItemProps) {
   const { collapsed } = use(SidebarContext);
   return (
     <MenuItem
       icon={
         collapsed ? (
           <Tooltip delayDuration={0}>
-            <TooltipTrigger asChild>{icon}</TooltipTrigger>
+            <TooltipTrigger asChild>
+              <Icon className="w-4 h-4" />
+            </TooltipTrigger>
             <TooltipContent side="right" className="flex items-center gap-4">
               {children}
               {label && (
@@ -44,12 +57,12 @@ export function NavItem({
             </TooltipContent>
           </Tooltip>
         ) : (
-          icon
+          <Icon className="w-4 h-4" />
         )
       }
       component={LinkComponent}
       className={cn(
-        "whitespace-nowrap  text-sm font-medium",
+        "whitespace-nowrap text-sm font-medium",
         "hover:bg-muted dark:hover:text-white rounded-md",
         variant === "default" ? "dark:bg-muted dark:text-white" : ""
       )}
@@ -70,7 +83,26 @@ export function NavItem({
     </MenuItem>
   );
 }
-export default function Sidebar({ children }: { children: ReactNode[] }) {
+
+export function SubNavItem({ label, Icon, children }: SubNavProps) {
+  const { collapsed } = use(SidebarContext);
+  return (
+    <SubMenu
+      label={label}
+      icon={<Icon className="w-4 h-4" />}
+      className={cn("whitespace-nowrap text-sm font-medium")}
+    >
+      <div className={cn({ "pl-2": !collapsed })}>{children}</div>
+    </SubMenu>
+  );
+}
+export default function Sidebar({
+  children,
+  header,
+}: {
+  children: ReactNode[];
+  header: ReactNode;
+}) {
   const { collapsed, toggled, toggleToggled, toggleCollapsed } =
     use(SidebarContext);
   return (
@@ -89,26 +121,54 @@ export default function Sidebar({ children }: { children: ReactNode[] }) {
       <Menu
         rootStyles={{
           [".ps-menuitem-root "]: {
-            width: collapsed ? "34px" : "100%",
+            // width: collapsed ? "34px" : "100%",
+          },
+          [".ps-submenu-content"]: {
+            backgroundColor: "hsl(var(--background))",
+            border: collapsed ? "1px solid hsl(var(--border))" : "none",
+            padding: collapsed ? "5px" : "none",
           },
           [".ps-menu-button"]: {
-            backgroundColor: "transparent",
+            borderRadius: "calc(var(--radius) - 2px)",
+            backgroundColor: "hsl(var(--background))",
             ["&:hover"]: {
-              backgroundColor: "transparent",
+              backgroundColor: "hsl(var(--muted))",
+              color: "rgb(255 255 255 / var(--tw-text-opacity))",
             },
+
             border: "none",
             height: "34px",
-            paddingRight: "0px",
+            paddingRight: collapsed ? "0px" : "8px",
             paddingLeft: "0px",
             [".ps-menu-icon"]: {
               height: "34px",
               width: "34px",
               margin: "0px",
             },
+            [".ps-submenu-expand-icon"]: {
+              right: "-4px",
+              paddingBottom: collapsed ? "6px" : "4px",
+            },
           },
         }}
       >
-        <div className="h-screen flex flex-col">{children}</div>
+        <div className={"h-screen flex flex-col"}>
+          <div
+            className={cn(
+              "flex items-center justify-center h-[55px] px-2"
+            )}
+          >
+            {header}
+          </div>
+          <Separator />
+          <div
+            className={cn("h-full flex flex-col py-2 pl-2 pr-2 gap-2", {
+              "px-2": !collapsed,
+            })}
+          >
+            {children}
+          </div>
+        </div>
       </Menu>
     </ProSidebar>
   );
