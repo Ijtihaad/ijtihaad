@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "strict": true,
+    "baseUrl": "./",
+    "paths": {
+      "@app/server": ["apps/server/src"],
+      "@app/server/*": ["apps/server/src/*"],
+      "@app/web": ["apps/web/src"],
+      "@app/web/*": ["apps/web/src/*"],
+      "@app/mobile": ["apps/mobile/src"],
+      "@app/mobile/*": ["apps/mobile/src/*"],
+      "@app/common": ["libs/common/lib/src"],
+      "@app/common/*": ["libs/common/lib/src/*"]
+    }
+  },
+  "exclude": ["node_modules"]
+}

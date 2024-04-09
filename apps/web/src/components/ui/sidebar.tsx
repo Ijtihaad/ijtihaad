@@ -1,21 +1,21 @@
-"use client";
+'use client';
 
-import { JSXElementConstructor, ReactElement, ReactNode, use } from "react";
+import { JSXElementConstructor, ReactElement, ReactNode, use } from 'react';
 import {
   Menu,
   MenuItem,
   Sidebar as ProSidebar,
   SubMenu,
-} from "react-pro-sidebar";
-import { SidebarContext } from "../contexts/sidebar-provider";
+} from 'react-pro-sidebar';
+import { SidebarContext } from '../contexts/sidebar-provider';
 
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@web/components/ui/tooltip";
-import { cn } from "@web/lib/utils";
-import { Separator } from "./separator";
+} from '@app/web/components/ui/tooltip';
+import cn from '@app/web/utils/cn';
+import { Separator } from './separator';
 
 interface NavItemProps {
   LinkComponent:
@@ -24,13 +24,13 @@ interface NavItemProps {
     | undefined;
   Icon: React.ElementType<any, keyof JSX.IntrinsicElements>;
   label?: string;
-  variant: "default" | "ghost";
+  variant: 'default' | 'ghost';
   children: ReactNode;
 }
 interface SubNavProps {
   Icon: React.ElementType<any, keyof JSX.IntrinsicElements>;
   label?: string;
-  variant: "default" | "ghost";
+  variant: 'default' | 'ghost';
   children: ReactNode;
 }
 export function NavItem({
@@ -41,6 +41,7 @@ export function NavItem({
   variant,
 }: NavItemProps) {
   const { collapsed } = use(SidebarContext);
+
   return (
     <MenuItem
       icon={
@@ -62,9 +63,9 @@ export function NavItem({
       }
       component={LinkComponent}
       className={cn(
-        "whitespace-nowrap text-sm font-medium",
-        "hover:bg-muted dark:hover:text-white rounded-md",
-        variant === "default" ? "dark:bg-muted dark:text-white" : ""
+        'whitespace-nowrap text-sm font-medium',
+        'hover:bg-muted dark:hover:text-white rounded-md',
+        variant === 'default' ? 'dark:bg-muted dark:text-white' : ''
       )}
     >
       <div>
@@ -72,8 +73,8 @@ export function NavItem({
         {label && (
           <span
             className={cn(
-              "ml-auto",
-              variant === "default" && "text-background dark:text-white"
+              'ml-auto',
+              variant === 'default' && 'text-background dark:text-white'
             )}
           >
             {label}
@@ -90,9 +91,9 @@ export function SubNavItem({ label, Icon, children }: SubNavProps) {
     <SubMenu
       label={label}
       icon={<Icon className="w-4 h-4" />}
-      className={cn("whitespace-nowrap text-sm font-medium")}
+      className={cn('whitespace-nowrap text-sm font-medium')}
     >
-      <div className={cn({ "pl-2": !collapsed })}>{children}</div>
+      <div className={cn({ 'pl-2': !collapsed })}>{children}</div>
     </SubMenu>
   );
 }
@@ -103,8 +104,7 @@ export default function Sidebar({
   children: ReactNode[];
   header: ReactNode;
 }) {
-  const { collapsed, toggled, toggleToggled, toggleCollapsed } =
-    use(SidebarContext);
+  let { collapsed, toggled, toggleToggled } = use(SidebarContext);
   return (
     <ProSidebar
       collapsed={collapsed}
@@ -113,58 +113,62 @@ export default function Sidebar({
       breakPoint="md"
       className="h-screen w-fit"
       rootStyles={{
-        border: "none",
+        border: 'none',
       }}
-      collapsedWidth={"3.2rem"}
-      backgroundColor={"hsl(var(--background))"}
+      collapsedWidth={'3.1rem'}
+      backgroundColor={'hsl(var(--background))'}
     >
       <Menu
         rootStyles={{
-          [".ps-menuitem-root "]: {
+          ['.ps-menuitem-root ']: {
             // width: collapsed ? "34px" : "100%",
           },
-          [".ps-submenu-content"]: {
-            backgroundColor: "hsl(var(--background))",
-            border: collapsed ? "1px solid hsl(var(--border))" : "none",
-            padding: collapsed ? "5px" : "none",
+          ['.ps-submenu-content']: {
+            backgroundColor: 'hsl(var(--background))',
+            borderRadius: '0.45rem',
+            border: collapsed ? '1px solid hsl(var(--border))' : 'none',
+            padding: collapsed ? '4px' : 'none',
           },
-          [".ps-menu-button"]: {
-            borderRadius: "calc(var(--radius) - 2px)",
-            backgroundColor: "hsl(var(--background))",
-            ["&:hover"]: {
-              backgroundColor: "hsl(var(--muted))",
-              color: "rgb(255 255 255 / var(--tw-text-opacity))",
+          ['.ps-menu-button']: {
+            borderRadius: 'calc(var(--radius) - 2px)',
+            backgroundColor: 'hsl(var(--background))',
+            ['&:hover']: {
+              backgroundColor: 'hsl(var(--default))',
+              color: 'rgb(255 255 255 / var(--tw-text-opacity))',
             },
 
-            border: "none",
-            height: "34px",
-            paddingRight: collapsed ? "0px" : "8px",
-            paddingLeft: "0px",
-            [".ps-menu-icon"]: {
-              height: "34px",
-              width: "34px",
-              margin: "0px",
+            border: 'none',
+            height: '34px',
+            paddingRight: collapsed ? '0px' : '8px',
+            paddingLeft: '0px',
+            ['.ps-menu-icon']: {
+              height: '34px',
+              width: '34px',
+              margin: '0px',
             },
-            [".ps-submenu-expand-icon"]: {
-              right: "-4px",
-              paddingBottom: collapsed ? "6px" : "4px",
+            ['.ps-submenu-expand-icon']: {
+              right: '-4px',
+              paddingBottom: collapsed ? '6px' : '4px',
             },
           },
         }}
       >
-        <div className={"h-screen flex flex-col"}>
+        <div className={cn('h-screen flex flex-col')}>
           <div
             className={cn(
-              "flex items-center justify-center h-[55px] px-2"
+              'flex items-center justify-center h-[55px] px-2 duration-300 ease-in-out'
             )}
           >
             {header}
           </div>
           <Separator />
           <div
-            className={cn("h-full flex flex-col py-2 pl-2 pr-2 gap-2", {
-              "px-2": !collapsed,
-            })}
+            className={cn(
+              'h-full flex flex-col py-2 pl-2 pr-2 gap-2 duration-300 ease-in-out',
+              {
+                'px-2': !collapsed,
+              }
+            )}
           >
             {children}
           </div>

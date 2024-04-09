@@ -1,32 +1,51 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import { useEffect, useState } from "react";
 
-import { cn } from "@web/lib/utils"
+import cn from "@app/web/utils/cn";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@web/components/ui/select"
+} from "@app/web/components/ui/select";
+import useCookie from "@app/web/hooks/use-coockes";
 
 interface AccountSwitcherProps {
-  collapsed: boolean
+  collapsed: boolean;
   accounts: {
-    label: string
-    email: string
-    icon: React.ReactNode
-  }[]
+    label: string;
+    email: string;
+    icon: React.ReactNode;
+  }[];
 }
 
-export function AccountSwitcher({
-  collapsed,
-  accounts,
-}: AccountSwitcherProps) {
-  const [selectedAccount, setSelectedAccount] = React.useState<string>(
-    accounts[0].email
-  )
+export function AccountSwitcher({ collapsed, accounts }: AccountSwitcherProps) {
+  const { getCookie, setCookie } = useCookie();
+  const [selectedAccount, setSelectedAccount] = useState<string>();
+
+  useEffect(() => {
+    if (selectedAccount) {
+      setCookie("activeAccount", selectedAccount);
+    }
+  }, [selectedAccount]);
+
+  useEffect(() => {
+    async function setAccount() {
+      const account = await getCookie("activeAccount");
+      if (account) {
+        setSelectedAccount(account);
+      } else if (accounts.length) {
+        setSelectedAccount(accounts[0].email);
+      }
+    }
+    setAccount();
+  }, []);
+
+  if (!selectedAccount) {
+    return <></>;
+  }
 
   return (
     <Select defaultValue={selectedAccount} onValueChange={setSelectedAccount}>
@@ -59,5 +78,5 @@ export function AccountSwitcher({
         ))}
       </SelectContent>
     </Select>
-  )
+  );
 }

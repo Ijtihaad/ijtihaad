@@ -1,10 +1,9 @@
 "use client";
 
-import { cn } from "@web/lib/utils";
+import cn from "@app/web/utils/cn";
 import { History, Home, PersonStanding, SquareLibrary } from "lucide-react";
 import Link from "next/link";
 import { use } from "react";
-import { MenuItem } from "react-pro-sidebar";
 import { SidebarContext } from "../contexts/sidebar-provider";
 import { Separator } from "../ui/separator";
 import Sidebar, { NavItem, SubNavItem } from "../ui/sidebar";
@@ -14,7 +13,7 @@ const links = [
   {
     title: "Home",
     icon: Home,
-    href: "/",
+    href: "/posts",
   },
   {
     title: "Library",
@@ -27,11 +26,11 @@ const links = [
     href: "history",
   },
 ];
+
 export default function AppSidebar({ user }: { user: any }) {
-  const { collapsed, toggled, toggleToggled, toggleCollapsed } =
-    use(SidebarContext);
+  const { collapsed } = use(SidebarContext);
   return (
-    <div className="h-screen flex">
+    <div className="h-screen flex sticky top-0">
       <Sidebar
         header={
           <AccountSwitcher
@@ -41,6 +40,11 @@ export default function AppSidebar({ user }: { user: any }) {
                 email: "harunjeylan@gmail.com",
                 icon: <PersonStanding className="w-4 h-4" />,
                 label: "Harun Jeylan",
+              },
+              {
+                email: "abdu@gmail.com",
+                icon: <PersonStanding className="w-4 h-4" />,
+                label: "Abdurahman",
               },
             ]}
           />

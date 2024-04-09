@@ -1,29 +1,31 @@
-"use client";
+'use client';
 
-import { Bell, Menu, Plus, Search } from "lucide-react";
-import { ReactNode, use } from "react";
-import { SidebarContext } from "../contexts/sidebar-provider";
-import { ModeToggle } from "../ui/ModeToggle";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { LinkButton } from "../ui/link-button";
-import { Separator } from "../ui/separator";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
-import { UserNav } from "./user-nav";
-import useMediaQuery from "../hooks/useMediaQuery";
+import { Bell, Menu, Plus, Search } from 'lucide-react';
+import { use } from 'react';
+import { SidebarContext } from '../contexts/sidebar-provider';
+import useMediaQuery from '../hooks/use-media-query';
+import { Button } from '../ui/button';
+import { Input } from '../ui/input';
+import { LinkButton } from '../ui/link-button';
+import NavLink from '../ui/nav-link';
+import { Separator } from '../ui/separator';
+import { ModeToggle } from './mode-toggle';
+import { UserNav } from './user-nav';
 
 export default function AppBar() {
-  const isMobile = useMediaQuery("(max-width: 768px)");
+  const isMobile = useMediaQuery('(max-width: 768px)');
   const { toggleCollapsed } = use(SidebarContext);
   return (
-    <div className="w-full flex flex-col">
+    <div className="w-full flex flex-col sticky top-0 bg-background/95 z-10">
       <div className="w-full flex items-center gap-2 p-2">
-        <div>
-          <Button variant="outline" size="icon" onClick={toggleCollapsed}>
-            <Menu className="h-4 w-4" />
-          </Button>
-        </div>
-        <div className="flex-1">
+        <Button
+          variant="default-outline"
+          width={'icon'}
+          onClick={toggleCollapsed}
+        >
+          <Menu className="h-4 w-4" />
+        </Button>
+        <div className="flex justify-start w-full">
           <div className="w-fit bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
             <form>
               <div className="relative">
@@ -36,7 +38,7 @@ export default function AppBar() {
         <div className="flex items-center gap-2 px-4">
           <NavLink
             label={
-              <Button variant="outline" size={"icon"}>
+              <Button variant="default-outline" width={'icon'}>
                 <Bell className="h-4 w-4" />
               </Button>
             }
@@ -46,9 +48,9 @@ export default function AppBar() {
             label={
               <LinkButton
                 href="/hello"
-                variant="outline"
+                variant="default-outline"
                 className="flex items-center gap-2"
-                size={isMobile ? "icon" : "default"}
+                width={isMobile ? 'icon' : 'default'}
               >
                 <Plus className="h-4 w-4" />
                 {!isMobile && <span className="">Create</span>}
@@ -62,21 +64,5 @@ export default function AppBar() {
       </div>
       <Separator />
     </div>
-  );
-}
-function NavLink({
-  title,
-  label,
-}: {
-  title: string;
-  label: string | ReactNode;
-}) {
-  return (
-    <Tooltip delayDuration={1000}>
-      <TooltipTrigger asChild>{label}</TooltipTrigger>
-      <TooltipContent side="bottom" className="flex items-center gap-4">
-        {title}
-      </TooltipContent>
-    </Tooltip>
   );
 }

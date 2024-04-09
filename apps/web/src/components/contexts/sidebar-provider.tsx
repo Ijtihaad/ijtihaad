@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import useMediaQuery from "@web/components/hooks/useMediaQuery";
-import { createContext, useState } from "react";
+import useMediaQuery from '@app/web/components/hooks/use-media-query';
+import { createContext, useState } from 'react';
 
 export const SidebarContext = createContext({
   toggled: false,
@@ -13,10 +13,11 @@ export const SidebarContext = createContext({
 });
 
 export default function SideBarProvider({ children }: { children: any }) {
-  const isMobile = useMediaQuery("(max-width: 768px)");
+  const isMobile = useMediaQuery('(max-width: 768px)');
   const [collapsed, setCollapsed] = useState(false);
   const [toggled, setToggled] = useState(false);
   const [sidebarRTL, setSidebarRrl] = useState(false);
+
   function toggleCollapsed() {
     if (isMobile) {
       toggleToggled();
@@ -26,6 +27,7 @@ export default function SideBarProvider({ children }: { children: any }) {
       setCollapsed((prev: boolean) => !prev);
     }
   }
+
   function toggleToggled() {
     setToggled((prev: boolean) => !prev);
   }
