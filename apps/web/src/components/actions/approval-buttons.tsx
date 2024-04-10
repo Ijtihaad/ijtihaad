@@ -1,30 +1,36 @@
 'use client';
 
-import cn from '@app/web/utils/cn';
+import cn from '@web/utils/cn';
 import { CheckCircle, XCircle } from 'lucide-react';
-import { Button } from '../ui/button';
+import { Button, buttonVariants } from '../ui/button';
 
-export default function ApprovalButtons() {
+export default function ApprovalButtons({
+  size,
+}: {
+  size?: 'xs' | 'sm' | 'lg';
+}) {
   return (
-    <div className={cn('flex items-center gap-1')}>
+    <div className={cn('flex items-center gap-1 bg-default rounded-full')}>
       <Button
-        size={'xs'}
-        variant={'success-outline'}
-        rounded={'both'}
-        className={cn('flex items-center gap-1 ps-1 pe-3 py-1')}
+        size={size ?? 'sm'}
+        variant={'ghost'}
+        width={'icon'}
+        rounded={'full'}
+        className="p-0 hover:border"
       >
-        <CheckCircle size={'1.2rem'} />
-        <p className="">{56}</p>
+        <CheckCircle />
       </Button>
 
+      <span className="text-sm">{56}</span>
+
       <Button
-        size={'xs'}
-        variant={'error-outline'}
-        rounded={'both'}
-        className={cn('flex items-center gap-1 ps-1 pe-3 py-1')}
+        size={size ?? 'sm'}
+        variant={'ghost'}
+        width={'icon'}
+        rounded={'full'}
+        className="p-0 hover:border"
       >
-        <XCircle size={'1.2rem'} />
-        <p className="">{56}</p>
+        <XCircle />
       </Button>
     </div>
   );

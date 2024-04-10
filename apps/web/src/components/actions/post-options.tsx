@@ -12,8 +12,8 @@ import {
 export default function PostOptions() {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
-        <Button width={'icon'} rounded={'full'} variant={'ghost'}>
+      <DropdownMenuTrigger asChild>
+        <Button width={'icon'} rounded={'full'} variant={'ghost'} size={'xs'}>
           <MoreHorizontal />
         </Button>
       </DropdownMenuTrigger>

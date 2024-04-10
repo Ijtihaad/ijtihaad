@@ -1,22 +1,15 @@
-import AnswerButton from '@app/web/components/actions/answer-button';
-import ApprovalButtons from '@app/web/components/actions/approval-buttons';
-import AvatarButton from '@app/web/components/actions/avatar-button';
-import BackButton from '@app/web/components/actions/back-button';
-import CommentButton from '@app/web/components/actions/comment-button';
-import PostOptions from '@app/web/components/actions/post-options';
-import ShareButton from '@app/web/components/actions/share-button';
-import VoteButtons from '@app/web/components/actions/vote-buttons';
-import { Button } from '@app/web/components/ui/button';
-import { Input } from '@app/web/components/ui/input';
-import { Textarea } from '@app/web/components/ui/textarea';
-import cn from '@app/web/utils/cn';
+import AvatarButton from '@web/components/actions/avatar-button';
+import BackButton from '@web/components/actions/back-button';
+import CommentButton from '@web/components/actions/comment-button';
+import PostOptions from '@web/components/actions/post-options';
+import ShareButton from '@web/components/actions/share-button';
+import VoteButtons from '@web/components/actions/vote-buttons';
+import Comments from '@web/components/comments/comments';
+import CommentForm from '@web/components/forms/comment/comment-form';
+import { Button } from '@web/components/ui/button';
+import { Textarea } from '@web/components/ui/textarea';
+import cn from '@web/utils/cn';
 
-type Comment = {
-  id: string;
-  title: string;
-  body: string;
-  replays: Comment[];
-};
 export default function Page({
   params: { postId },
 }: {
@@ -30,41 +23,51 @@ export default function Page({
     comments: [
       {
         id: '1',
-        title:
-          'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab, pariatur?',
         body: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint blanditiis atque magnam perferendis maxime dolorem adipisci laboriosam eius natus cupiditate.',
         replays: [],
       },
       {
         id: '2',
-        title:
-          'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab, pariatur?',
-        body: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint blanditiis atque magnam perferendis maxime dolorem adipisci laboriosam eius natus cupiditate.',
+        body: 'Lorem ipsum dolor sit amet consecteturadipisicing elit. Sint blanditiis atque magnam perferendis maxime dolorem adipisci laboriosam eius natus cupiditate adipisicing elit. Sint blanditiis atque magnam perferendis maxime dolorem adipisci laboriosam eius natus cupiditate.',
         replays: [],
       },
       {
         id: '3',
-        title:
-          'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab, pariatur?',
-        body: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint blanditiis atque magnam perferendis maxime dolorem adipisci laboriosam eius natus cupiditate.',
+        body: 'Lorem ipsum dolor sit amet consecteturadipisicing elit. Sint blanditiis atque magnam perferendis maxime dolorem adipisci laboriosam eius natus cupiditate adipisicing elit. Sint blanditiis atque magnam perferendis maxime dolorem adipisci laboriosam eius natus cupiditate.',
         replays: [
           {
             id: '2',
-            title:
-              'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab, pariatur?',
             body: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint blanditiis atque magnam perferendis maxime dolorem adipisci laboriosam eius natus cupiditate.',
             replays: [
               {
                 id: '2',
-                title:
-                  'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab, pariatur?',
                 body: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint blanditiis atque magnam perferendis maxime dolorem adipisci laboriosam eius natus cupiditate.',
-                replays: [],
+                replays: [
+                  {
+                    id: '2',
+                    body: 'Lorem ipsum dolor sit ametadipisicing elit. Sint blanditiis atque magnam perferendis maxime dolorem adipisci laboriosam eius natus cupiditate consectetur adipisicing elit. Sint blanditiis atque magnam perferendis maxime dolorem adipisci laboriosam eius natus cupiditate.',
+                    replays: [
+                      {
+                        id: '2',
+                        body: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint blanditiis atque magnam perferendis maxime dolorem adipisci laboriosam eius natus cupiditate.',
+                        replays: [],
+                      },
+                      {
+                        id: '3',
+                        body: 'Lorem ipsum dolor sit adipisicing elit. Sint blanditiis atque magnam perferendis maxime dolorem adipisci laboriosam eius natus cupiditateamet consectetur adipisicing elit. Sint blanditiis atque magnam perferendis maxime dolorem adipisci laboriosam eius natus cupiditate.',
+                        replays: [],
+                      },
+                    ],
+                  },
+                  {
+                    id: '3',
+                    body: 'Lorem ipsum dolor sit amet adipisicing elit. Sint blanditiis atque magnam perferendis maxime dolorem adipisci laboriosam eius natus cupiditateconsectetur adipisicing elit. Sint blanditiis atque magnam perferendis maxime dolorem adipisci laboriosam eius natus cupiditate.',
+                    replays: [],
+                  },
+                ],
               },
               {
                 id: '3',
-                title:
-                  'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab, pariatur?',
                 body: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint blanditiis atque magnam perferendis maxime dolorem adipisci laboriosam eius natus cupiditate.',
                 replays: [],
               },
@@ -72,8 +75,6 @@ export default function Page({
           },
           {
             id: '3',
-            title:
-              'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ab, pariatur?',
             body: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint blanditiis atque magnam perferendis maxime dolorem adipisci laboriosam eius natus cupiditate.',
             replays: [],
           },
@@ -82,87 +83,37 @@ export default function Page({
     ],
   };
   return (
-    <div className="w-full flex flex-col gap-2 px-2 py-4">
-      <div className="w-full flex items-center justify-between gap-2">
-        <div className="flex items-center gap-2">
-          <BackButton />
-          <AvatarButton showName />
-          <span>{new Date().toISOString()}</span>
-        </div>
-        <PostOptions />
-      </div>
-      <div className={cn('')}>
-        <h6 className="text-title">{post.title}</h6>
-        <p className="text-body">{post.body}</p>
-      </div>
-      <div className={cn('flex items-center justify-between gap-2 my-4')}>
-        <div className={cn('flex items-center gap-2')}>
-          <VoteButtons />
-          <ShareButton />
-          <CommentButton />
-        </div>
-        <div className={cn('flex items-center gap-2')}>
-          <AnswerButton />
-        </div>
-      </div>
-      <div className="border rounded-2xl px-2">
-        <Textarea variant={'ghost'} />
-        <div className="flex justify-between items-center gap-2 py-1">
-          <div>
-            <Button rounded={'full'} width={'icon'} variant={'ghost'}>
-              T
-            </Button>
-          </div>
+    <main className={cn('w-full md:max-w-2xl xl:max-w-4xl mx-auto')}>
+      <div className="w-full flex flex-col gap-2 py-4">
+        <div className="w-full flex items-center justify-between gap-2 px-2">
           <div className="flex items-center gap-2">
-            <Button>Cancel</Button>
-            <Button variant={'primary'}>Comment</Button>
+            <BackButton />
+            <AvatarButton showName className="h-8 w-8 md:h-8 md:w-8" />
+            <span className="text-sm">{`5 day ago`}</span>
+          </div>
+          <PostOptions />
+        </div>
+        <div className={cn('px-2')}>
+          <h6 className="text-title">{post.title}</h6>
+          <p className="text-body">{post.body}</p>
+        </div>
+        <div
+          className={cn('flex items-center justify-between gap-2 my-4 px-2')}
+        >
+          <div className={cn('flex items-center gap-2')}>
+            <VoteButtons />
+            <ShareButton />
+            <CommentButton />
           </div>
         </div>
-      </div>
-      <div className="py-4">
-        <Comments comments={post.comments} />
-      </div>
-    </div>
-  );
-}
+        <div className={cn('px-2')}>
+          <CommentForm />
+        </div>
 
-function Comments({ comments }: { comments: Comment[] }) {
-  return (
-    <div>
-      {comments.map((comment) => (
-        <div key={comment.id}>
-          <div className="px-2 py-2 flex flex-col gap-2">
-            <div className="w-full flex items-center justify-between gap-2">
-              <div className="flex items-center gap-2">
-                <AvatarButton showName />
-                <span>{new Date().toISOString()}</span>
-              </div>
-            </div>
-            <div className={cn('ps-4')}>
-              <div className={cn('border-s ps-4 flex flex-col gap-2')}>
-                <div className={cn('')}>
-                  <h6 className="text-title">{comment.title}</h6>
-                  <p className="text-body">{comment.body}</p>
-                </div>
-                <div className={cn('flex items-center justify-between gap-2')}>
-                  <div className={cn('flex items-center gap-2')}>
-                    <VoteButtons />
-                    <ShareButton />
-                    <CommentButton />
-                    <PostOptions />
-                  </div>
-                  <ApprovalButtons />
-                </div>
-                <div>
-                  {!!comment.replays?.length && (
-                    <Comments comments={comment.replays} />
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
+        <div className="py-4 px-1">
+          <Comments comments={post.comments} />
         </div>
-      ))}
-    </div>
+      </div>
+    </main>
   );
 }

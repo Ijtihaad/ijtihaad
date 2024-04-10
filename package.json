@@ -6,9 +6,15 @@
   "scripts": {
     "dev:web": "pnpm --filter web run dev",
     "dev:mobile": "cd apps/mobile && npm run start",
-    "dev:server": "pnpm --filter server run start:dev"
+    "dev:server": "pnpm --filter server run start:dev",
+    "prisma:migrate": "pnpm prisma migrate dev  --name "
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@prisma/client": "^5.12.1",
+    "prisma": "^5.12.1",
+    "zod": "^3.22.4"
+  }
 }

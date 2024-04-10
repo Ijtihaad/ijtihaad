@@ -1,34 +1,32 @@
-"use client";
+'use client';
 
-import cn from "@app/web/utils/cn";
-import { History, Home, PersonStanding, SquareLibrary } from "lucide-react";
-import Link from "next/link";
-import { use } from "react";
-import { SidebarContext } from "../contexts/sidebar-provider";
-import { Separator } from "../ui/separator";
-import Sidebar, { NavItem, SubNavItem } from "../ui/sidebar";
-import { AccountSwitcher } from "./account-switcher";
+import cn from '@web/utils/cn';
+import { History, Home, PersonStanding, SquareLibrary } from 'lucide-react';
+import Link from 'next/link';
+import { Separator } from '../ui/separator';
+import Sidebar, { NavItem, SubNavItem, useSidebar } from '../ui/sidebar';
+import { AccountSwitcher } from './account-switcher';
 
 const links = [
   {
-    title: "Home",
+    title: 'Home',
     icon: Home,
-    href: "/posts",
+    href: '/posts',
   },
   {
-    title: "Library",
+    title: 'Library',
     icon: SquareLibrary,
-    href: "/library",
+    href: '/library',
   },
   {
-    title: "History",
+    title: 'History',
     icon: History,
-    href: "history",
+    href: 'history',
   },
 ];
 
 export default function AppSidebar({ user }: { user: any }) {
-  const { collapsed } = use(SidebarContext);
+  const { collapsed } = useSidebar();
   return (
     <div className="h-screen flex sticky top-0">
       <Sidebar
@@ -37,14 +35,14 @@ export default function AppSidebar({ user }: { user: any }) {
             collapsed={collapsed}
             accounts={[
               {
-                email: "harunjeylan@gmail.com",
+                email: 'harunjeylan@gmail.com',
                 icon: <PersonStanding className="w-4 h-4" />,
-                label: "Harun Jeylan",
+                label: 'Harun Jeylan',
               },
               {
-                email: "abdu@gmail.com",
+                email: 'abdu@gmail.com',
                 icon: <PersonStanding className="w-4 h-4" />,
-                label: "Abdurahman",
+                label: 'Abdurahman',
               },
             ]}
           />
@@ -55,20 +53,20 @@ export default function AppSidebar({ user }: { user: any }) {
             key={link.href}
             Icon={link.icon}
             LinkComponent={<Link href={link.href} />}
-            variant={"ghost"}
+            variant={'ghost'}
           >
             {link.title}
           </NavItem>
         ))}
         <Separator />
         <SubNavItem Icon={SquareLibrary} variant="ghost" label="Subtitle">
-          <div className={cn("flex flex-col gap-2")}>
+          <div className={cn('flex flex-col gap-2')}>
             {links.map((link, index) => (
               <NavItem
                 key={link.href}
                 Icon={link.icon}
                 LinkComponent={<Link href={link.href} />}
-                variant={"ghost"}
+                variant={'ghost'}
               >
                 {link.title}
               </NavItem>

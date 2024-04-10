@@ -1,6 +1,6 @@
 "use server";
 
-import { server_host } from "@app/web/constants/host.config";
+import { server_host } from "@web/constants/host.config";
 import { cookies } from "next/headers";
 
 export default async function refreshTokens() {

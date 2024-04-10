@@ -94,21 +94,21 @@ const config = {
       },
       fontSize: {
         title: [
-          "1.2rem",
+          "1rem",
           {
             fontWeight: "bold",
-            lineHeight: "1.6rem",
+            lineHeight: "1.5rem",
           },
         ],
         subtitle: [
-          "1rem",
+          "0.9rem",
           {
             fontWeight: "bold",
             lineHeight: "1.4rem",
           },
         ],
         body: [
-          "1rem",
+          "0.8rem",
           {
             fontWeight: "normal",
             lineHeight: "1.4rem",

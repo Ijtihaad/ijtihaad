@@ -1,0 +1,78 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("IJTIHAD_DATABASE_URL")
+}
+
+model User {
+  id            String         @id @default(uuid())
+  firstName     String         @db.VarChar(255)
+  lastName      String         @db.VarChar(255)
+  email         String?        @unique @db.VarChar(255)
+  phone         String         @unique @db.VarChar(255)
+  blocked       Boolean        @default(false)
+  role          Role           @default(USER)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  image         String?        @db.VarChar(255)
+  address       Address?
+  password      Password?
+  notifications Notification[]
+  subscriptions Subscription[]
+
+  @@map("users")
+}
+
+model Password {
+  id     String @id @default(uuid())
+  value  String @db.VarChar(255)
+  userId String @unique @db.VarChar(255)
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@map("passwords")
+}
+
+model Address {
+  id       String  @id @default(uuid())
+  state    String  @db.VarChar(255)
+  city     String  @db.VarChar(255)
+  subcity  String  @db.VarChar(255)
+  location String? @db.VarChar(255)
+  user     User?   @relation(fields: [userId], references: [id])
+  userId   String? @unique @db.VarChar(255)
+
+  @@map("address")
+}
+
+model Subscription {
+  id           String  @id @default(uuid())
+  user         User?   @relation(fields: [userId], references: [id])
+  userId       String? @db.VarChar(255)
+  endpoint     String  @unique @db.VarChar(255)
+  subscription Json
+
+  @@map("subscriptions")
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  user      User?    @relation(fields: [userId], references: [id])
+  toRole    Role?
+  userId    String?  @db.VarChar(255)
+  title     String   @db.VarChar(255)
+  body      String   @db.Text
+  checked   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("notifications")
+}
+
+enum Role {
+  ADMIN @map("ADMIN")
+  MUFTI @map("MUFTI")
+  USER  @map("USER")
+}

@@ -1,4 +1,5 @@
-import cn from '@app/web/utils/cn';
+import AppSidebar from '@web/components/global/app-sidebar';
+import AppBar from '@web/components/global/app-topbar';
 import { ReactNode } from 'react';
 
 export default async function Layout({
@@ -7,12 +8,12 @@ export default async function Layout({
   children: ReactNode;
 }>) {
   return (
-    <main
-      className={cn(
-        'w-full md:max-w-2xl xl:max-w-4xl mx-auto'
-      )}
-    >
-      {children}
-    </main>
+    <div className="flex w-full">
+      <AppSidebar user={null} />
+      <div className="flex flex-col w-full">
+        <AppBar />
+        {children}
+      </div>
+    </div>
   );
 }

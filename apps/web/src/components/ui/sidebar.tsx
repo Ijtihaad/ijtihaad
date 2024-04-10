@@ -1,21 +1,72 @@
 'use client';
 
-import { JSXElementConstructor, ReactElement, ReactNode, use } from 'react';
+import {
+  JSXElementConstructor,
+  ReactElement,
+  ReactNode,
+  useEffect,
+} from 'react';
 import {
   Menu,
   MenuItem,
   Sidebar as ProSidebar,
   SubMenu,
 } from 'react-pro-sidebar';
-import { SidebarContext } from '../contexts/sidebar-provider';
 
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from '@app/web/components/ui/tooltip';
-import cn from '@app/web/utils/cn';
+} from '@web/components/ui/tooltip';
+import cn from '@web/utils/cn';
 import { Separator } from './separator';
+
+import { create } from 'zustand';
+import useMediaQuery from '../hooks/use-media-query';
+
+export type sidebarState = {
+  collapsed: boolean;
+  toggled: boolean;
+  sidebarRTL: boolean;
+};
+
+export type sidebarActions = {
+  toggleCollapsed: () => void;
+  toggleToggled: () => void;
+  toggleRTL: () => void;
+
+  setCollapsed: (value: boolean) => void;
+  setToggled: (value: boolean) => void;
+  setRTL: (value: boolean) => void;
+};
+
+export type sidebarStore = sidebarState & sidebarActions;
+
+export const useSidebar = create<sidebarStore>((set) => ({
+  collapsed: false,
+  toggled: false,
+  sidebarRTL: false,
+
+  toggleCollapsed: () => {
+    set((state) => ({ collapsed: !state.collapsed }));
+  },
+  toggleToggled: () => {
+    set((state) => ({ toggled: !state.toggled }));
+  },
+  toggleRTL: () => {
+    set((state) => ({ sidebarRTL: !state.sidebarRTL }));
+  },
+
+  setCollapsed: (value: boolean) => {
+    set((state) => ({ collapsed: value }));
+  },
+  setToggled: (value: boolean) => {
+    set((state) => ({ toggled: value }));
+  },
+  setRTL: (value: boolean) => {
+    set((state) => ({ sidebarRTL: value }));
+  },
+}));
 
 interface NavItemProps {
   LinkComponent:
@@ -40,7 +91,7 @@ export function NavItem({
   children,
   variant,
 }: NavItemProps) {
-  const { collapsed } = use(SidebarContext);
+  const { collapsed } = useSidebar();
 
   return (
     <MenuItem
@@ -86,7 +137,7 @@ export function NavItem({
 }
 
 export function SubNavItem({ label, Icon, children }: SubNavProps) {
-  const { collapsed } = use(SidebarContext);
+  const { collapsed } = useSidebar();
   return (
     <SubMenu
       label={label}
@@ -104,7 +155,18 @@ export default function Sidebar({
   children: ReactNode[];
   header: ReactNode;
 }) {
-  let { collapsed, toggled, toggleToggled } = use(SidebarContext);
+  const { collapsed, toggled, toggleToggled, setCollapsed, setToggled } =
+    useSidebar();
+  const isMobile = useMediaQuery('(max-width: 768px)');
+
+  useEffect(() => {
+    if (isMobile) {
+      setCollapsed(false);
+    } else {
+      setToggled(false);
+    }
+  }, [isMobile, collapsed, toggled]);
+
   return (
     <ProSidebar
       collapsed={collapsed}

@@ -1,6 +1,6 @@
-import PostCard from '@app/web/components/posts/post-card';
-import { Separator } from '@app/web/components/ui/separator';
-import cn from '@app/web/utils/cn';
+import PostCard from '@web/components/posts/post-card';
+import { Separator } from '@web/components/ui/separator';
+import cn from '@web/utils/cn';
 
 export default function Home() {
   const posts = [
@@ -24,13 +24,15 @@ export default function Home() {
     },
   ];
   return (
-    <div className={cn('w-full flex flex-col gap-1')}>
-      {posts.map((post) => (
-        <div key={post.id} className={cn('flex flex-col gap-1 px-2')}>
-          <PostCard post={post} />
-          <Separator />
-        </div>
-      ))}
-    </div>
+    <main className={cn('w-full md:max-w-2xl xl:max-w-4xl mx-auto')}>
+      <div className={cn('w-full flex flex-col gap-1')}>
+        {posts.map((post) => (
+          <div key={post.id} className={cn('flex flex-col gap-1 px-2')}>
+            <PostCard post={post} />
+            <Separator />
+          </div>
+        ))}
+      </div>
+    </main>
   );
 }

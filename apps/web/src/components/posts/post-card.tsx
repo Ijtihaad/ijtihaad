@@ -1,9 +1,8 @@
-import AnswerButton from '@app/web/components/actions/answer-button';
-import AvatarButton from '@app/web/components/actions/avatar-button';
-import CommentButton from '@app/web/components/actions/comment-button';
-import ShareButton from '@app/web/components/actions/share-button';
-import VoteButtons from '@app/web/components/actions/vote-buttons';
-import cn from '@app/web/utils/cn';
+import AvatarButton from '@web/components/actions/avatar-button';
+import CommentButton from '@web/components/actions/comment-button';
+import ShareButton from '@web/components/actions/share-button';
+import VoteButtons from '@web/components/actions/vote-buttons';
+import cn from '@web/utils/cn';
 import Link from 'next/link';
 import PostOptions from '../actions/post-options';
 
@@ -21,7 +20,7 @@ export default function PostCard({
       <div className="w-full flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <AvatarButton showName />
-          <span>{new Date().toISOString()}</span>
+          <span>{`5min ago`}</span>
         </div>
         <PostOptions />
       </div>
@@ -34,9 +33,6 @@ export default function PostCard({
           <VoteButtons />
           <ShareButton />
           <CommentButton />
-        </div>
-        <div className={cn('flex items-center gap-2')}>
-          <AnswerButton />
         </div>
       </div>
     </div>

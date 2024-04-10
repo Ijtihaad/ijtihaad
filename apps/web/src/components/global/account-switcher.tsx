@@ -2,15 +2,15 @@
 
 import { useEffect, useState } from "react";
 
-import cn from "@app/web/utils/cn";
+import cn from "@web/utils/cn";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@app/web/components/ui/select";
-import useCookie from "@app/web/hooks/use-coockes";
+} from "@web/components/ui/select";
+import useCookie from "@web/hooks/use-coockes";
 
 interface AccountSwitcherProps {
   collapsed: boolean;

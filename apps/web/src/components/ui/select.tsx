@@ -9,7 +9,7 @@ import {
 } from '@radix-ui/react-icons';
 import * as SelectPrimitive from '@radix-ui/react-select';
 
-import cn from '@app/web/utils/cn';
+import cn from '@web/utils/cn';
 import { cva, VariantProps } from 'class-variance-authority';
 
 const Select = SelectPrimitive.Root;

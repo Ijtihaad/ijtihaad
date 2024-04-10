@@ -1,20 +1,32 @@
 'use client';
 
-import cn from '@app/web/utils/cn';
+import cn from '@web/utils/cn';
 import { ArrowBigDown, ArrowBigUp } from 'lucide-react';
 import { Button } from '../ui/button';
 
-export default function VoteButtons() {
+export default function VoteButtons({ size }: { size?: 'xs' | 'sm' | 'lg' }) {
   return (
     <div className={cn('flex items-center gap-1 bg-default rounded-full')}>
-      <Button size={'sm'} variant={'ghost'} width={'icon'} rounded={'full'} className="p-0 hover:border">
-        <ArrowBigDown className="h-6 w-6" />
+      <Button
+        size={size ?? 'sm'}
+        variant={'ghost'}
+        width={'icon'}
+        rounded={'full'}
+        className="p-0 hover:border"
+      >
+        <ArrowBigDown />
       </Button>
 
-      <p className="text-body">{56}</p>
+      <span className="text-sm">{56}</span>
 
-      <Button size={'sm'} variant={'ghost'} width={'icon'} rounded={'full'} className="p-0 hover:border">
-        <ArrowBigUp className="h-6 w-6" />
+      <Button
+        size={size ?? 'sm'}
+        variant={'ghost'}
+        width={'icon'}
+        rounded={'full'}
+        className="p-0 hover:border"
+      >
+        <ArrowBigUp />
       </Button>
     </div>
   );

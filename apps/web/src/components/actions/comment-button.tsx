@@ -1,16 +1,15 @@
 import { MessageSquare } from 'lucide-react';
 import { Button } from '../ui/button';
 
-export default function CommentButton() {
+export default function CommentButton({ size }: { size?: 'xs' | 'sm' | 'lg' }) {
   return (
     <Button
-      size={'sm'}
+      size={size ?? 'sm'}
       rounded={'both'}
-      contain={'default'}
       className="flex items-center gap-2 pe-4"
     >
       <MessageSquare size={'1.2rem'} />
-      <p>{83}</p>
+      <span className="text-sm">{83}</span>
     </Button>
   );
 }

@@ -1,27 +1,26 @@
 'use client';
 
 import { Bell, Menu, Plus, Search } from 'lucide-react';
-import { use } from 'react';
-import { SidebarContext } from '../contexts/sidebar-provider';
 import useMediaQuery from '../hooks/use-media-query';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { LinkButton } from '../ui/link-button';
 import NavLink from '../ui/nav-link';
 import { Separator } from '../ui/separator';
+import { useSidebar } from '../ui/sidebar';
 import { ModeToggle } from './mode-toggle';
 import { UserNav } from './user-nav';
 
 export default function AppBar() {
   const isMobile = useMediaQuery('(max-width: 768px)');
-  const { toggleCollapsed } = use(SidebarContext);
+  const { toggleCollapsed, toggleToggled } = useSidebar();
   return (
     <div className="w-full flex flex-col sticky top-0 bg-background/95 z-10">
       <div className="w-full flex items-center gap-2 p-2">
         <Button
           variant="default-outline"
           width={'icon'}
-          onClick={toggleCollapsed}
+          onClick={isMobile ? toggleToggled : toggleCollapsed}
         >
           <Menu className="h-4 w-4" />
         </Button>

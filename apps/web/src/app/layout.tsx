@@ -1,13 +1,13 @@
-import SidebarProvider from '@app/web/components/contexts/sidebar-provider';
-import { ThemeProvider } from '@app/web/components/contexts/theme-provider';
-import AppSidebar from '@app/web/components/global/app-sidebar';
-import AppBar from '@app/web/components/global/app-topbar';
-import { TooltipProvider } from '@app/web/components/ui/tooltip';
+import { ThemeProvider } from '@web/components/contexts/theme-provider';
+import AppSidebar from '@web/components/global/app-sidebar';
+import AppBar from '@web/components/global/app-topbar';
+import { TooltipProvider } from '@web/components/ui/tooltip';
 import type { Metadata } from 'next';
 import { Inter as FontSans } from 'next/font/google';
 import cn from '../utils/cn';
 import './globals.css';
-import { Separator } from '../components/ui/separator';
+import TransitionProvider from '@web/components/contexts/transition-provider';
+import { Toaster } from '@web/components/ui/toast';
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -38,17 +38,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <TooltipProvider>
-            <SidebarProvider>
-              <div className="flex w-full">
-                <AppSidebar user={null} />
-                <div className="flex flex-col w-full">
-                  <AppBar />
-                  {children}
-                </div>
-              </div>
-            </SidebarProvider>
-          </TooltipProvider>
+          <TransitionProvider>
+            <TooltipProvider>{children}</TooltipProvider>
+          </TransitionProvider>
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>
