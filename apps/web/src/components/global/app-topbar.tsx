@@ -54,7 +54,7 @@ export default function AppBar({ user }: { user: User | null }) {
           <NavLink
             label={
               <LinkButton
-                href="/hello"
+                href="/posts/create"
                 variant="default-outline"
                 className="flex items-center gap-2"
                 width={isMobile ? 'icon' : 'default'}

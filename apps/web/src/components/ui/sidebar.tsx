@@ -190,6 +190,8 @@ export default function Sidebar({
             borderRadius: '0.45rem',
             border: collapsed ? '1px solid hsl(var(--border))' : 'none',
             padding: collapsed ? '4px' : 'none',
+            marginTop:collapsed ? '4px' : 'none',
+            marginBottom:collapsed ? '4px' : 'none',
           },
           ['.ps-menu-button']: {
             borderRadius: 'calc(var(--radius) - 2px)',
@@ -226,7 +228,7 @@ export default function Sidebar({
           <Separator />
           <div
             className={cn(
-              'h-full flex flex-col py-2 pl-2 pr-2 gap-2 duration-300 ease-in-out',
+              'h-full flex flex-col py-2 pl-2 pr-2 gap-2 duration-300 ease-in-out overflow-y-auto pb-4',
               {
                 'px-2': !collapsed,
               }

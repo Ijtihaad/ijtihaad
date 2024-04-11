@@ -2,7 +2,7 @@ import PostCard from '@web/components/posts/post-card';
 import { Separator } from '@web/components/ui/separator';
 import cn from '@web/utils/cn';
 
-export default function Home() {
+export default function Page() {
   const posts = [
     {
       id: '1',

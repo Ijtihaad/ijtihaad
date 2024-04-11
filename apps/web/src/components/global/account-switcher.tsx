@@ -18,6 +18,15 @@ import { TransitionContext } from '../contexts/transition-provider';
 import { UserLoginForm } from '../forms/auth/login-form';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Button, buttonVariants } from '../ui/button';
+import Link from 'next/link';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '../ui/dialog';
 
 export function AccountSwitcher({
   collapsed,
@@ -33,22 +42,46 @@ export function AccountSwitcher({
 
   return (
     <>
-      {openDialog && (
-        <div className="fixed inset-0 z-50">
-          <div
-            className="fixed inset-0 bg-black/50"
-            onClick={() => setOpenDialog(false)}
-          ></div>
-          <div className="fixed top-1/2 left-1/2 -translate-x-1/2 0translate-y-1/2 flex flex-col gap-2 max-w-4xl bg-background p-8">
-            <div className="flex justify-end">
-              <Button onClick={() => setOpenDialog(false)} width={'icon'}>
-                <X />
-              </Button>
-            </div>
-            <UserLoginForm />
-          </div>
-        </div>
-      )}
+      <Dialog open={openDialog} onOpenChange={setOpenDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Login</DialogTitle>
+            <DialogDescription>
+              <div className="lg:p-8">
+                <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+                  <div className="flex flex-col space-y-2 text-center">
+                    <h1 className="text-2xl font-semibold tracking-tight">
+                      Login to your account
+                    </h1>
+                    <p className="text-sm text-muted-foreground">
+                      Enter your email below to login to your account
+                    </p>
+                  </div>
+                  <UserLoginForm />
+                  <p className="px-8 text-center text-sm text-muted-foreground">
+                    By clicking continue, you agree to our{' '}
+                    <Link
+                      href="/terms"
+                      className="underline underline-offset-4 hover:text-primary"
+                    >
+                      Terms of Service
+                    </Link>{' '}
+                    and{' '}
+                    <Link
+                      href="/privacy"
+                      className="underline underline-offset-4 hover:text-primary"
+                    >
+                      Privacy Policy
+                    </Link>
+                    .
+                  </p>
+                </div>
+              </div>
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
+
       {accounts?.length ? (
         <Select
           defaultValue={account?.email}
@@ -66,27 +99,20 @@ export function AccountSwitcher({
             )}
             aria-label="Select account"
           >
-            <SelectValue placeholder="Select an account">
-              {account ? (
+            <SelectValue>
+              {account && (
                 <div className="flex items-center gap-2">
-                  <Avatar className={cn('h-6 w-6')}>
+                  <Avatar className={cn('h-6 w-6 rounded-sm')}>
                     {account.image && (
                       <AvatarImage src={account.image} alt={account.username} />
                     )}
-                    <AvatarFallback>
+                    <AvatarFallback className={cn('rounded-sm')}>
                       {(account.username || account.email)[0].toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                   {!collapsed && (
                     <span>{account.username || account.email}</span>
                   )}
-                </div>
-              ) : (
-                <div className="flex items-center gap-2">
-                  <div className={cn('bg-default p-1 rounded-full')}>
-                    <Plus />
-                  </div>
-                  {!collapsed && <span>Select Account</span>}
                 </div>
               )}
             </SelectValue>
@@ -95,15 +121,15 @@ export function AccountSwitcher({
             {accounts?.map((account) => (
               <SelectItem key={account.email} value={account.email}>
                 <div className="flex items-center gap-2 [&_svg]:h-4 [&_svg]:w-4 [&_svg]:shrink-0 [&_svg]:text-foreground">
-                  <Avatar className={cn('h-6 w-6')}>
+                  <Avatar className={cn('h-6 w-6 rounded-sm')}>
                     {account.image && (
                       <AvatarImage src={account.image} alt={account.username} />
                     )}
-                    <AvatarFallback>
+                    <AvatarFallback className={cn('rounded-sm')}>
                       {account.email[0].toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
-                  {account.email}
+                  <span>{account.email}</span>
                 </div>
               </SelectItem>
             ))}
@@ -111,10 +137,10 @@ export function AccountSwitcher({
             <Button
               width={'full'}
               onClick={() => setOpenDialog(true)}
-              className="flex gap-2"
+              className="flex gap-3 justify-start px-3 rounded-sm py-2"
             >
-              <Plus />
-              Add Account
+              <Plus className={cn('rounded-sm')} size={'1.2rem'} />
+              <span>Add Account</span>
             </Button>
           </SelectContent>
         </Select>
@@ -122,10 +148,13 @@ export function AccountSwitcher({
         <Button
           width={collapsed ? 'icon' : 'full'}
           onClick={() => setOpenDialog(true)}
-          className="flex gap-2"
+          className={cn(
+            'flex gap-2 rounded-md',
+            collapsed ? 'justify-center' : 'justify-start'
+          )}
           variant={'default-outline'}
         >
-          <Plus />
+          <Plus className={cn('rounded-sm')} />
           {!collapsed && <span>Add Account</span>}
         </Button>
       )}

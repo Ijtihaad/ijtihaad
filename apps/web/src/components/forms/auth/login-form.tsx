@@ -19,9 +19,8 @@ import cn from '@web/utils/cn';
 import { use } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-interface UserLoginFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-export function UserLoginForm({ className, ...props }: UserLoginFormProps) {
+export function UserLoginForm() {
   const { handleServerMutation, isMutating } = use(TransitionContext);
   const { toast } = useToast();
   const form = useForm<z.infer<typeof userLoginSchema>>({
@@ -50,7 +49,7 @@ export function UserLoginForm({ className, ...props }: UserLoginFormProps) {
   }
 
   return (
-    <div className={cn('grid gap-6', className)} {...props}>
+    <div className={cn('grid gap-6')}>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <div className="grid grid-cols-2 gap-2">

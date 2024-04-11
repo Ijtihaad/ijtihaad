@@ -15,6 +15,8 @@ import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import logout from '@web/data/auth/logout-user';
 import { useToast } from '../ui/toast';
 import { User } from '@prisma/client';
+import { LinkButton } from '../ui/link-button';
+import Link from 'next/link';
 
 export function UserNav({ user }: { user: User }) {
   const { toast } = useToast();
@@ -59,9 +61,11 @@ export function UserNav({ user }: { user: User }) {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem className="cursor-pointer">
-            Profile
-            <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+          <DropdownMenuItem className="cursor-pointer" asChild>
+            <Link href="/profile">
+              Profile
+              <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuItem className="cursor-pointer">
             Billing

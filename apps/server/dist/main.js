@@ -1729,6 +1729,7 @@ __exportStar(__webpack_require__(/*! ./types/request.type */ "../../libs/common/
 __exportStar(__webpack_require__(/*! ./types/user.type */ "../../libs/common/src/types/user.type.ts"), exports);
 __exportStar(__webpack_require__(/*! ./types/notifications.type */ "../../libs/common/src/types/notifications.type.ts"), exports);
 __exportStar(__webpack_require__(/*! ./validation/auth.validation */ "../../libs/common/src/validation/auth.validation.ts"), exports);
+__exportStar(__webpack_require__(/*! ./validation/community.validation */ "../../libs/common/src/validation/community.validation.ts"), exports);
 
 
 /***/ }),
@@ -1849,6 +1850,28 @@ exports.userRegisterSchema = zod_1.z.object({
 exports.userLoginSchema = zod_1.z.object({
     email: zod_1.z.string().min(2).max(50),
     password: zod_1.z.string().min(2).max(50),
+});
+
+
+/***/ }),
+
+/***/ "../../libs/common/src/validation/community.validation.ts":
+/*!****************************************************************!*\
+  !*** ../../libs/common/src/validation/community.validation.ts ***!
+  \****************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.createPostSchema = void 0;
+const zod_1 = __webpack_require__(/*! zod */ "zod");
+exports.createPostSchema = zod_1.z.object({
+    body: zod_1.z.string(),
+    type: zod_1.z.string(),
+    title: zod_1.z.string().min(2).max(50),
+    account: zod_1.z.string().optional(),
+    community: zod_1.z.string().min(2).max(50),
 });
 
 

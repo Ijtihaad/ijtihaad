@@ -8,11 +8,13 @@ import CommentOptions from '../actions/comment-options';
 import VoteButtons from '../actions/vote-buttons';
 import CommentForm from '../forms/comment/comment-form';
 import { Button } from '../ui/button';
+
 type Comment = {
   id: string;
   body: string;
   replays: Comment[];
 };
+
 export default function Comments({ comments }: { comments: Comment[] }) {
   return (
     <div className="flex flex-col gap-2">
@@ -32,10 +34,10 @@ export function Comment({ comment }: { comment: Comment }) {
       <div className="w-full -translate-x-[0.1rem] flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <AvatarButton showName />
-          <span className="text-sm"> {`5min ago`}</span>
+          <span className="text-xs"> {`5min ago`}</span>
         </div>
       </div>
-      <div className={cn('flex')}>
+      <div className={cn('flex mt-1')}>
         {haveReplays && (
           <div
             className={cn(
@@ -55,7 +57,7 @@ export function Comment({ comment }: { comment: Comment }) {
           className={cn('flex flex-col gap-2', haveReplays ? 'ps-1' : 'ps-6')}
         >
           <div className={cn('-translate-x-1')}>
-            <p className="text-sm">{comment.body}</p>
+            <p className="text-body">{comment.body}</p>
           </div>
           <div className={cn('flex items-center gap-2', {})}>
             <VoteButtons size="xs" />
@@ -81,18 +83,18 @@ export function Comment({ comment }: { comment: Comment }) {
           )}
         </div>
       </div>
-      <div className={cn('flex w-full')}>
-        <div className={cn('flex flex-col items-end min-w-3 group')}>
-          <div className="shrink-0 bg-border h-full w-[1px] group-hover:bg-muted -translate-y-[0.2rem]" />
-        </div>
-        {!collapsed && (
-          <div className="ps-1 md:ps-2 py-1 pt-2">
+      {!collapsed && (
+        <div className={cn('flex w-full')}>
+          <div className={cn('flex flex-col items-end min-w-5 group px-2')}>
+            <div className="shrink-0 bg-border h-full w-[1px] group-hover:bg-muted -translate-y-[0.2rem]" />
+          </div>
+          <div className="py-1 pt-2">
             {!!comment.replays?.length && (
               <Comments comments={comment.replays} />
             )}
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }

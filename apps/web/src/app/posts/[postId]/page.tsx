@@ -89,7 +89,7 @@ export default function Page({
           <div className="flex items-center gap-2">
             <BackButton />
             <AvatarButton showName className="h-8 w-8 md:h-8 md:w-8" />
-            <span className="text-sm">{`5 day ago`}</span>
+            <span className="text-xs">{`5 day ago`}</span>
           </div>
           <PostOptions />
         </div>
