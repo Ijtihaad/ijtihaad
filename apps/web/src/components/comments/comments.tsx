@@ -4,11 +4,10 @@ import cn from '@web/utils/cn';
 import { MessageSquare, Minus, Plus } from 'lucide-react';
 import { useState } from 'react';
 import AvatarButton from '../actions/avatar-button';
-import CommentButton from '../actions/comment-button';
 import CommentOptions from '../actions/comment-options';
 import VoteButtons from '../actions/vote-buttons';
-import { Button } from '../ui/button';
 import CommentForm from '../forms/comment/comment-form';
+import { Button } from '../ui/button';
 type Comment = {
   id: string;
   body: string;
@@ -29,73 +28,70 @@ export function Comment({ comment }: { comment: Comment }) {
   const [collapsed, setCollapsed] = useState(true);
   const [openForm, setOpenForm] = useState(false);
   return (
-    <div className="ps-1 md:ps-2 pt-2 flex flex-col gap-1">
-      <div className="md:ps-[0.2rem] w-full flex items-center justify-between gap-2">
+    <div className="flex flex-col">
+      <div className="w-full -translate-x-[0.1rem] flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <AvatarButton showName />
           <span className="text-sm"> {`5min ago`}</span>
         </div>
       </div>
-      <div className={cn('ps-[0.82rem] md:ps-4')}>
-        <div
-          className={cn('flex flex-col gap-2 ', {
-            'border-s': haveReplays,
-          })}
-        >
-          <div className={cn('ps-2 md:ps-4')}>
-            <p className="text-sm">{comment.body}</p>
-          </div>
+      <div className={cn('flex')}>
+        {haveReplays && (
           <div
             className={cn(
-              'ps-3 flex items-center justify-between gap-2 relative'
+              'relative group -translate-y-[0.2rem] flex flex-col items-center min-w-6'
             )}
           >
-            <div
-              className={cn('flex items-center gap-2', {
-                '-translate-x-[1.64rem] translate-y-1': haveReplays,
-              })}
+            <div className="shrink-0 bg-border h-full w-[1px] group-hover:bg-muted" />
+            <button
+              onClick={() => setCollapsed((prev) => !prev)}
+              className="-translate-y-[1.4rem] w-6 h-6 p-1 flex justify-center items-center rounded-full bg-default border border-border hover:bg-muted"
             >
-              {haveReplays && (
-                <button
-                  onClick={() => setCollapsed((prev) => !prev)}
-                  className="w-fit p-1 rounded-full bg-default border border-default/0 hover:border-default/100"
-                >
-                  {collapsed ? (
-                    <Plus size={'1.1rem'} />
-                  ) : (
-                    <Minus size={'1.1rem'} />
-                  )}
-                </button>
-              )}
-              <VoteButtons size="xs" />
-              <Button
-                size={'xs'}
-                rounded={'both'}
-                className="flex items-center gap-2 pe-4"
-                onClick={() => {
-                  setOpenForm((prev) => !prev);
-                  setCollapsed(false);
-                }}
-              >
-                <MessageSquare size={'1.2rem'} />
-                <span className="text-sm">{83}</span>
-              </Button>
-              <CommentOptions />
-            </div>
+              {collapsed ? <Plus size={'1.1rem'} /> : <Minus size={'1.1rem'} />}
+            </button>
           </div>
+        )}
+        <div
+          className={cn('flex flex-col gap-2', haveReplays ? 'ps-1' : 'ps-6')}
+        >
+          <div className={cn('-translate-x-1')}>
+            <p className="text-sm">{comment.body}</p>
+          </div>
+          <div className={cn('flex items-center gap-2', {})}>
+            <VoteButtons size="xs" />
+            <Button
+              size={'xs'}
+              rounded={'both'}
+              className="flex items-center gap-2 pe-4"
+              onClick={() => {
+                setOpenForm((prev) => !prev);
+                setCollapsed(false);
+              }}
+            >
+              <MessageSquare size={'1.2rem'} />
+              <span className="text-sm">{83}</span>
+            </Button>
+            <CommentOptions />
+          </div>
+
           {openForm && (
             <div className={cn('px-2')}>
               <CommentForm />
             </div>
           )}
-          {!collapsed && (
-            <div className="">
-              {!!comment.replays?.length && (
-                <Comments comments={comment.replays} />
-              )}
-            </div>
-          )}
         </div>
+      </div>
+      <div className={cn('flex w-full')}>
+        <div className={cn('flex flex-col items-end min-w-3 group')}>
+          <div className="shrink-0 bg-border h-full w-[1px] group-hover:bg-muted -translate-y-[0.2rem]" />
+        </div>
+        {!collapsed && (
+          <div className="ps-1 md:ps-2 py-1 pt-2">
+            {!!comment.replays?.length && (
+              <Comments comments={comment.replays} />
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

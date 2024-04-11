@@ -31,7 +31,7 @@
     --error: 0 87% 59%;
     --error-foreground: 4 38% 8%;
 
-    --muted: 210 40% 96.1%;
+    --muted: 210 9% 77%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
     --accent: 210 40% 96.1%;
@@ -75,7 +75,7 @@
     --error: 0 61% 44%;
     --error-foreground: 3 23% 81%;
 
-    --muted: 217.2 32.6% 17.5%;
+    --muted: 218 33% 24%;
     --muted-foreground: 215 20.2% 65.1%;
 
     --accent: 217.2 32.6% 17.5%;
@@ -104,6 +104,10 @@ light {
   background-color: hsl(222.2 47.4% 11.2%);
   color: hsl(205, 21%, 89%);
 
+  /* muted */
+  background-color: hsl(210, 9%, 77%);
+  color: hsl(205, 21%, 89%);
+
   /* primary */
   background-color: hsl(244, 87%, 59%);
   color: hsl(208, 38%, 9%);
@@ -125,6 +129,10 @@ dark {
   /* default */
   background-color: hsl(210 40% 98%);
   color: hsl(222.2 47.4% 11.2%);
+
+  /* muted */
+  background-color: hsl(218, 33%, 24%);
+  color: hsl(205, 21%, 89%);
 
   /* primary */
   background-color: hsl(244, 63%, 42%);

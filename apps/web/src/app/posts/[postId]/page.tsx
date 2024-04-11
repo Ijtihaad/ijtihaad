@@ -110,7 +110,7 @@ export default function Page({
           <CommentForm />
         </div>
 
-        <div className="py-4 px-1">
+        <div className="py-4 px-2">
           <Comments comments={post.comments} />
         </div>
       </div>
