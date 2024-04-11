@@ -1,15 +1,15 @@
 'use server';
 
-import { JwtToken, userRegisterSchema } from '@common';
-import { cookies } from 'next/headers';
+import { AuthUser, JwtToken, User, userRegisterSchema } from '@common';
 import { z } from 'zod';
 import fetcher from '../fetcher';
 import revalidate from '../revalidate';
+import { addAuthentication } from './authentications';
 
-export default async function registerWithEmail<T = {}>(
+export default async function registerWithEmail(
   data: z.infer<typeof userRegisterSchema>
 ) {
-  const res = await fetcher<JwtToken & T>(`auth/register/email`, {
+  const res = await fetcher<AuthUser>(`auth/register/email`, {
     method: 'POST',
     body: JSON.stringify(data),
     cache: 'no-store',
@@ -18,19 +18,8 @@ export default async function registerWithEmail<T = {}>(
   if (!res.success) {
     return res;
   }
-  const jwt = res.data;
-  const cookieStore = cookies();
-  cookieStore.set({
-    name: 'accessToken',
-    value: jwt.accessToken,
-    secure: process.env.NODE_ENV === 'production',
-  });
 
-  cookieStore.set({
-    name: 'refreshToken',
-    value: jwt.refreshToken,
-    secure: process.env.NODE_ENV === 'production',
-  });
+  await addAuthentication(res.data);
 
   return { success: true, message: 'You Registered Successfully' };
 }

@@ -4,6 +4,8 @@ import { server_host } from '@web/constants/host.config';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import refreshTokens from './refresh-tokens';
+import { AuthUser } from '@common';
+import { getAuthentication } from './auth/authentications';
 
 interface SuccessResponse<T> {
   success: true;
@@ -27,10 +29,12 @@ export default async function fetcher<T = null>(
     'Content-Type': 'application/json',
     ...options?.headers,
   };
-  if (cookieStore.has('accessToken')) {
-    const accessToken = cookieStore.get('accessToken')?.value;
-    headers['Authorization'] = `Bearer ${accessToken}`;
+
+  const authentication = await getAuthentication()
+  if (authentication) {
+    headers['Authorization'] = `Bearer ${authentication.accessToken}`;
   }
+
   const url = `${server_host}/${pathname}`;
 
   let response = await fetch(url, {

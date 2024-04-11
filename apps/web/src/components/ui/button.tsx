@@ -49,6 +49,7 @@ const buttonVariants = cva(
       width: {
         default: 'aspect-auto',
         icon: 'aspect-square p-1',
+        full: 'w-full',
       },
     },
     defaultVariants: {

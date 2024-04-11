@@ -1,7 +1,9 @@
 import {
   AccessTokenPayload,
+  AuthUser,
   RefreshTokenPayload,
   Role,
+  User,
   UserCreateInput,
   UserWhereUniqueInput,
 } from '@common';
@@ -25,12 +27,12 @@ export class AuthService {
   async register(data: UserCreateInput) {
     const userExist = await this.prisma.user.findFirst({
       where: {
-        phone: data.phone,
+        email: data.email,
       },
     });
 
     if (userExist) {
-      throw new ConflictException('User already exists with this Phone Number');
+      throw new ConflictException('User already exists with this Email Number');
     }
 
     const user = await this.prisma.user.create({
@@ -40,9 +42,9 @@ export class AuthService {
     return user;
   }
 
-  async login(userId: string) {
-    const accessTokenPayload: AccessTokenPayload = { userId };
-    const refreshTokenPayload: RefreshTokenPayload = { userId };
+  async login(user: User): Promise<AuthUser> {
+    const accessTokenPayload: AccessTokenPayload = { userId: user.id };
+    const refreshTokenPayload: RefreshTokenPayload = { userId: user.id };
 
     const accessToken = this.jwtTokenService.encryptJwtToken(
       accessTokenPayload,
@@ -61,8 +63,11 @@ export class AuthService {
     );
 
     return {
-      accessToken,
-      refreshToken,
+      user: user,
+      jwt: {
+        accessToken,
+        refreshToken,
+      },
     };
   }
 

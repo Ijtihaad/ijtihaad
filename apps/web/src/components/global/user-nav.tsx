@@ -1,3 +1,5 @@
+'use client';
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,45 +12,71 @@ import {
 } from '@web/components/ui/dropdown-menu';
 import { Button } from '../ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import logout from '@web/data/auth/logout-user';
+import { useToast } from '../ui/toast';
+import { User } from '@prisma/client';
 
-export function UserNav() {
+export function UserNav({ user }: { user: User }) {
+  const { toast } = useToast();
+  async function onLogout() {
+    const result = await logout();
+    if (!result.success) {
+      const snackbarKey = toast({
+        description: result.message,
+        variant: 'error',
+      });
+    } else {
+      const snackbarKey = toast({
+        description: result.message,
+        variant: 'success',
+      });
+    }
+  }
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="icon" rounded={'full'} className="relative">
+        <Button width="icon" rounded={'full'} className="relative">
           <Avatar className="h-9 w-9">
-            <AvatarImage src="/avatars/01.png" alt="@shadcn" />
-            <AvatarFallback>SC</AvatarFallback>
+            {user.image && (
+              <AvatarImage src={user.image} alt={user.firstName} />
+            )}
+            <AvatarFallback>
+              {`${user.firstName.at(0)}${user.lastName.at(0)}`.toUpperCase()}
+            </AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">shadcn</p>
+            <p className="text-sm font-medium leading-none">
+              {user.firstName} {user.lastName}
+            </p>
             <p className="text-xs leading-none text-muted-foreground">
-              m@example.com
+              {user.email}
             </p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer">
             Profile
             <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer">
             Billing
             <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer">
             Settings
             <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
           </DropdownMenuItem>
-          <DropdownMenuItem>New Team</DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer">
+            New Team
+          </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={onLogout} className="cursor-pointer">
           Log out
           <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>

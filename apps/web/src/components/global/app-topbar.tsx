@@ -10,8 +10,9 @@ import { Separator } from '../ui/separator';
 import { useSidebar } from '../ui/sidebar';
 import { ModeToggle } from './mode-toggle';
 import { UserNav } from './user-nav';
+import { User } from '@common';
 
-export default function AppBar() {
+export default function AppBar({ user }: { user: User | null }) {
   const isMobile = useMediaQuery('(max-width: 768px)');
   const { toggleCollapsed, toggleToggled } = useSidebar();
   return (
@@ -25,16 +26,23 @@ export default function AppBar() {
           <Menu className="h-4 w-4" />
         </Button>
         <div className="flex justify-start w-full">
-          <div className="w-fit bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-            <form>
-              <div className="relative">
-                <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input placeholder="Search" className="pl-8" />
-              </div>
-            </form>
-          </div>
+          {isMobile ? (
+            <Button variant={'default-outline'} width={'icon'} className="p-2">
+              <Search />
+            </Button>
+          ) : (
+            <div className="w-fit bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+              <form>
+                <div className="relative">
+                  <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+
+                  <Input placeholder="Search" className={'pl-8'} />
+                </div>
+              </form>
+            </div>
+          )}
         </div>
-        <div className="flex items-center gap-2 px-4">
+        <div className="flex items-center gap-2">
           <NavLink
             label={
               <Button variant="default-outline" width={'icon'}>
@@ -58,7 +66,13 @@ export default function AppBar() {
             title="Create Question"
           />
           <ModeToggle />
-          <UserNav />
+          {user ? (
+            <UserNav user={user} />
+          ) : (
+            <LinkButton href="/auth/login" variant="default-outline">
+              Login
+            </LinkButton>
+          )}
         </div>
       </div>
       <Separator />

@@ -48,6 +48,7 @@ const linkVariants = cva(
       width: {
         default: 'aspect-auto',
         icon: 'aspect-square p-1',
+        full:"full"
       },
     },
     defaultVariants: {

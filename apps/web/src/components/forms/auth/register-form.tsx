@@ -47,7 +47,7 @@ export function UserRegisterForm({
         });
       } else {
         const snackbarKey = toast({
-          description: 'You Registered Successfully',
+          description: result.message,
           variant: 'success',
         });
       }
@@ -125,7 +125,7 @@ export function UserRegisterForm({
               {isMutating && (
                 <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
               )}
-              Sign In with Email
+              Sign Up with Email
             </Button>
           </div>
         </form>

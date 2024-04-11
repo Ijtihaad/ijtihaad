@@ -14,7 +14,7 @@ export default function VoteButtons({ size }: { size?: 'xs' | 'sm' | 'lg' }) {
         rounded={'full'}
         className="p-0 hover:border"
       >
-        <ArrowBigDown />
+        <ArrowBigUp />
       </Button>
 
       <span className="text-sm">{56}</span>
@@ -26,7 +26,7 @@ export default function VoteButtons({ size }: { size?: 'xs' | 'sm' | 'lg' }) {
         rounded={'full'}
         className="p-0 hover:border"
       >
-        <ArrowBigUp />
+        <ArrowBigDown />
       </Button>
     </div>
   );

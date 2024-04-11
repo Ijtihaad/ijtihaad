@@ -35,7 +35,6 @@ export class AuthController {
       firstName: data.firstName,
       lastName: data.lastName,
       email: data.email,
-      phone: data.phone,
     };
 
     if (!isAdminExist) {
@@ -53,7 +52,7 @@ export class AuthController {
       },
     );
 
-    return this.authService.login(user.id);
+    return this.authService.login(user);
   }
 
   @Post('login/email')
@@ -80,7 +79,7 @@ export class AuthController {
     if (!user.password.value || !verifiedPassword) {
       throw new UnauthorizedException('Wrong Credential');
     }
-    return this.authService.login(user.id);
+    return this.authService.login(user);
   }
 
   @Patch('password')
@@ -123,6 +122,6 @@ export class AuthController {
     if (!user) {
       throw new UnauthorizedException('User Not Found');
     }
-    return this.authService.login(user.id);
+    return this.authService.login(user);
   }
 }

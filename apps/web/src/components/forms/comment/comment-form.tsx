@@ -11,20 +11,13 @@ import {
 import { Textarea } from '@web/components/ui/textarea';
 import cn from '@web/utils/cn';
 import { useState } from 'react';
-import { createPortal } from 'react-dom';
 
 export default function CommentForm() {
   const [commentType, setCommentType] = useState('replay');
   const isMobile = useMediaQuery('(max-width: 768px)');
 
   return (
-    <div
-      className={cn(
-        isMobile
-          ? 'fixed bottom-0 inset-x-0 bg-default'
-          : 'border rounded-xl px-1'
-      )}
-    >
+    <div className={cn('border rounded-xl px-1')}>
       <Textarea variant={'ghost'} />
       <div className="flex justify-between items-center gap-2 py-1">
         <div className="flex items-center ga-2">
@@ -33,7 +26,7 @@ export default function CommentForm() {
           </Button>
         </div>
         <div className="flex items-center gap-2">
-          <Select defaultValue={'replay'} onValueChange={setCommentType}>
+          {/* <Select defaultValue={'replay'} onValueChange={setCommentType}>
             <SelectTrigger className={cn('h-8')} aria-label="Select account">
               <SelectValue placeholder="Select an account">
                 <span className={cn('ml-2')}>{commentType}</span>
@@ -51,7 +44,7 @@ export default function CommentForm() {
                 </div>
               </SelectItem>
             </SelectContent>
-          </Select>
+          </Select> */}
           <Button size={'sm'}>Cancel</Button>
           <Button variant={'primary'} size={'sm'}>
             Comment

@@ -1,35 +1,27 @@
 'use server';
 
-import { JwtToken, userLoginSchema } from '@common';
-import { cookies } from 'next/headers';
+import { AuthUser, JwtToken, User, userLoginSchema } from '@common';
 import { z } from 'zod';
 import fetcher from '../fetcher';
+import { addAuthentication } from './authentications';
 
-export default async function loginWithEmail<T = {}>(
+export default async function loginWithEmail(
   data: z.infer<typeof userLoginSchema>
 ) {
-  const res = await fetcher<JwtToken & T>(`auth/login/email`, {
-    method: 'POST',
-    body: JSON.stringify(data),
-    cache: 'no-store',
-  });
+  const res = await fetcher<AuthUser>(
+    `auth/login/email`,
+    {
+      method: 'POST',
+      body: JSON.stringify(data),
+      cache: 'no-store',
+    }
+  );
 
   if (!res.success) {
     return res;
   }
-  const jwt = res.data;
-  const cookieStore = cookies();
-  cookieStore.set({
-    name: 'accessToken',
-    value: jwt.accessToken,
-    secure: process.env.NODE_ENV === 'production',
-  });
 
-  cookieStore.set({
-    name: 'refreshToken',
-    value: jwt.refreshToken,
-    secure: process.env.NODE_ENV === 'production',
-  });
+  await addAuthentication(res.data);
 
   return { success: true, message: 'You Login Successfully' };
 }

@@ -16,6 +16,15 @@ export type AccessAccessToken = {
 
 export type JwtToken = RefreshAccessToken & AccessAccessToken;
 
+export type AuthUser = {
+  user: {
+    email: string;
+    username?: string;
+    image: string | null;
+  };
+  jwt: JwtToken;
+};
+
 export type LoginOtp = {
   otpCode: string;
   otpToken: string;

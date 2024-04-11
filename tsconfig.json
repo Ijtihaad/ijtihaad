@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "esModuleInterop": true,
-    "noStrictGenericChecks": true,
     "sourceMap": true,
     "strict": true,
     "baseUrl": "./",

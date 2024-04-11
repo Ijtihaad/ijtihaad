@@ -87,7 +87,6 @@ let AuthController = AuthController_1 = class AuthController {
             firstName: data.firstName,
             lastName: data.lastName,
             email: data.email,
-            phone: data.phone,
         };
         if (!isAdminExist) {
             userData.role = _common_1.Role.ADMIN;
@@ -100,7 +99,7 @@ let AuthController = AuthController_1 = class AuthController {
             userId: user.id,
             value: data.password,
         });
-        return this.authService.login(user.id);
+        return this.authService.login(user);
     }
     async loginEmail(data) {
         this.logger.log(this.loginEmail.name);
@@ -118,7 +117,7 @@ let AuthController = AuthController_1 = class AuthController {
         if (!user.password.value || !verifiedPassword) {
             throw new common_1.UnauthorizedException('Wrong Credential');
         }
-        return this.authService.login(user.id);
+        return this.authService.login(user);
     }
     async updateMyPassword(data, user) {
         this.logger.log(this.updateMyPassword.name);
@@ -141,7 +140,7 @@ let AuthController = AuthController_1 = class AuthController {
         if (!user) {
             throw new common_1.UnauthorizedException('User Not Found');
         }
-        return this.authService.login(user.id);
+        return this.authService.login(user);
     }
 };
 exports.AuthController = AuthController;
@@ -293,20 +292,20 @@ let AuthService = class AuthService {
     async register(data) {
         const userExist = await this.prisma.user.findFirst({
             where: {
-                phone: data.phone,
+                email: data.email,
             },
         });
         if (userExist) {
-            throw new common_1.ConflictException('User already exists with this Phone Number');
+            throw new common_1.ConflictException('User already exists with this Email Number');
         }
         const user = await this.prisma.user.create({
             data: data,
         });
         return user;
     }
-    async login(userId) {
-        const accessTokenPayload = { userId };
-        const refreshTokenPayload = { userId };
+    async login(user) {
+        const accessTokenPayload = { userId: user.id };
+        const refreshTokenPayload = { userId: user.id };
         const accessToken = this.jwtTokenService.encryptJwtToken(accessTokenPayload, {
             expiresIn: jwt_constant_1.jwtConstants.expiresAccessToken,
             secret: jwt_constant_1.jwtConstants.accessSecretKey,
@@ -316,8 +315,11 @@ let AuthService = class AuthService {
             secret: jwt_constant_1.jwtConstants.refreshSecretKey,
         });
         return {
-            accessToken,
-            refreshToken,
+            user: user,
+            jwt: {
+                accessToken,
+                refreshToken,
+            },
         };
     }
     async findUser(where) {

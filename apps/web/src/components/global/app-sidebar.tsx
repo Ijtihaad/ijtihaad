@@ -1,7 +1,9 @@
 'use client';
 
+import { AuthUser } from '@common';
+import { User } from '@prisma/client';
 import cn from '@web/utils/cn';
-import { History, Home, PersonStanding, SquareLibrary } from 'lucide-react';
+import { History, Home, SquareLibrary } from 'lucide-react';
 import Link from 'next/link';
 import { Separator } from '../ui/separator';
 import Sidebar, { NavItem, SubNavItem, useSidebar } from '../ui/sidebar';
@@ -25,26 +27,22 @@ const links = [
   },
 ];
 
-export default function AppSidebar({ user }: { user: any }) {
+export default function AppSidebar({
+  user,
+  accounts,
+}: {
+  user: User | null;
+  accounts?: AuthUser['user'][];
+}) {
   const { collapsed } = useSidebar();
   return (
-    <div className="h-screen flex sticky top-0">
+    <div className="h-screen flex sticky top-0 z-50">
       <Sidebar
         header={
           <AccountSwitcher
             collapsed={collapsed}
-            accounts={[
-              {
-                email: 'harunjeylan@gmail.com',
-                icon: <PersonStanding className="w-4 h-4" />,
-                label: 'Harun Jeylan',
-              },
-              {
-                email: 'abdu@gmail.com',
-                icon: <PersonStanding className="w-4 h-4" />,
-                label: 'Abdurahman',
-              },
-            ]}
+            accounts={accounts}
+            account={user}
           />
         }
       >
