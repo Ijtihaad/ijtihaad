@@ -191,18 +191,13 @@ export default function CreatePostFrom({
                             placeholder="body (optional)"
                             modules={{
                               toolbar: [
-                                [{ font: [] }],
-                                [{ header: [1, 2, 3, 4, 5, 6, false] }],
-                                ['bold', 'italic', 'underline', 'strike'],
+                                ['bold', 'italic', 'underline'],
                                 [{ list: 'ordered' }, { list: 'bullet' }],
                                 [
                                   { indent: '-1' },
                                   { indent: '+1' },
                                   { align: [] },
                                 ],
-                                [{ color: [] }, { background: [] }],
-                                [{ script: 'sub' }, { script: 'super' }],
-                                ['blockquote', 'code-block'],
                                 ['clean'],
                               ],
                             }}

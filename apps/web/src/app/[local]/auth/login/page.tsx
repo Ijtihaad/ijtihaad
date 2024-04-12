@@ -2,6 +2,7 @@ import { UserLoginForm } from '@web/components/forms/auth/login-form';
 import { buttonVariants } from '@web/components/ui/button';
 import cn from '@web/utils/cn';
 import { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
@@ -9,7 +10,8 @@ export const metadata: Metadata = {
   description: 'Authentication forms built using the components.',
 };
 
-export default function Page() {
+export default async function Page() {
+  const t = await getTranslations();
   return (
     <div className="h-[calc(100vh_-_56px)]">
       <div className="h-full w-full flex ">
@@ -54,7 +56,7 @@ export default function Page() {
             <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
               <div className="flex flex-col space-y-2 text-center">
                 <h1 className="text-2xl font-semibold tracking-tight">
-                  Login to your account
+                  {t('auth.loginTitle')}
                 </h1>
                 <p className="text-sm text-muted-foreground">
                   Enter your email below to login to your account

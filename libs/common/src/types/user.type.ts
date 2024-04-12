@@ -21,8 +21,8 @@ export type AddressWhereUniqueInput = Prisma.AddressWhereUniqueInput;
 export type CreateUser = {
   firstName: string;
   lastName: string;
-  phone: string;
-  email?: string;
+  phone?: string;
+  email: string;
   role?: Role;
   address?: CreateAddress;
 };

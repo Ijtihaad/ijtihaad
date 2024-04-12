@@ -10,6 +10,8 @@ import TransitionProvider from '@web/components/contexts/transition-provider';
 import { Toaster } from '@web/components/ui/toast';
 import getMe from '@web/data/user/getMe';
 import { getAccounts } from '@web/data/auth/authentications';
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale, getMessages } from "next-intl/server";
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -26,6 +28,8 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const messages = await getMessages();
+  const local = await getLocale();
   const user = await getMe();
   const accounts = await getAccounts();
   const communities = [
@@ -142,36 +146,38 @@ export default async function RootLayout({
     },
   ];
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={local} suppressHydrationWarning>
       <body
         className={cn(
           'min-h-screen w-full bg-background text-foreground font-sans antialiased',
           fontSans.variable
         )}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <TransitionProvider>
-            <TooltipProvider>
-              <div className="flex w-full">
-                <AppSidebar
-                  user={user}
-                  accounts={accounts ?? []}
-                  communities={communities}
-                />
-                <div className="flex flex-col w-full">
-                  <AppBar user={user} />
-                  {children}
+        <NextIntlClientProvider messages={messages}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <TransitionProvider>
+              <TooltipProvider>
+                <div className="flex w-full">
+                  <AppSidebar
+                    user={user}
+                    accounts={accounts ?? []}
+                    communities={communities}
+                  />
+                  <div className="flex flex-col w-full">
+                    <AppBar user={user} />
+                    {children}
+                  </div>
                 </div>
-              </div>
-            </TooltipProvider>
-          </TransitionProvider>
-          <Toaster />
-        </ThemeProvider>
+              </TooltipProvider>
+            </TransitionProvider>
+            <Toaster />
+          </ThemeProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

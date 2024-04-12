@@ -8,7 +8,7 @@
       "@server": ["apps/server/src"],
       "@server/*": ["apps/server/src/*"],
       "@web": ["apps/web/src"],
-      "@web/*": ["apps/web/src/*"],
+      "@web/*": ["apps/web/src/*", "apps/web/*"],
       "@mobile": ["apps/mobile/src"],
       "@mobile/*": ["apps/mobile/src/*"],
       "@common": ["libs/common/src"],
