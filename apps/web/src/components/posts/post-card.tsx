@@ -5,7 +5,6 @@ import { CalendarDays, MessageSquare } from 'lucide-react';
 import Link from 'next/link';
 import PostOptions from '../actions/post-options';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
-import { Button } from '../ui/button';
 import {
   HoverCard,
   HoverCardContent,
@@ -28,7 +27,12 @@ export default function PostCard({
         <div className="flex items-center gap-2">
           <HoverCard>
             <HoverCardTrigger asChild>
-              <button className={cn('[outline:unset]', 'relative flex items-center gap-2')}>
+              <button
+                className={cn(
+                  '[outline:unset]',
+                  'relative flex items-center gap-2'
+                )}
+              >
                 <Avatar className={cn('h-6 w-6 md:h-8 md:w-8')}>
                   <AvatarImage src="/avatars/01.png" alt="@shadcn" />
                   <AvatarFallback>SC</AvatarFallback>

@@ -1,17 +1,17 @@
 import { ThemeProvider } from '@web/components/contexts/theme-provider';
+import TransitionProvider from '@web/components/contexts/transition-provider';
 import AppSidebar from '@web/components/global/app-sidebar';
 import AppBar from '@web/components/global/app-topbar';
+import { Toaster } from '@web/components/ui/toast';
 import { TooltipProvider } from '@web/components/ui/tooltip';
+import { getAccounts } from '@web/data/auth/authentications';
+import getMe from '@web/data/user/getMe';
+import { getLocale } from '@web/locales/locale';
+import TranslationProvider from '@web/locales/TranslationContext';
 import type { Metadata } from 'next';
 import { Inter as FontSans } from 'next/font/google';
 import cn from '../utils/cn';
 import './globals.css';
-import TransitionProvider from '@web/components/contexts/transition-provider';
-import { Toaster } from '@web/components/ui/toast';
-import getMe from '@web/data/user/getMe';
-import { getAccounts } from '@web/data/auth/authentications';
-import { NextIntlClientProvider } from "next-intl";
-import { getLocale, getMessages } from "next-intl/server";
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -28,123 +28,9 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const messages = await getMessages();
   const local = await getLocale();
   const user = await getMe();
   const accounts = await getAccounts();
-  const communities = [
-    {
-      slug: 'astu-muslim-jama',
-      name: 'Astu Muslim Jama',
-      image: '',
-    },
-    {
-      slug: 'dodola-muslim-jama',
-      name: 'Dodola Muslim Jama',
-      image: '',
-    },
-    {
-      slug: 'adama-muslim-jama',
-      name: 'Adama Muslim Jama',
-      image: '',
-    },
-
-    {
-      slug: 'astu-muslim-jama2',
-      name: 'Astu Muslim Jama',
-      image: '',
-    },
-    {
-      slug: 'dodola-muslim-jama2',
-      name: 'Dodola Muslim Jama',
-      image: '',
-    },
-    {
-      slug: 'adama-muslim-jama2',
-      name: 'Adama Muslim Jama',
-      image: '',
-    },
-
-    {
-      slug: 'astu-muslim-jama3',
-      name: 'Astu Muslim Jama',
-      image: '',
-    },
-    {
-      slug: 'dodola-muslim-jama3',
-      name: 'Dodola Muslim Jama',
-      image: '',
-    },
-    {
-      slug: 'adama-muslim-jama3',
-      name: 'Adama Muslim Jama',
-      image: '',
-    },
-
-    {
-      slug: 'astu-muslim-jama4',
-      name: 'Astu Muslim Jama',
-      image: '',
-    },
-    {
-      slug: 'dodola-muslim-jama4',
-      name: 'Dodola Muslim Jama',
-      image: '',
-    },
-    {
-      slug: 'adama-muslim-jama4',
-      name: 'Adama Muslim Jama',
-      image: '',
-    },
-
-    {
-      slug: 'astu-muslim-jama5',
-      name: 'Astu Muslim Jama',
-      image: '',
-    },
-    {
-      slug: 'dodola-muslim-jama5',
-      name: 'Dodola Muslim Jama',
-      image: '',
-    },
-    {
-      slug: 'adama-muslim-jama5',
-      name: 'Adama Muslim Jama',
-      image: '',
-    },
-
-    {
-      slug: 'astu-muslim-jama6',
-      name: 'Astu Muslim Jama',
-      image: '',
-    },
-    {
-      slug: 'dodola-muslim-jama6',
-      name: 'Dodola Muslim Jama',
-      image: '',
-    },
-    {
-      slug: 'adama-muslim-jama6',
-      name: 'Adama Muslim Jama',
-      image: '',
-    },
-
-    {
-      slug: 'astu-muslim-jama7',
-      name: 'Astu Muslim Jama',
-      image: '',
-    },
-    {
-      slug: 'dodola-muslim-jama7',
-      name: 'Dodola Muslim Jama',
-      image: '',
-    },
-    {
-      slug: 'adama-muslim-jama7',
-      name: 'Adama Muslim Jama',
-      image: '',
-    },
-  ];
   return (
     <html lang={local} suppressHydrationWarning>
       <body
@@ -153,7 +39,7 @@ export default async function RootLayout({
           fontSans.variable
         )}
       >
-        <NextIntlClientProvider messages={messages}>
+        <TranslationProvider local={local}>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -177,8 +63,122 @@ export default async function RootLayout({
             </TransitionProvider>
             <Toaster />
           </ThemeProvider>
-        </NextIntlClientProvider>
+        </TranslationProvider>
       </body>
     </html>
   );
 }
+
+const communities = [
+  {
+    slug: 'astu-muslim-jama',
+    name: 'Astu Muslim Jama',
+    image: '',
+  },
+  {
+    slug: 'dodola-muslim-jama',
+    name: 'Dodola Muslim Jama',
+    image: '',
+  },
+  {
+    slug: 'adama-muslim-jama',
+    name: 'Adama Muslim Jama',
+    image: '',
+  },
+
+  {
+    slug: 'astu-muslim-jama2',
+    name: 'Astu Muslim Jama',
+    image: '',
+  },
+  {
+    slug: 'dodola-muslim-jama2',
+    name: 'Dodola Muslim Jama',
+    image: '',
+  },
+  {
+    slug: 'adama-muslim-jama2',
+    name: 'Adama Muslim Jama',
+    image: '',
+  },
+
+  {
+    slug: 'astu-muslim-jama3',
+    name: 'Astu Muslim Jama',
+    image: '',
+  },
+  {
+    slug: 'dodola-muslim-jama3',
+    name: 'Dodola Muslim Jama',
+    image: '',
+  },
+  {
+    slug: 'adama-muslim-jama3',
+    name: 'Adama Muslim Jama',
+    image: '',
+  },
+
+  {
+    slug: 'astu-muslim-jama4',
+    name: 'Astu Muslim Jama',
+    image: '',
+  },
+  {
+    slug: 'dodola-muslim-jama4',
+    name: 'Dodola Muslim Jama',
+    image: '',
+  },
+  {
+    slug: 'adama-muslim-jama4',
+    name: 'Adama Muslim Jama',
+    image: '',
+  },
+
+  {
+    slug: 'astu-muslim-jama5',
+    name: 'Astu Muslim Jama',
+    image: '',
+  },
+  {
+    slug: 'dodola-muslim-jama5',
+    name: 'Dodola Muslim Jama',
+    image: '',
+  },
+  {
+    slug: 'adama-muslim-jama5',
+    name: 'Adama Muslim Jama',
+    image: '',
+  },
+
+  {
+    slug: 'astu-muslim-jama6',
+    name: 'Astu Muslim Jama',
+    image: '',
+  },
+  {
+    slug: 'dodola-muslim-jama6',
+    name: 'Dodola Muslim Jama',
+    image: '',
+  },
+  {
+    slug: 'adama-muslim-jama6',
+    name: 'Adama Muslim Jama',
+    image: '',
+  },
+
+  {
+    slug: 'astu-muslim-jama7',
+    name: 'Astu Muslim Jama',
+    image: '',
+  },
+  {
+    slug: 'dodola-muslim-jama7',
+    name: 'Dodola Muslim Jama',
+    image: '',
+  },
+  {
+    slug: 'adama-muslim-jama7',
+    name: 'Adama Muslim Jama',
+    image: '',
+  },
+];

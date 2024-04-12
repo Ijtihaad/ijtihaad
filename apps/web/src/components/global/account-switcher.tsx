@@ -27,6 +27,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '../ui/dialog';
+import { UserRegisterForm } from '../forms/auth/register-form';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
+import { Separator } from '@radix-ui/react-dropdown-menu';
 
 export function AccountSwitcher({
   collapsed,
@@ -44,41 +47,24 @@ export function AccountSwitcher({
     <>
       <Dialog open={openDialog} onOpenChange={setOpenDialog}>
         <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Login</DialogTitle>
-            <DialogDescription>
-              <div className="lg:p-8">
-                <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
-                  <div className="flex flex-col space-y-2 text-center">
-                    <h1 className="text-2xl font-semibold tracking-tight">
-                      Login to your account
-                    </h1>
-                    <p className="text-sm text-muted-foreground">
-                      Enter your email below to login to your account
-                    </p>
-                  </div>
-                  <UserLoginForm />
-                  <p className="px-8 text-center text-sm text-muted-foreground">
-                    By clicking continue, you agree to our{' '}
-                    <Link
-                      href="/terms"
-                      className="underline underline-offset-4 hover:text-primary"
-                    >
-                      Terms of Service
-                    </Link>{' '}
-                    and{' '}
-                    <Link
-                      href="/privacy"
-                      className="underline underline-offset-4 hover:text-primary"
-                    >
-                      Privacy Policy
-                    </Link>
-                    .
-                  </p>
-                </div>
-              </div>
-            </DialogDescription>
-          </DialogHeader>
+          <DialogDescription className="">
+            <Tabs
+              defaultValue="login"
+              className="w-full flex flex-col gap-4 justify-center "
+            >
+              <TabsList className=" w-fit -translate-x-2 -translate-y-2">
+                <TabsTrigger value="login">Login</TabsTrigger>
+                <TabsTrigger value="register">Register</TabsTrigger>
+              </TabsList>
+              <Separator />
+              <TabsContent value="login">
+                <UserLoginForm />
+              </TabsContent>
+              <TabsContent value="register">
+                <UserRegisterForm />
+              </TabsContent>
+            </Tabs>
+          </DialogDescription>
         </DialogContent>
       </Dialog>
 
