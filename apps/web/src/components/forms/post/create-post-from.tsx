@@ -10,10 +10,8 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormMessage,
 } from '@web/components/ui/form';
 import { Icons } from '@web/components/ui/icons';
-import { Input } from '@web/components/ui/input';
 import {
   Select,
   SelectContent,
@@ -28,13 +26,23 @@ import {
   TabsList,
   TabsTrigger,
 } from '@web/components/ui/tabs';
-import { Textarea } from '@web/components/ui/textarea';
 import { useToast } from '@web/components/ui/toast';
 import cn from '@web/utils/cn';
 import { FileQuestion, Globe, Newspaper } from 'lucide-react';
-import { ReactNode, use } from 'react';
+import dynamic from 'next/dynamic';
+import { ReactNode, use, useState } from 'react';
+import { Dropzone, FileMosaic } from '@files-ui/react';
 import { useForm } from 'react-hook-form';
+import 'react-quill/dist/quill.snow.css';
 import { z } from 'zod';
+import './quill.style.css';
+import './dropzone.style.css';
+import AdvancedDropzone from '@web/components/ui/dropzone';
+import { server_host } from '@web/constants/host.config';
+const ReactQuill = dynamic(() => import('react-quill'), {
+  loading: () => <p>Loading...</p>,
+  ssr: false,
+});
 
 const postTypes = [
   {
@@ -64,13 +72,25 @@ export default function CreatePostFrom({
   const form = useForm<z.infer<typeof createPostSchema>>({
     resolver: zodResolver(createPostSchema),
     defaultValues: {
-      title: '',
       type: '',
       body: '',
       account: '',
       community: '',
+      video: '',
+      images: [],
     },
   });
+
+  const [files, setFiles] = useState([]);
+  const updateFiles = (incommingFiles: any) => {
+    //do something with the files
+    console.log('incomming files', incommingFiles);
+    setFiles(incommingFiles);
+    //even your own upload implementation
+  };
+  const removeFile = (id: string) => {
+    setFiles(files.filter((x: any) => x.id !== id));
+  };
 
   async function onSubmit(values: z.infer<typeof createPostSchema>) {
     handleServerMutation(async () => {
@@ -156,26 +176,7 @@ export default function CreatePostFrom({
                 </TabsList>
               </div>
               <Separator className="col-span-4" />
-              <TabsContent value="text" className='py-0 my-0'>
-                <div className="col-span-4">
-                  <FormField
-                    control={form.control}
-                    name="title"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <Input
-                            placeholder="Title"
-                            type="text"
-                            {...field}
-                            className="rounded-none border-none h-10"
-                          />
-                        </FormControl>
-                        <FormMessage className="px-2" />
-                      </FormItem>
-                    )}
-                  />
-                </div>
+              <TabsContent value="text" className="py-0 my-0">
                 <div className="col-span-4">
                   <FormField
                     control={form.control}
@@ -183,10 +184,30 @@ export default function CreatePostFrom({
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
-                          <Textarea
+                          <ReactQuill
+                            theme="snow"
+                            value={field.value}
+                            defaultValue={field.value}
                             placeholder="body (optional)"
-                            {...field}
-                            className="rounded-none border-none"
+                            modules={{
+                              toolbar: [
+                                [{ font: [] }],
+                                [{ header: [1, 2, 3, 4, 5, 6, false] }],
+                                ['bold', 'italic', 'underline', 'strike'],
+                                [{ list: 'ordered' }, { list: 'bullet' }],
+                                [
+                                  { indent: '-1' },
+                                  { indent: '+1' },
+                                  { align: [] },
+                                ],
+                                [{ color: [] }, { background: [] }],
+                                [{ script: 'sub' }, { script: 'super' }],
+                                ['blockquote', 'code-block'],
+                                ['clean'],
+                              ],
+                            }}
+                            onChange={field.onChange}
+                            style={{ border: 'none' }}
                           />
                         </FormControl>
                       </FormItem>
@@ -194,8 +215,42 @@ export default function CreatePostFrom({
                   />
                 </div>
               </TabsContent>
-              <TabsContent value="image" className='py-0 my-0'>Upload Image.</TabsContent>
-              <TabsContent value="video" className='py-0 my-0'>Upload Video</TabsContent>
+              <TabsContent value="image" className="py-0 my-0">
+                <FormField
+                  control={form.control}
+                  name="images"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <AdvancedDropzone
+                          upload_url={`${server_host}/files`}
+                          onUploaded={(files: string[]) =>
+                            field.onChange(files)
+                          }
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </TabsContent>
+              <TabsContent value="video" className="py-0 my-0">
+                <FormField
+                  control={form.control}
+                  name="video"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <AdvancedDropzone
+                          upload_url={`${server_host}/files`}
+                          onUploaded={(files: string[]) =>
+                            field.onChange(files[0])
+                          }
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </TabsContent>
             </Tabs>
             <Separator className="col-span-4" />
             <div className="col-span-4 px-2 py-2 flex gap-2 justify-between">
@@ -306,8 +361,6 @@ function SelectedValue({
   placeholder?: ReactNode;
   items: { name: string; slug: string; icon: ReactNode }[];
 }) {
-  console.log({ value });
-
   const item = items?.find((item) => item.slug === value);
 
   return (

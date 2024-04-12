@@ -1869,9 +1869,10 @@ const zod_1 = __webpack_require__(/*! zod */ "zod");
 exports.createPostSchema = zod_1.z.object({
     body: zod_1.z.string(),
     type: zod_1.z.string(),
-    title: zod_1.z.string().min(2).max(50),
     account: zod_1.z.string().optional(),
     community: zod_1.z.string().min(2).max(50),
+    images: zod_1.z.array(zod_1.z.string()).optional(),
+    video: zod_1.z.string().optional(),
 });
 
 
