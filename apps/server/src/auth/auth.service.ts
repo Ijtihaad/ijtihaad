@@ -1,146 +1,196 @@
 import {
-  AccessTokenPayload,
-  AuthUser,
-  RefreshTokenPayload,
-  Role,
-  User,
-  UserCreateInput,
-  UserWhereUniqueInput,
-} from '@common';
+  LocalLogin,
+  LocalRegister,
+  OAuthRegister,
+} from '@libs/common';
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
+  InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
 import * as argon from 'argon2';
-import { jwtConstants } from '../global/constants/jwt.constant';
-import { JwtTokenService } from '../global/services/jwt-token.service';
-import { PrismaService } from '../global/services/prisma.service';
+import { eq, or } from 'drizzle-orm';
+import {
+  EmailTable,
+  PasswordTable,
+  UserTable,
+} from '../drizzle/drizzle.schema';
+import { DrizzleService } from '../drizzle/drizzle.service';
+
+import { omit } from '@libs/common';
 
 @Injectable()
 export class AuthService {
-  constructor(
-    private readonly prisma: PrismaService,
-    private readonly jwtTokenService: JwtTokenService,
-  ) {}
+  constructor(private readonly drizzle: DrizzleService) {}
 
-  async register(data: UserCreateInput) {
-    const userExist = await this.prisma.user.findFirst({
-      where: {
-        email: data.email,
-      },
-    });
+  async findUser(where: { id?: number; username?: string }) {
+    const whereOpr: any[] = [];
 
-    if (userExist) {
-      throw new ConflictException('User already exists with this Email Number');
+    if (where.id) {
+      whereOpr.push(eq(UserTable.id, where.id));
+    }
+    if (where.username) {
+      whereOpr.push(eq(UserTable.username, where.username));
+    }
+    if (!whereOpr.length) {
+      throw new InternalServerErrorException();
     }
 
-    const user = await this.prisma.user.create({
-      data: data,
-    });
-
-    return user;
-  }
-
-  async login(user: User): Promise<AuthUser> {
-    const accessTokenPayload: AccessTokenPayload = { userId: user.id };
-    const refreshTokenPayload: RefreshTokenPayload = { userId: user.id };
-
-    const accessToken = this.jwtTokenService.encryptJwtToken(
-      accessTokenPayload,
-      {
-        expiresIn: jwtConstants.expiresAccessToken,
-        secret: jwtConstants.accessSecretKey,
-      },
-    );
-
-    const refreshToken = this.jwtTokenService.encryptJwtToken(
-      refreshTokenPayload,
-      {
-        expiresIn: jwtConstants.expiresRefreshToken,
-        secret: jwtConstants.refreshSecretKey,
-      },
-    );
-
-    return {
-      user: user,
-      jwt: {
-        accessToken,
-        refreshToken,
-      },
-    };
-  }
-
-  async findUser(where: UserWhereUniqueInput) {
-    const user = await this.prisma.user.findFirst({
-      where: where,
-      include: {
-        password: true,
-      },
+    const user = await this.drizzle.db.query.UserTable.findFirst({
+      where: or(...whereOpr),
     });
     return user;
   }
 
-  async refreshAccessToken(refreshToken: string) {
-    const refreshTokenData =
-      this.jwtTokenService.decryptJwtAccessToken<RefreshTokenPayload>(
-        refreshToken,
-        {
-          secret: jwtConstants.refreshSecretKey,
-        },
-      );
-    if (!refreshTokenData) {
-      throw new UnauthorizedException();
+  async findEmail(value: string) {
+    const email = (
+      await this.drizzle.db
+        .select()
+        .from(EmailTable)
+        .where(eq(EmailTable.value, value))
+    )?.[0];
+
+    return email;
+  }
+
+  async localRegister(data: LocalRegister) {
+    const emailExist = await this.drizzle.db.query.EmailTable.findFirst({
+      where: eq(EmailTable.value, data.email),
+      columns: {},
+    });
+
+    if (emailExist) {
+      throw new ConflictException('User already exists with this Email');
     }
-    const user = await this.prisma.user.findFirst({
-      where: { id: refreshTokenData.userId },
+
+    const user = (
+      await this.drizzle.db
+        .insert(UserTable)
+        .values(omit(data, ['password', 'email']))
+        .returning()
+    )[0];
+
+    await this.createEmail({
+      userId: user.id,
+      value: data.email,
     });
+
+    await this.createPassword({
+      userId: user.id,
+      value: data.password,
+    });
+
     return user;
   }
 
-  async createOrUpdatePassword(
-    where: UserWhereUniqueInput,
-    data: { value: string; userId: string },
-  ) {
-    const passwordExist = await this.prisma.password.findFirst({
-      where: {
-        user: where,
-      },
-    });
+  async localLogin(data: LocalLogin) {
+    let user: Awaited<ReturnType<typeof this.findUser>>;
 
-    const hashedPassword = await argon.hash(data.value);
-    if (passwordExist) {
-      await this.prisma.password.update({
-        where: {
-          id: passwordExist.id,
-        },
-        data: {
-          value: hashedPassword,
-          userId: data.userId,
-        },
+    if (data.identifier.includes('@')) {
+      const email = await this.findEmail(data.identifier);
+      if (!email) {
+        throw new BadRequestException('User Not Found With this Email');
+      }
+      user = await this.findUser({
+        id: email.userId,
       });
     } else {
-      await this.prisma.password.create({
-        data: {
-          value: hashedPassword,
-          userId: data.userId,
-        },
+      user = await this.findUser({
+        username: data.identifier,
       });
+      if (!user) {
+        throw new BadRequestException('User Not Found With this Username');
+      }
     }
 
-    return { message: 'Password Updated' };
+    if (!user) {
+      throw new BadRequestException('User Not Found');
+    }
+
+    if (user.blocked) {
+      throw new UnauthorizedException('User Blocked By Admin');
+    }
+
+    const verifiedPassword = await this.verifyUserPassword({
+      userId: user.id,
+      password: data.password,
+    });
+
+    if (!verifiedPassword) {
+      throw new UnauthorizedException('Wrong Credential');
+    }
+
+    return user;
   }
 
-  async verifyPassword(hashedPassword: string, planePassword: string) {
-    return await argon.verify(hashedPassword, planePassword);
+  async oauthRegister(data: OAuthRegister) {
+    const emailExist = await this.drizzle.db.query.EmailTable.findFirst({
+      where: eq(EmailTable.value, data.email.value),
+      columns: {},
+    });
+
+    if (emailExist) {
+      throw new ConflictException('User already exists with this Email');
+    }
+
+    const user = (
+      await this.drizzle.db
+        .insert(UserTable)
+        .values(omit(data, ['email']))
+        .returning()
+    )[0];
+
+    await this.createEmail({
+      userId: user.id,
+      value: data.email.value,
+      verified: data.email.verified,
+    });
+    return user;
+  }
+
+  async createPassword(data: InsertPassword) {
+    const hashedValue = await argon.hash(data.value);
+
+    const password = (
+      await this.drizzle.db
+        .insert(PasswordTable)
+        .values({
+          value: hashedValue,
+          userId: data.userId,
+        })
+        .returning()
+    )[0];
+    return password;
+  }
+
+  async verifyUserPassword(data: { userId: number; password: string }) {
+    const password = await this.drizzle.db.query.PasswordTable.findFirst({
+      where: eq(PasswordTable.userId, data.userId),
+    });
+
+    if (!password) {
+      throw new UnauthorizedException('Credential Not Set yet');
+    }
+
+    const verifiedPassword = await argon.verify(password.value, data.password);
+
+    return verifiedPassword;
+  }
+
+  async createEmail(data: CreateEmail) {
+    const email = (
+      await this.drizzle.db.insert(EmailTable).values(data).returning()
+    )[0];
+
+    return email;
   }
 
   async isAdminExist() {
-    const user = await this.prisma.user.findFirst({
-      where: {
-        role: Role.ADMIN,
-      },
+    const user = await this.drizzle.db.query.UserTable.findFirst({
+      where: eq(UserTable.role, 'ADMIN'),
     });
-    return user;
+    return !user;
   }
 }

@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <div className="h-[calc(100vh_-_56px)]">
+    <div className="h-screen">
       <div className="h-full w-full flex ">
         <div className="relative hidden h-full flex-col bg-muted p-10 md:flex dark:border-r md:w-1/2">
           <div className="absolute inset-0 bg-zinc-900" />

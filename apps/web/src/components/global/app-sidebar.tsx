@@ -16,6 +16,7 @@ import { Separator } from '../ui/separator';
 import Sidebar, { NavItem, SubNavItem, useSidebar } from '../ui/sidebar';
 import { AccountSwitcher } from './account-switcher';
 import { ScrollArea } from '../ui/scroll-area';
+import { usePathname } from 'next/navigation';
 
 const links = [
   {
@@ -60,6 +61,10 @@ export default function AppSidebar({
   communities,
 }: AppSidebarProps) {
   const { collapsed } = useSidebar();
+  const pathname = usePathname();
+  if (pathname.startsWith('/auth')) {
+    return <></>;
+  }
   return (
     <div className="h-screen flex sticky top-0 z-50">
       <Sidebar
@@ -89,7 +94,11 @@ export default function AppSidebar({
               variant="ghost"
               label="Communities"
             >
-              <ScrollArea className={cn('flex flex-col gap-2 max-h-[calc(100vh_-_26rem)]')}>
+              <ScrollArea
+                className={cn(
+                  'flex flex-col gap-2 max-h-[calc(100vh_-_26rem)]'
+                )}
+              >
                 {communities.map((community, index) => (
                   <NavItem
                     key={community.slug}
@@ -117,7 +126,7 @@ export default function AppSidebar({
                 <NavItem
                   Icon={({ className }: { className: string }) => (
                     <Avatar className={cn('h-6 w-6 flex items-center gap-4')}>
-                      <AvatarFallback className='p-1'>
+                      <AvatarFallback className="p-1">
                         <Plus />
                       </AvatarFallback>
                     </Avatar>

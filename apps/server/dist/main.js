@@ -1730,6 +1730,7 @@ __exportStar(__webpack_require__(/*! ./types/user.type */ "../../libs/common/src
 __exportStar(__webpack_require__(/*! ./types/notifications.type */ "../../libs/common/src/types/notifications.type.ts"), exports);
 __exportStar(__webpack_require__(/*! ./validation/auth.validation */ "../../libs/common/src/validation/auth.validation.ts"), exports);
 __exportStar(__webpack_require__(/*! ./validation/community.validation */ "../../libs/common/src/validation/community.validation.ts"), exports);
+__exportStar(__webpack_require__(/*! ./validation/profile.validation */ "../../libs/common/src/validation/profile.validation.ts"), exports);
 
 
 /***/ }),
@@ -1873,6 +1874,42 @@ exports.createPostSchema = zod_1.z.object({
     community: zod_1.z.string().min(2).max(50),
     images: zod_1.z.array(zod_1.z.string()).optional(),
     video: zod_1.z.string().optional(),
+});
+
+
+/***/ }),
+
+/***/ "../../libs/common/src/validation/profile.validation.ts":
+/*!**************************************************************!*\
+  !*** ../../libs/common/src/validation/profile.validation.ts ***!
+  \**************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.profileFormSchema = void 0;
+const zod_1 = __webpack_require__(/*! zod */ "zod");
+exports.profileFormSchema = zod_1.z.object({
+    username: zod_1.z
+        .string()
+        .min(2, {
+        message: 'Username must be at least 2 characters.',
+    })
+        .max(30, {
+        message: 'Username must not be longer than 30 characters.',
+    }),
+    email: zod_1.z
+        .string({
+        required_error: 'Please enter an email.',
+    })
+        .email(),
+    bio: zod_1.z.string().max(160).min(4),
+    urls: zod_1.z
+        .array(zod_1.z.object({
+        value: zod_1.z.string().url({ message: 'Please enter a valid URL.' }),
+    }))
+        .optional(),
 });
 
 

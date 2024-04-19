@@ -1,127 +1,140 @@
 import {
-  LoginEmail,
-  RefreshAccessToken,
-  RegisterEmail,
-  Role,
-  UpdatePassword,
-  User,
-  UserCreateInput,
-} from '@common';
-import {
-  BadRequestException,
   Body,
-  Controller,
-  Logger,
-  Patch,
+  Get,
   Post,
+  UsePipes,
+  Controller,
+  NotFoundException,
   UnauthorizedException,
-  UseGuards,
 } from '@nestjs/common';
-import { CurrentUser } from '../users/decorators/current-user-decorator';
 import { AuthService } from './auth.service';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { GoogleAuthService } from './google-auth/google-auth.service';
+import { JwtAuthService } from './jwt-auth/jwt-auth.service';
+import { LocalLoginPipe } from './pipes/local-login.pipe';
+import { localRegisterPipe } from './pipes/local-register.pipe';
+import { LocalLogin, LocalRegister } from '@libs/common';
+
 @Controller('auth')
 export class AuthController {
-  private readonly logger = new Logger(AuthController.name);
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly googleAuthService: GoogleAuthService,
+    private readonly authService: AuthService,
+    private readonly jwtAuthService: JwtAuthService,
+  ) {}
 
-  @Post('register/email')
-  async registerEmail(@Body() data: RegisterEmail) {
-    this.logger.log(this.registerEmail.name);
-
-    const isAdminExist = await this.authService.isAdminExist();
-
-    const userData: UserCreateInput = {
-      firstName: data.firstName,
-      lastName: data.lastName,
-      email: data.email,
+  @Post('/local/register')
+  @UsePipes(localRegisterPipe)
+  async localRegister(@Body() data: LocalRegister) {
+    const user = await this.authService.localRegister(data);
+    const jwt = {
+      accessToken: await this.jwtAuthService.encryptJwtAccessToken({
+        userId: user.id,
+      }),
+      refreshToken: await this.jwtAuthService.encryptJwtRefreshToken({
+        userId: user.id,
+      }),
     };
 
-    if (!isAdminExist) {
-      userData.role = Role.ADMIN;
-    } else {
-      userData.role = Role.USER;
-    }
-
-    const user = await this.authService.register(userData);
-    await this.authService.createOrUpdatePassword(
-      { id: user.id },
-      {
-        userId: user.id,
-        value: data.password,
-      },
-    );
-
-    return this.authService.login(user);
+    return { user, jwt };
   }
 
-  @Post('login/email')
-  async loginEmail(@Body() data: LoginEmail) {
-    this.logger.log(this.loginEmail.name);
+  @Post('/local/login')
+  @UsePipes(LocalLoginPipe)
+  async localLogin(@Body() data: LocalLogin) {
+    const user = await this.authService.localLogin(data);
+
+    const jwt = {
+      accessToken: await this.jwtAuthService.encryptJwtAccessToken({
+        userId: user.id,
+      }),
+      refreshToken: await this.jwtAuthService.encryptJwtRefreshToken({
+        userId: user.id,
+      }),
+    };
+
+    return { user, jwt };
+  }
+
+  @Get('/google/url')
+  async googleUrl() {
+    const url = await this.googleAuthService.getAuthUrl();
+    return { authUrl: url };
+  }
+
+  @Post('/google/login')
+  async googleLogin(@Body() data: { code: string }) {
     console.log({ data });
 
-    const user = await this.authService.findUser({
-      email: data.email,
-    });
+    const googleUser = await this.googleAuthService.validateUser(data.code);
+    if (!googleUser) {
+      throw new UnauthorizedException('Google Auth Filled');
+    }
 
-    if (!user) {
-      throw new BadRequestException('User Not Found With this Email');
+    const email = await this.authService.findEmail(googleUser.email);
+
+    let user: any;
+    if (email) {
+      user = await this.authService.findUser({
+        id: email.userId,
+      });
+    } else {
+      user = await this.authService.oauthRegister({
+        firstName: googleUser.given_name,
+        lastName: googleUser.family_name,
+        picture: googleUser.picture,
+        email: {
+          value: googleUser.email,
+          verified: googleUser.email_verified,
+        },
+      });
     }
 
     if (user.blocked) {
       throw new UnauthorizedException('User Blocked By Admin');
     }
-    const verifiedPassword = await this.authService.verifyPassword(
-      user.password.value,
-      data.password,
-    );
 
-    if (!user.password.value || !verifiedPassword) {
-      throw new UnauthorizedException('Wrong Credential');
-    }
-    return this.authService.login(user);
-  }
-
-  @Patch('password')
-  @UseGuards(JwtAuthGuard)
-  async updateMyPassword(
-    @Body() data: UpdatePassword,
-    @CurrentUser() user: User,
-  ) {
-    this.logger.log(this.updateMyPassword.name);
-    const userData = await this.authService.findUser({ id: user.id });
-
-    if (userData.password) {
-      const verifiedPassword = await this.authService.verifyPassword(
-        userData.password.value,
-        data.oldPassword,
-      );
-
-      if (!userData.password.value || !verifiedPassword) {
-        throw new UnauthorizedException('Wrong Credential');
-      }
-    }
-
-    const password = await this.authService.createOrUpdatePassword(
-      { id: user.id },
-      {
+    const jwt = {
+      accessToken: await this.jwtAuthService.encryptJwtAccessToken({
         userId: user.id,
-        value: data.newPassword,
-      },
-    );
+      }),
+      refreshToken: await this.jwtAuthService.encryptJwtRefreshToken({
+        userId: user.id,
+      }),
+    };
 
-    return password;
+    return { user, jwt };
   }
 
   @Post('token/refresh')
-  async refreshAccessToken(@Body() refreshAccessToken: RefreshAccessToken) {
-    this.logger.log(this.refreshAccessToken.name);
-    const user = await this.authService.refreshAccessToken(
-      refreshAccessToken.refreshToken,
-    );
-    if (!user) {
-      throw new UnauthorizedException('User Not Found');
+  async refreshAccessToken(
+    @Body() refreshAccessToken: { refreshToken: string },
+  ) {
+    console.log(refreshAccessToken);
+
+    const data = await this.jwtAuthService.decryptJwtRefreshToken<{
+      userId: number;
+    }>(refreshAccessToken.refreshToken);
+
+    if (!data) {
+      throw new UnauthorizedException('Access Token Invalid or Expired!');
     }
-    return this.authService.login(user);
+
+    let user = await this.authService.findUser({
+      id: +data.userId,
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const jwt = {
+      accessToken: await this.jwtAuthService.encryptJwtAccessToken({
+        userId: user.id,
+      }),
+      refreshToken: await this.jwtAuthService.encryptJwtRefreshToken({
+        userId: user.id,
+      }),
+    };
+    return { user, jwt };
   }
 }

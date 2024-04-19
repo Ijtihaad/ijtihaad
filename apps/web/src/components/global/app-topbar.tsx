@@ -11,10 +11,15 @@ import { useSidebar } from '../ui/sidebar';
 import { ModeToggle } from './mode-toggle';
 import { UserNav } from './user-nav';
 import { User } from '@common';
+import { usePathname } from 'next/navigation';
 
 export default function AppBar({ user }: { user: User | null }) {
   const isMobile = useMediaQuery('(max-width: 768px)');
   const { toggleCollapsed, toggleToggled } = useSidebar();
+  const pathname = usePathname();
+  if (pathname.startsWith('/auth')) {
+    return <></>;
+  }
   return (
     <div className="w-full flex flex-col sticky top-0 bg-background/95 z-10">
       <div className="w-full flex items-center gap-2 p-2">

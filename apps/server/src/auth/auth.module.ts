@@ -1,30 +1,17 @@
 import { Module } from '@nestjs/common';
-import { JwtModule, JwtService } from '@nestjs/jwt';
-import { PrismaService } from '../global/services/prisma.service';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { PassportModule } from '@nestjs/passport';
-import { jwtConstants } from '../global/constants/jwt.constant';
-import { JwtStrategy } from './strategies/jwt.strategy';
-import { JwtTokenService } from '../global/services/jwt-token.service';
-import { NotificationsService } from '../notification/notifications.service';
+import { GoogleAuthService } from './google-auth/google-auth.service';
+import { GoogleAuthModule } from './google-auth/google-auth.module';
+import { DrizzleService } from '../drizzle/drizzle.service';
+import { DrizzleModule } from '../drizzle/drizzle.module';
+import { JwtAuthService } from './jwt-auth/jwt-auth.service';
+import { JwtAuthModule } from './jwt-auth/jwt-auth.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
-  imports: [
-    PassportModule,
-    JwtModule.register({
-      secret: jwtConstants.accessSecretKey,
-      signOptions: { expiresIn: jwtConstants.expiresAccessToken },
-    }),
-  ],
+  imports: [GoogleAuthModule, DrizzleModule, JwtAuthModule, JwtModule],
   controllers: [AuthController],
-  providers: [
-    PrismaService,
-    JwtStrategy,
-    AuthService,
-    JwtTokenService,
-    JwtService,
-    NotificationsService,
-  ],
+  providers: [AuthService, GoogleAuthService, DrizzleService, JwtAuthService,],
 })
 export class AuthModule {}

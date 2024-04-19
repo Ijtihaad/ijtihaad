@@ -10,3 +10,4 @@ export * from './types/notifications.type';
 
 export * from './validation/auth.validation';
 export * from './validation/community.validation';
+export * from './validation/profile.validation';

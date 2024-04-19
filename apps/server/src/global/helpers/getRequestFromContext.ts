@@ -1,14 +1,13 @@
 import { ExecutionContext } from '@nestjs/common';
 import { Request } from 'express';
-
-export function getRequestFromContext<T extends Request>(
-  context: ExecutionContext
-): T {
-  let request: T;
+export function getRequestFromContext<T extends object>(
+  context: ExecutionContext,
+): Request & T {
+  let request: Request & T;
   if (context.getType() === 'http') {
-    request = context.switchToHttp().getRequest<T>();
-  } else if (context.getType() === 'rpc') {
-    request = context.switchToRpc().getData<T>();
+    request = context.switchToHttp().getRequest<Request & T>();
+  } else {
+    request = context.switchToRpc().getData<Request & T>();
   }
   return request;
 }
