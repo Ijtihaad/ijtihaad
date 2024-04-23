@@ -1,9 +1,5 @@
 module.exports = {
   parser: '@typescript-eslint/parser',
-  env: {
-    browser: true,
-    node: true,
-  },
   parserOptions: {
     project: 'tsconfig.json',
     tsconfigRootDir: __dirname,
@@ -13,8 +9,6 @@ module.exports = {
   extends: [
     'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
-    'eslint:recommended',
-    'plugin:import/recommended',
   ],
   root: true,
   env: {
@@ -27,14 +21,5 @@ module.exports = {
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
-    '@typescript-eslint/no-unused-vars': 'off',
-    'prefer-const': 'off',
-    'prettier/prettier': 'off',
-    'react-hooks/exhaustive-deps': 'off',
-    'no-unused-vars': 'off',
-    'import/named': 'off',
-    'no-empty': 'off',
-    'no-useless-escape': 'off',
-    '@typescript-eslint/ban-ts-comment':'off'
   },
 };
