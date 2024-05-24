@@ -1,14 +1,16 @@
 import { z } from 'zod';
 
 export const userRole = z.union([z.literal("ADMIN"), z.literal("BASIC")])
+
 export const userSchema = z.object({
   id: z.string(),
+  blocked: z.boolean(),
+  emailVerified: z.boolean(),
   firstName: z.string().min(3).max(100),
   lastName: z.string().min(3).max(100),
-  email: z.string().email().max(100),
   username: z.string().min(3).max(100).nullable(),
   picture: z.string().max(255).nullable(),
-  blocked: z.boolean(),
+  email: z.string().email().max(100),
   role: userRole,
 })
 

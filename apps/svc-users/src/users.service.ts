@@ -5,12 +5,13 @@ import {
 } from '@nestjs/common';
 import {
   User,
-  RegisterUser,
   UpdateMe,
   UpdateUser,
   UserWhereInput,
   UserWhereUniqueInput,
-  VerifyUserPassword
+  VerifyUserPassword,
+  LocalRegister,
+  OAuthRegister
 } from '@repo/common';
 
 import * as argon from 'argon2';
@@ -26,28 +27,24 @@ export class UsersService {
     private readonly userQueryParser: UserQueryParser,
   ) { }
 
-  async create(data: RegisterUser): Promise<User> {
+  async create(data: LocalRegister | OAuthRegister): Promise<User> {
 
-    const emailExist = await this.drizzle.db.query.usersTable.findFirst({
+    const userExist = await this.drizzle.db.query.usersTable.findFirst({
       where: eq(usersTable.email, data.email),
     });
 
-    console.log(data);
-
-    if (emailExist) {
+    if (userExist) {
       throw new ConflictException('User already exists with this Email');
     }
 
-    const hash = await argon.hash(data.password);
+    if ("password" in data) {
+      data.password = await argon.hash(data.password);
+    }
+
     const user = (
       await this.drizzle.db
         .insert(usersTable)
-        .values({
-          firstName: data.firstName,
-          lastName: data.lastName,
-          email: data.email,
-          password: hash,
-        })
+        .values(data)
         .returning()
     )[0];
 
@@ -57,6 +54,7 @@ export class UsersService {
 
     return user;
   }
+
 
   async findMany(where?: UserWhereInput, search?: string): Promise<User[]> {
     const whereOpr = this.userQueryParser.where(where);
@@ -131,7 +129,7 @@ export class UsersService {
       throw new NotFoundException('User Not Found');
     }
 
-    const verifiedPassword = await argon.verify(user.password, data.password);
+    const verifiedPassword = await argon.verify(user.password ?? "", data.password);
 
     return verifiedPassword;
   }

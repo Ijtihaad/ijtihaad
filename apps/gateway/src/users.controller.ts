@@ -9,7 +9,6 @@ import {
   OnModuleInit,
   Param,
   Patch,
-  Post,
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 

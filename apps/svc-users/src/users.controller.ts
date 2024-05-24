@@ -1,12 +1,13 @@
 import { Controller, Logger } from "@nestjs/common";
 import { MessagePattern, Payload } from "@nestjs/microservices";
 import {
-  RegisterUser,
   UpdateMe,
   UpdateUser,
+  LocalRegister,
   UserWhereInput,
   UserWhereUniqueInput,
-  VerifyUserPassword
+  VerifyUserPassword,
+  OAuthRegister
 } from "@repo/common";
 import { UsersServiceController } from "@repo/shared-svc";
 import { ServiceRequest } from "@repo/shared-svc/dist/interfaces/request.interface";
@@ -18,7 +19,7 @@ export class UsersController implements UsersServiceController {
   constructor(private readonly usersService: UsersService) { }
 
   @MessagePattern("users:create")
-  create(@Payload() { data }: ServiceRequest<RegisterUser>) {
+  create(@Payload() { data }: ServiceRequest<LocalRegister | OAuthRegister>) {
     this.logger.log("users:create")
     return this.usersService.create(data);
   }

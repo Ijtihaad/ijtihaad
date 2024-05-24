@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { userRole } from './user.schema';
 
-export const registerUserSchema = z.object({
+export const localRegisterSchema = z.object({
   firstName: z.string().min(3).max(100),
   lastName: z.string().min(3).max(100),
   email: z.string().email().max(100),
@@ -13,8 +13,16 @@ export const registerUserSchema = z.object({
     .regex(/[0-9]/, 'Password must contain at least 1 numeric character'),
 });
 
-export const loginUserSchema = z.object({
-  email: z.string().email(),
+export const oauthRegisterSchema = z.object({
+  firstName: z.string().min(3).max(100),
+  lastName: z.string().min(3).max(100),
+  email: z.string().email().max(100),
+  picture: z.string().optional(),
+  emailVerified: z.boolean(),
+});
+
+export const localLoginSchema = z.object({
+  identifier: z.string(),
   password: z.string(),
 });
 
@@ -27,10 +35,18 @@ export const refreshTokenPayloadSchema = z.object({
   userId: z.string(),
 });
 
+export type JwtAuthToken = {
+  accessToken: string;
+  refreshToken: string
+}
 
-export type LoginUser = z.infer<typeof loginUserSchema>;
-export type RegisterUser = z.infer<typeof registerUserSchema>;
+export type JwtAuthTokenPayload = {
+  accessToken: AccessTokenPayload;
+  refreshToken: RefreshTokenPayload
+}
+
+export type LocalLogin = z.infer<typeof localLoginSchema>;
+export type LocalRegister = z.infer<typeof localRegisterSchema>;
+export type OAuthRegister = z.infer<typeof oauthRegisterSchema>;
 export type AccessTokenPayload = z.infer<typeof accessTokenPayloadSchema>;
 export type RefreshTokenPayload = z.infer<typeof refreshTokenPayloadSchema>;
-
-export type JwtAuthToken = AccessTokenPayload & RefreshTokenPayload;

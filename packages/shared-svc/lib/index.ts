@@ -9,3 +9,6 @@ export * from './core/rpc-handler';
 export * from './interfaces/request.interface';
 export * from './interfaces/auth.interface';
 export * from './interfaces/user.interface';
+
+export * from './pipes/validation.pipe';
+

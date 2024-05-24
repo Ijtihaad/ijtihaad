@@ -1,9 +1,9 @@
-import { RegisterUser, UpdateMe, UpdateUser, User, UserWhereInput, UserWhereUniqueInput, VerifyUserPassword } from '@repo/common';
+import { LocalRegister, OAuthRegister, UpdateMe, UpdateUser, User, UserWhereInput, UserWhereUniqueInput, VerifyUserPassword } from '@repo/common';
 import { RpcHandler } from '../core/rpc-handler';
 import { ServiceRequest } from './request.interface';
 
 export interface UsersServiceController {
-  create(payload: ServiceRequest<RegisterUser>): Promise<User>;
+  create(payload: ServiceRequest<LocalRegister | OAuthRegister>): Promise<User>;
 
   findMany(payload: ServiceRequest<UserWhereInput>): Promise<User[]>;
 
