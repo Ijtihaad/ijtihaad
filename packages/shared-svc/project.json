@@ -1,0 +1,11 @@
+{
+  "name": "@repo/shared-svc",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/shared-svc/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "dependsOn": [{ "projects": "@repo/common", "target": "build" }]
+    }
+  }
+}

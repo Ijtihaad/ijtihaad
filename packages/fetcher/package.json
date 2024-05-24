@@ -1,0 +1,17 @@
+{
+  "name": "@repo/fetcher",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "rm -rf dist && tsc && tsc-alias"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@repo/config": "workspace:*",
+    "tsc-alias": "^1.8.10"
+  },
+  "dependencies": {}
+}
