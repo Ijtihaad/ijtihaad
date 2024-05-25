@@ -1,12 +1,11 @@
 import {
-  Body,
   Controller,
   NotFoundException,
   UnauthorizedException
 } from '@nestjs/common';
-import { MessagePattern } from '@nestjs/microservices';
-import { JwtAuthToken, LocalLogin, LocalRegister, User } from '@repo/common';
-import { AuthServiceController, ServiceRequest } from '@repo/shared-svc';
+import { MessagePattern, Payload } from '@nestjs/microservices';
+import { LocalLogin, LocalRegister, User } from '@repo/common';
+import { AuthServiceController } from '@repo/shared-svc';
 import { AuthService } from './auth.service';
 import { GoogleAuthService } from './google-auth/google-auth.service';
 import { JwtAuthService } from './jwt-auth/jwt-auth.service';
@@ -20,33 +19,17 @@ export class AuthController implements AuthServiceController {
   ) { }
 
   @MessagePattern("auth:localRegister")
-  async localRegister(@Body() { data }: ServiceRequest<LocalRegister>) {
+  async localRegister(@Payload("data") data: LocalRegister) {
     const user = await this.authService.localRegister(data);
-    const jwt = {
-      accessToken: await this.jwtAuthService.encryptJwtAccessToken({
-        userId: user.id,
-      }),
-      refreshToken: await this.jwtAuthService.encryptJwtRefreshToken({
-        userId: user.id,
-      }),
-    };
-
+    const jwt = this.jwtAuthService.encryptAuthTokens(user)
     return { user, jwt };
   }
 
   @MessagePattern("auth:localLogin")
-  async localLogin(@Body() { data }: ServiceRequest<LocalLogin>) {
+  async localLogin(@Payload("data") data: LocalLogin) {
     const user = await this.authService.localLogin(data);
 
-    const jwt: JwtAuthToken = {
-      accessToken: await this.jwtAuthService.encryptJwtAccessToken({
-        userId: user.id,
-        role: user.role,
-      }),
-      refreshToken: await this.jwtAuthService.encryptJwtRefreshToken({
-        userId: user.id,
-      }),
-    };
+    const jwt = this.jwtAuthService.encryptAuthTokens(user)
 
     return { user, jwt };
   }
@@ -58,7 +41,7 @@ export class AuthController implements AuthServiceController {
   }
 
   @MessagePattern("auth:googleLogin")
-  async googleLogin(@Body() { data }: ServiceRequest<{ code: string }>) {
+  async googleLogin(@Payload("data") data: { code: string }) {
     const googleUser = await this.googleAuthService.validateUser(data.code);
     if (!googleUser) {
       throw new UnauthorizedException('Google Auth Filled');
@@ -80,25 +63,16 @@ export class AuthController implements AuthServiceController {
       throw new UnauthorizedException('User Blocked By Admin');
     }
 
-    const jwt = {
-      accessToken: await this.jwtAuthService.encryptJwtAccessToken({
-        userId: user.id,
-      }),
-      refreshToken: await this.jwtAuthService.encryptJwtRefreshToken({
-        userId: user.id,
-      }),
-    };
+    const jwt = this.jwtAuthService.encryptAuthTokens(user)
 
     return { user, jwt };
   }
 
   @MessagePattern("auth:verifyAccessToken")
   async verifyAccessToken(
-    @Body() { data }: ServiceRequest<{ accessToken: string }>,
+    @Payload("data") data: { accessToken: string },
   ) {
-    const result = await this.jwtAuthService.decryptJwtAccessToken<{
-      userId: string;
-    }>(data.accessToken);
+    const result = this.jwtAuthService.decryptJwtAccessToken(data.accessToken);
 
     if (!result) {
       throw new UnauthorizedException('Access Token Invalid or Expired!');
@@ -117,13 +91,11 @@ export class AuthController implements AuthServiceController {
 
   @MessagePattern("auth:refreshAccessToken")
   async refreshAccessToken(
-    @Body() { data }: ServiceRequest<{ refreshToken: string }>,
+    @Payload("data") data: { refreshToken: string }
   ) {
-    console.log({ data });
+    console.log(data);
 
-    const result = await this.jwtAuthService.decryptJwtRefreshToken<{
-      userId: string;
-    }>(data.refreshToken);
+    const result = this.jwtAuthService.decryptJwtRefreshToken(data.refreshToken);
 
     if (!result) {
       throw new UnauthorizedException('Access Token Invalid or Expired!');
@@ -137,14 +109,7 @@ export class AuthController implements AuthServiceController {
       throw new NotFoundException('User not found');
     }
 
-    const jwt = {
-      accessToken: await this.jwtAuthService.encryptJwtAccessToken({
-        userId: user.id,
-      }),
-      refreshToken: await this.jwtAuthService.encryptJwtRefreshToken({
-        userId: user.id,
-      }),
-    };
+    const jwt = this.jwtAuthService.encryptAuthTokens(user)
     return { user, jwt };
   }
 }

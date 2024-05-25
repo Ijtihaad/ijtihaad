@@ -1,39 +1,36 @@
-import { ServiceRequest } from "./request.interface";
+import { Rpc } from "@/core/rpc-client";
 import { JwtAuthToken, LocalLogin, LocalRegister, User } from "@repo/common";
-import { RpcHandler } from '../core/rpc-handler';
 
 export interface AuthServiceController {
-  localRegister(payload: ServiceRequest<LocalRegister>): Promise<{
+  localRegister(payload: LocalRegister): Promise<{
     user: User;
     jwt: JwtAuthToken;
   }>;
 
-  localLogin(payload: ServiceRequest<LocalLogin>): Promise<{
+  localLogin(payload: LocalLogin): Promise<{
     user: User;
     jwt: JwtAuthToken;
   }>;
 
   googleUrl(): Promise<{ authUrl: string }>;
 
-  googleLogin(payload: ServiceRequest<{ code: string }>): Promise<{
+  googleLogin(payload: { code: string }): Promise<{
     user: User;
     jwt: JwtAuthToken;
   }>;
 
   refreshAccessToken(
-    payload: ServiceRequest<{ refreshToken: string }>,
+    payload: { refreshToken: string },
   ): Promise<{
     user: User;
     jwt: JwtAuthToken;
   }>;
 
   verifyAccessToken(
-    payload: ServiceRequest<{
+    payload: {
       accessToken: string;
-    }>,
+    },
   ): Promise<User>;
 }
 
-export type AuthRpcService = ReturnType<
-  typeof RpcHandler.createRpcClient<AuthServiceController>
->;
+export type AuthRpcService = Rpc<AuthServiceController>

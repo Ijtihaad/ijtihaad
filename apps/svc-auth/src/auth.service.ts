@@ -1,31 +1,27 @@
 import {
   BadRequestException,
-  Inject,
   Injectable,
-  UnauthorizedException,
+  UnauthorizedException
 } from '@nestjs/common';
-import { LocalRegister, LocalLogin, User, VerifyUserPassword, OAuthRegister, UserWhereUniqueInput } from '@repo/common';
+import { LocalLogin, LocalRegister, OAuthRegister, User, UserWhereUniqueInput, VerifyUserPassword } from '@repo/common';
 
-import { ClientProxy } from '@nestjs/microservices';
-import { RpcHandler, UserRpcService } from '@repo/shared-svc';
+import { RpcClient, UserRpcService } from '@repo/shared-svc';
 import { lastValueFrom } from 'rxjs';
 
 @Injectable()
 export class AuthService {
   private usersRpc: UserRpcService;
-  constructor(@Inject('USERS_SERVICE') private usersClient: ClientProxy) {
-    this.usersRpc = RpcHandler.createRpcClient('users', this.usersClient);
+  constructor(private rpcClient: RpcClient) {
+    this.usersRpc = this.rpcClient.createRpcClient('users')
   }
 
   async findUser(where: UserWhereUniqueInput) {
-    const user = await lastValueFrom(this.usersRpc('findOne', { data: where }));
+    const user = await lastValueFrom(this.usersRpc('findOne', where));
     return user;
   }
 
   async localRegister(data: LocalRegister) {
-    const user = this.usersRpc('create', {
-      data: data,
-    });
+    const user = this.usersRpc('create', data);
 
     return lastValueFrom(user);
   }
@@ -35,14 +31,14 @@ export class AuthService {
 
     if (data.identifier.includes('@')) {
       user = await lastValueFrom(
-        this.usersRpc('findOne', { data: { email: data.identifier } }),
+        this.usersRpc('findOne', { email: data.identifier }),
       );
       if (!user) {
         throw new BadRequestException('User Not Found With this Email');
       }
     } else {
       user = await lastValueFrom(
-        this.usersRpc('findOne', { data: { username: data.identifier } }),
+        this.usersRpc('findOne', { username: data.identifier }),
       );
       if (!user) {
         throw new BadRequestException('User Not Found With this Username');
@@ -70,15 +66,13 @@ export class AuthService {
   }
 
   async oauthRegister(data: OAuthRegister) {
-    const user = this.usersRpc('create', {
-      data: data,
-    });
+    const user = this.usersRpc('create', data);
 
     return lastValueFrom(user);
   }
 
   async verifyUserPassword(data: VerifyUserPassword) {
-    const verifiedPassword = this.usersRpc('verifyUserPassword', { data });
+    const verifiedPassword = this.usersRpc('verifyUserPassword', data);
 
     return lastValueFrom(verifiedPassword);
   }

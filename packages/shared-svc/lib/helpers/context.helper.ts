@@ -3,7 +3,7 @@ import { ExecutionContext } from '@nestjs/common';
 export class ContextHelper {
   static getAuthToken(context: ExecutionContext): string | undefined {
     const request = ContextHelper.getRequest<any>(context);
-    const authHeader = request.headers.authorization;
+    const authHeader = request.headers?.authorization;
     return authHeader;
   }
 

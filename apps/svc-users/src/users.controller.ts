@@ -1,4 +1,4 @@
-import { Controller, Logger } from "@nestjs/common";
+import { Controller, Logger, UseGuards } from "@nestjs/common";
 import { MessagePattern, Payload } from "@nestjs/microservices";
 import {
   LocalRegister,
@@ -9,36 +9,38 @@ import {
   UserWhereUniqueInput,
   VerifyUserPassword
 } from "@repo/common";
-import { UsersServiceController } from "@repo/shared-svc";
-import { ServiceRequest } from "@repo/shared-svc/dist/interfaces/request.interface";
+import { ServiceAuthGuard } from "@repo/shared-svc";
 import { UsersService } from "./users.service";
 
+
 @Controller()
-export class UsersController implements UsersServiceController {
+@UseGuards(ServiceAuthGuard)
+export class UsersController {
   private readonly logger = new Logger(UsersController.name);
   constructor(private readonly usersService: UsersService) { }
 
   @MessagePattern("users:create")
-  create(@Payload() { data }: ServiceRequest<LocalRegister | OAuthRegister>) {
+  create(@Payload("data") data: LocalRegister | OAuthRegister) {
     this.logger.log("users:create")
     return this.usersService.create(data);
   }
 
   @MessagePattern("users:findMany")
-  findMany(@Payload() { data }: ServiceRequest<UserWhereInput>) {
+  findMany(@Payload("data") data: UserWhereInput) {
     this.logger.log("users:findMany")
     return this.usersService.findMany();
   }
 
+
   @MessagePattern("users:findOne")
-  findOne(@Payload('data') { data }: ServiceRequest<UserWhereUniqueInput>,) {
+  findOne(@Payload('data') data: UserWhereUniqueInput) {
     this.logger.log("users:create")
     return this.usersService.findOne(data);
   }
 
   @MessagePattern("users:updateUser")
   updateUser(
-    @Payload() { data }: ServiceRequest<UpdateUser & UserWhereUniqueInput>
+    @Payload("data") data: UpdateUser & UserWhereUniqueInput
   ) {
     this.logger.log("users:updateUser")
     return this.usersService.updateUser({ id: data.id }, data);
@@ -46,21 +48,21 @@ export class UsersController implements UsersServiceController {
 
   @MessagePattern("users:updateMe")
   updateMe(
-    @Payload() { data }: ServiceRequest<UpdateMe & UserWhereUniqueInput>
+    @Payload("data") data: UpdateMe & UserWhereUniqueInput
   ) {
     this.logger.log("users:updateMe")
     return this.usersService.updateMe({ id: data.id }, data);
   }
 
   @MessagePattern("users:delete")
-  delete(@Payload() { data }: ServiceRequest<UserWhereUniqueInput>) {
+  delete(@Payload("data") data: UserWhereUniqueInput) {
     this.logger.log("users:create")
     return this.usersService.delete(data);
   }
 
   @MessagePattern("users:verifyUserPassword")
   verifyUserPassword(
-    @Payload() { data }: ServiceRequest<VerifyUserPassword>
+    @Payload("data") data: VerifyUserPassword
   ) {
     this.logger.log("users:create")
     return this.usersService.verifyUserPassword(data);

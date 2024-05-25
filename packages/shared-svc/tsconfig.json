@@ -3,7 +3,10 @@
   "compilerOptions": {
     "noEmit": false,
     "baseUrl": "./",
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "paths": {
+      "@/*": ["lib/*"]
+    }
   },
   "include": ["lib"],
   "exclude": ["node_modules", "dist"]

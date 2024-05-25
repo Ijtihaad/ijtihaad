@@ -1,11 +1,11 @@
 'use server';
 
+import { AuthUser } from '@common';
 import { server_host } from '@web/constants/host.config';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import refreshTokens from './refresh-tokens';
-import { AuthUser } from '@common';
 import { getAuthentication } from './auth/authentications';
+import refreshTokens from './refresh-tokens';
 
 interface SuccessResponse<T> {
   success: true;
@@ -32,7 +32,7 @@ export default async function fetcher<T = null>(
 
   const authentication = await getAuthentication();
   if (authentication) {
-    headers['Authorization'] = `Bearer ${authentication.accessToken}`;
+    headers.Authorization = `Bearer ${authentication.accessToken}`;
   }
 
   const url = `${server_host}/${pathname}`;

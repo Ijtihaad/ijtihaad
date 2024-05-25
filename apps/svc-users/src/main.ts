@@ -1,8 +1,8 @@
-import { NestFactory } from '@nestjs/core';
-import { UsersModule } from './users.module';
 import { Logger } from '@nestjs/common';
+import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
-import { RpcExceptionFilter } from '@repo/shared-svc';
+import { RpcExceptionFilter, ServiceAuthGuard } from '@repo/shared-svc';
+import { UsersModule } from './users.module';
 
 async function bootstrap() {
   const logger = new Logger('Users::Microservice');
@@ -16,7 +16,6 @@ async function bootstrap() {
     },
   );
   app.useGlobalFilters(new RpcExceptionFilter());
-
   await app.listen();
   logger.debug('Microservice is listening...');
 }

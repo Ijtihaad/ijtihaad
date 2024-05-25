@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "dev": "tsc && tsc-alias -w",
+    "dev": "tsc -w && tsc-alias",
     "build": "rm -rf dist && tsc && tsc-alias"
   },
   "keywords": [],

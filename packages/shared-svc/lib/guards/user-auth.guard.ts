@@ -1,23 +1,21 @@
 import {
   CanActivate,
   ExecutionContext,
-  Inject,
   Injectable,
   Logger,
-  UnauthorizedException,
+  UnauthorizedException
 } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
 import { AuthRpcService } from 'lib/interfaces/auth.interface';
 import { lastValueFrom } from 'rxjs';
-import { RpcHandler } from '../core/rpc-handler';
+import { RpcClient } from '../core/rpc-client';
 import { ContextHelper } from '../helpers/context.helper';
 
 @Injectable()
-export class ServiceGuard implements CanActivate {
-  private readonly logger = new Logger(ServiceGuard.name);
+export class UserAuthGuard implements CanActivate {
+  private readonly logger = new Logger(UserAuthGuard.name);
   private authRpc: AuthRpcService;
-  constructor(@Inject('MICRO_SERVICE') private client: ClientProxy) {
-    this.authRpc = RpcHandler.createRpcClient('auth', this.client);
+  constructor(private rpcClient: RpcClient) {
+    this.authRpc = this.rpcClient.createRpcClient('auth')
   }
 
   async canActivate(context: ExecutionContext) {
@@ -32,9 +30,7 @@ export class ServiceGuard implements CanActivate {
     }
 
     const user = await lastValueFrom(
-      this.authRpc('verifyAccessToken', {
-        data: { accessToken: token },
-      }),
+      this.authRpc('verifyAccessToken', { accessToken: token }),
     );
 
     if (!user) {

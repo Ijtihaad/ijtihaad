@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { RpcClient } from '@repo/shared-svc';
 import { AuthController } from './auth.controller';
 import { UsersController } from './users.controller';
 
@@ -13,7 +14,7 @@ import { UsersController } from './users.controller';
 
     ClientsModule.register([
       {
-        name: 'MICRO_SERVICE',
+        name: 'RPC_SERVICE',
         transport: Transport.NATS,
         options: {
           servers: [process.env.NATS_SERVER_URL!],
@@ -22,6 +23,6 @@ import { UsersController } from './users.controller';
     ]),
   ],
   controllers: [UsersController, AuthController],
-  providers: [],
+  providers: [RpcClient],
 })
 export class AppModule { }
