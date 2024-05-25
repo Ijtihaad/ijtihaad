@@ -9,9 +9,10 @@ import { UsersController } from './users.controller';
       isGlobal: true,
       envFilePath: ['.env', './apps/app-ijtihaad/.env'],
     }),
+
     ClientsModule.register([
       {
-        name: 'USERS_SERVICE',
+        name: 'MICRO_SERVICE',
         transport: Transport.NATS,
         options: {
           servers: [process.env.NATS_SERVER_URL!],
@@ -22,4 +23,4 @@ import { UsersController } from './users.controller';
   controllers: [UsersController],
   providers: [],
 })
-export class AppModule {}
+export class AppModule { }

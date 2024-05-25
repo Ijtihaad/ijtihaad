@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { AuthorizationCode } from 'simple-oauth2';
 import { googleAuthConstants } from './google-auth.constant';
@@ -7,6 +7,7 @@ import { googleAuthConstants } from './google-auth.constant';
 export const GOOGLE_OAUTH20 = 'GOOGLE_OAUTH20';
 
 @Module({
+  imports: [ConfigModule],
   providers: [
     {
       provide: GOOGLE_OAUTH20,

@@ -7,7 +7,7 @@ import {
   UnauthorizedException,
   UsePipes,
 } from '@nestjs/common';
-import { LocalLogin, localLoginSchema, LocalRegister, localRegisterSchema, User } from '@repo/common';
+import { LocalLogin, LocalRegister, User, localLoginSchema, localRegisterSchema } from '@repo/common';
 import { AuthServiceController, ServiceRequest, ValidationPipe } from '@repo/shared-svc';
 import { AuthService } from './auth.service';
 import { GoogleAuthService } from './google-auth/google-auth.service';
@@ -107,7 +107,7 @@ export class AuthController implements AuthServiceController {
       throw new UnauthorizedException('Access Token Invalid or Expired!');
     }
 
-    let user = await this.authService.findUser({
+    const user = await this.authService.findUser({
       id: result.userId,
     });
 
@@ -132,7 +132,7 @@ export class AuthController implements AuthServiceController {
       throw new UnauthorizedException('Access Token Invalid or Expired!');
     }
 
-    let user = await this.authService.findUser({
+    const user = await this.authService.findUser({
       id: result.userId,
     });
 
