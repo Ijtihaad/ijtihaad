@@ -1,8 +1,8 @@
-import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { AuthModule } from './auth.module';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { RpcExceptionFilter } from '@repo/shared-svc';
+import { AuthModule } from './auth.module';
 
 async function bootstrap() {
   const logger = new Logger('Auth::Microservice');

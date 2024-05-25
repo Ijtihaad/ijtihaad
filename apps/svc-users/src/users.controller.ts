@@ -1,13 +1,13 @@
 import { Controller, Logger } from "@nestjs/common";
 import { MessagePattern, Payload } from "@nestjs/microservices";
 import {
+  LocalRegister,
+  OAuthRegister,
   UpdateMe,
   UpdateUser,
-  LocalRegister,
   UserWhereInput,
   UserWhereUniqueInput,
-  VerifyUserPassword,
-  OAuthRegister
+  VerifyUserPassword
 } from "@repo/common";
 import { UsersServiceController } from "@repo/shared-svc";
 import { ServiceRequest } from "@repo/shared-svc/dist/interfaces/request.interface";
@@ -31,7 +31,7 @@ export class UsersController implements UsersServiceController {
   }
 
   @MessagePattern("users:findOne")
-  findOne(@Payload() { data }: ServiceRequest<UserWhereUniqueInput>) {
+  findOne(@Payload('data') { data }: ServiceRequest<UserWhereUniqueInput>,) {
     this.logger.log("users:create")
     return this.usersService.findOne(data);
   }

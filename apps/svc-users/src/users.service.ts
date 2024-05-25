@@ -4,14 +4,14 @@ import {
   NotFoundException
 } from '@nestjs/common';
 import {
-  User,
+  LocalRegister,
+  OAuthRegister,
   UpdateMe,
   UpdateUser,
+  User,
   UserWhereInput,
   UserWhereUniqueInput,
-  VerifyUserPassword,
-  LocalRegister,
-  OAuthRegister
+  VerifyUserPassword
 } from '@repo/common';
 
 import * as argon from 'argon2';
@@ -40,6 +40,7 @@ export class UsersService {
     if ("password" in data) {
       data.password = await argon.hash(data.password);
     }
+    console.log({ data });
 
     const user = (
       await this.drizzle.db

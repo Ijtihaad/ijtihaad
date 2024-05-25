@@ -8,9 +8,11 @@ import {
   OnModuleInit,
   Param,
   Patch,
+  UseGuards,
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { RpcHandler, UserRpcService } from '@repo/shared-svc';
+import { User, } from '@repo/common';
+import { AuthGuard, AuthToken, CurrentUser, RpcHandler, UserRpcService } from '@repo/shared-svc';
 
 @Controller('users')
 export class UsersController implements OnModuleInit, OnModuleDestroy {
@@ -31,6 +33,17 @@ export class UsersController implements OnModuleInit, OnModuleDestroy {
   findMany() {
     return this.usersRpc('findMany', {
       data: {},
+    });
+  }
+
+  @Get('me')
+  @UseGuards(AuthGuard)
+  findMe(@CurrentUser() user: User, @AuthToken() accessToken: string) {
+    return this.usersRpc('findOne', {
+      data: { id: user.id },
+      headers: {
+        authorization: accessToken
+      }
     });
   }
 

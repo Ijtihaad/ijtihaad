@@ -17,12 +17,15 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
 
+    const details = exception?.response
+
     const message =
       exception?.message ??
       exception?.response?.message ??
       'Internal Server Error';
 
     const statusCode =
+      exception?.status ??
       exception?.statusCode ??
       exception?.response?.statusCode ??
       HttpStatus.INTERNAL_SERVER_ERROR;
@@ -30,8 +33,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
     response.status(statusCode).json({
       statusCode: statusCode,
       message: message,
-      timestamp: new Date().toISOString(),
+      details: details,
       path: request.url,
+      method: request.method,
+      timestamp: new Date().toISOString(),
     });
   }
 }

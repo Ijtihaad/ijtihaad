@@ -1,19 +1,17 @@
 import {
   Body,
   Controller,
-  Get,
   NotFoundException,
-  Post,
-  UnauthorizedException,
-  UsePipes,
+  UnauthorizedException
 } from '@nestjs/common';
-import { LocalLogin, LocalRegister, User, localLoginSchema, localRegisterSchema } from '@repo/common';
-import { AuthServiceController, ServiceRequest, ValidationPipe } from '@repo/shared-svc';
+import { MessagePattern } from '@nestjs/microservices';
+import { JwtAuthToken, LocalLogin, LocalRegister, User } from '@repo/common';
+import { AuthServiceController, ServiceRequest } from '@repo/shared-svc';
 import { AuthService } from './auth.service';
 import { GoogleAuthService } from './google-auth/google-auth.service';
 import { JwtAuthService } from './jwt-auth/jwt-auth.service';
 
-@Controller('auth')
+@Controller()
 export class AuthController implements AuthServiceController {
   constructor(
     private readonly authService: AuthService,
@@ -21,8 +19,7 @@ export class AuthController implements AuthServiceController {
     private readonly jwtAuthService: JwtAuthService,
   ) { }
 
-  @Post('local/register')
-  @UsePipes(ValidationPipe(localRegisterSchema))
+  @MessagePattern("auth:localRegister")
   async localRegister(@Body() { data }: ServiceRequest<LocalRegister>) {
     const user = await this.authService.localRegister(data);
     const jwt = {
@@ -37,14 +34,14 @@ export class AuthController implements AuthServiceController {
     return { user, jwt };
   }
 
-  @Post('local/login')
-  @UsePipes(ValidationPipe(localLoginSchema))
+  @MessagePattern("auth:localLogin")
   async localLogin(@Body() { data }: ServiceRequest<LocalLogin>) {
     const user = await this.authService.localLogin(data);
 
-    const jwt = {
+    const jwt: JwtAuthToken = {
       accessToken: await this.jwtAuthService.encryptJwtAccessToken({
         userId: user.id,
+        role: user.role,
       }),
       refreshToken: await this.jwtAuthService.encryptJwtRefreshToken({
         userId: user.id,
@@ -54,13 +51,13 @@ export class AuthController implements AuthServiceController {
     return { user, jwt };
   }
 
-  @Get('google/url')
+  @MessagePattern("auth:googleUrl")
   async googleUrl() {
     const url = await this.googleAuthService.getAuthUrl();
     return { authUrl: url };
   }
 
-  @Post('google/login')
+  @MessagePattern("auth:googleLogin")
   async googleLogin(@Body() { data }: ServiceRequest<{ code: string }>) {
     const googleUser = await this.googleAuthService.validateUser(data.code);
     if (!googleUser) {
@@ -95,7 +92,7 @@ export class AuthController implements AuthServiceController {
     return { user, jwt };
   }
 
-  @Post('token/verify')
+  @MessagePattern("auth:verifyAccessToken")
   async verifyAccessToken(
     @Body() { data }: ServiceRequest<{ accessToken: string }>,
   ) {
@@ -118,7 +115,7 @@ export class AuthController implements AuthServiceController {
     return user;
   }
 
-  @Post('token/refresh')
+  @MessagePattern("auth:refreshAccessToken")
   async refreshAccessToken(
     @Body() { data }: ServiceRequest<{ refreshToken: string }>,
   ) {

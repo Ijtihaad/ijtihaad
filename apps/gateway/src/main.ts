@@ -1,7 +1,7 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { HttpExceptionFilter } from '@repo/shared-svc';
 import { Logger } from '@nestjs/common';
+import { NestFactory } from '@nestjs/core';
+import { HttpExceptionFilter } from '@repo/shared-svc';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
   const logger = new Logger('app-ijtihaad::App');

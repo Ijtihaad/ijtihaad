@@ -16,6 +16,8 @@ const formatZodIssue = (issue: ZodIssue): Record<any, any> => {
 
 export function formatZodError<T = any>(error: ZodError<T>) {
   const { issues } = error;
+  console.log({ issues });
+
   let formattedIssues: Record<any, any> = {};
 
   if (issues?.length) {

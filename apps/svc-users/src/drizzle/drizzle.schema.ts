@@ -18,7 +18,7 @@ export const usersTable = pgTable('users', {
   role: userRole('role').default('BASIC').notNull(),
   email: varchar('value', { length: 100 }).notNull().unique(),
   password: varchar('password', { length: 120 }),
-  emailVerified: boolean('blocked').default(false).notNull(),
+  emailVerified: boolean('emailVerified').default(false).notNull(),
   blocked: boolean('blocked').default(false).notNull(),
   picture: varchar('picture', { length: 255 }),
 });

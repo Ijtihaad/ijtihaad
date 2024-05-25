@@ -1,20 +1,20 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
   Inject,
   OnModuleDestroy,
   OnModuleInit,
-  Param,
-  Patch,
+  Post,
+  UsePipes
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { RpcHandler, UserRpcService } from '@repo/shared-svc';
+import { LocalLogin, LocalRegister, localLoginSchema, localRegisterSchema } from '@repo/common';
+import { AuthRpcService, RpcHandler, ServiceRequest, ValidationPipe } from '@repo/shared-svc';
 
 @Controller('auth')
 export class AuthController implements OnModuleInit, OnModuleDestroy {
-  private authRpc: UserRpcService;
+  private authRpc: AuthRpcService;
   constructor(@Inject('MICRO_SERVICE') private client: ClientProxy) {
     this.authRpc = RpcHandler.createRpcClient('auth', this.client);
   }
@@ -27,31 +27,30 @@ export class AuthController implements OnModuleInit, OnModuleDestroy {
     await this.client.close();
   }
 
-  @Get()
-  findMany() {
-    return this.authRpc('findMany', {
-      data: {},
-    });
+  @Post('local/register')
+  @UsePipes(ValidationPipe(localRegisterSchema))
+  async localRegister(@Body() data: LocalRegister) {
+    return this.authRpc("localRegister", { data });
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.authRpc('findOne', {
-      data: { id },
-    });
+  @Post('local/login')
+  @UsePipes(ValidationPipe(localLoginSchema))
+  async localLogin(@Body() data: LocalLogin) {
+    return this.authRpc('localLogin', { data });
   }
 
-  @Patch(':id')
-  updateUser(@Param('id') id: string, @Body() data: any) {
-    return this.authRpc('updateUser', {
-      data: { ...data, id },
-    });
+  @Get('google/url')
+  async googleUrl() {
+    return this.authRpc('googleUrl', {});
   }
 
-  @Delete(':id')
-  delete(@Param('id') id: string) {
-    return this.authRpc('delete', {
-      data: { id },
-    });
+  @Post('google/login')
+  async googleLogin(@Body() { data }: ServiceRequest<{ code: string }>) {
+    return (this.authRpc('googleLogin', { data }));
+  }
+
+  @Post('token/refresh')
+  async refreshAccessToken(@Body() data: { refreshToken: string }) {
+    return this.authRpc('refreshAccessToken', { data })
   }
 }

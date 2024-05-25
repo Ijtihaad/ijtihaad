@@ -22,6 +22,20 @@
       "when": 1716558938488,
       "tag": "0002_premium_revanche",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1716611134491,
+      "tag": "0003_big_stephen_strange",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1716611522359,
+      "tag": "0004_ambitious_bromley",
+      "breakpoints": true
     }
   ]
 }

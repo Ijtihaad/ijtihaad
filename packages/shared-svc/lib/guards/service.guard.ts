@@ -13,8 +13,8 @@ import { RpcHandler } from '../core/rpc-handler';
 import { ContextHelper } from '../helpers/context.helper';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
-  private readonly logger = new Logger(AuthGuard.name);
+export class ServiceGuard implements CanActivate {
+  private readonly logger = new Logger(ServiceGuard.name);
   private authRpc: AuthRpcService;
   constructor(@Inject('MICRO_SERVICE') private client: ClientProxy) {
     this.authRpc = RpcHandler.createRpcClient('auth', this.client);
