@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const userRole = z.union([z.literal("ADMIN"), z.literal("BASIC")])
+export const userRole = z.union([z.literal('ADMIN'), z.literal('BASIC')]);
 
 export const userSchema = z.object({
   id: z.string(),
@@ -12,12 +12,12 @@ export const userSchema = z.object({
   picture: z.string().max(255).nullable(),
   email: z.string().email().max(100),
   role: userRole,
-})
+});
 
 export const updateMeSchema = userSchema.pick({
   firstName: true,
   lastName: true,
-  email: true
+  email: true,
 });
 
 export const updateUserSchema = z.object({
@@ -41,7 +41,7 @@ export const verifyUserPasswordSchema = z.object({
   password: z.string(),
 });
 
-export type UserRole = z.infer<typeof userRole>
+export type UserRole = z.infer<typeof userRole>;
 export type User = z.infer<typeof userSchema>;
 export type UpdateMe = z.infer<typeof updateMeSchema>;
 export type UpdateUser = z.infer<typeof updateUserSchema>;

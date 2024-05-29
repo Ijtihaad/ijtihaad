@@ -3,9 +3,10 @@
   "display": "React Library",
   "extends": "./base.json",
   "compilerOptions": {
-    "lib": ["es2022", "DOM", "DOM.Iterable"],
-    "moduleResolution": "NodeNext",
-    "module": "NodeNext",
+    "declaration": true,
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
     "jsx": "react-jsx"
   }
 }

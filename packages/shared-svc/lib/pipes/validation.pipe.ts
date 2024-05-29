@@ -2,13 +2,14 @@ import {
   ArgumentMetadata,
   BadRequestException,
   Logger,
-  PipeTransform
+  PipeTransform,
 } from '@nestjs/common';
 import { formatZodError } from '@repo/common';
 import { z } from 'zod';
 
-export function ValidationPipe<T extends z.ZodRawShape>(validationSchema: z.ZodObject<T>) {
-
+export function ValidationPipe<T extends z.ZodRawShape>(
+  validationSchema: z.ZodObject<T>,
+) {
   return class Pipe implements PipeTransform {
     readonly logger = new Logger(ValidationPipe.name);
     transform(data: any, metadata: ArgumentMetadata) {
@@ -24,5 +25,5 @@ export function ValidationPipe<T extends z.ZodRawShape>(validationSchema: z.ZodO
       }
       return result.data;
     }
-  }
+  };
 }

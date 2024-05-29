@@ -1,9 +1,16 @@
 import {
   BadRequestException,
   Injectable,
-  UnauthorizedException
+  UnauthorizedException,
 } from '@nestjs/common';
-import { LocalLogin, LocalRegister, OAuthRegister, User, UserWhereUniqueInput, VerifyUserPassword } from '@repo/common';
+import {
+  LocalLogin,
+  LocalRegister,
+  OAuthRegister,
+  User,
+  UserWhereUniqueInput,
+  VerifyUserPassword,
+} from '@repo/common';
 
 import { RpcClient, UserRpcService } from '@repo/shared-svc';
 import { lastValueFrom } from 'rxjs';
@@ -12,7 +19,7 @@ import { lastValueFrom } from 'rxjs';
 export class AuthService {
   private usersRpc: UserRpcService;
   constructor(private rpcClient: RpcClient) {
-    this.usersRpc = this.rpcClient.createRpcClient('users')
+    this.usersRpc = this.rpcClient.createRpcClient('users');
   }
 
   async findUser(where: UserWhereUniqueInput) {

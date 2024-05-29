@@ -9,7 +9,7 @@ export class GoogleAuthService {
   constructor(
     @Inject(GOOGLE_OAUTH20)
     readonly authClient: AuthorizationCode,
-  ) { }
+  ) {}
 
   async getAuthUrl() {
     const authorizationUri = this.authClient.authorizeURL({

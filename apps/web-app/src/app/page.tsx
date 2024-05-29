@@ -1,6 +1,5 @@
-import PostCard from '@web/components/posts/post-card';
-import { Separator } from '@web/components/ui/separator';
-import cn from '@web/utils/cn';
+import PostCard from '@/components/posts/post-card';
+import { Separator, cn } from '@repo/shared-ui';
 
 export default function Page() {
   const posts = [
@@ -60,15 +59,17 @@ export default function Page() {
     },
   ];
   return (
-    <main className={cn('w-full py-4 md:max-w-2xl xl:max-w-4xl mx-auto')}>
-      <div className={cn('w-full flex flex-col gap-1')}>
-        {posts.map((post) => (
-          <div key={post.id} className={cn('flex flex-col gap-1 px-2')}>
-            <PostCard post={post} />
-            <Separator />
-          </div>
-        ))}
-      </div>
+    <main className={cn('w-full')}>
+      <section className="w-full max-w-3xl mx-auto border rounded-xl">
+        <div className={cn('w-full flex flex-col gap-1')}>
+          {posts.map((post) => (
+            <div key={post.id} className={cn('flex flex-col gap-1 px-2')}>
+              <PostCard post={post} />
+              <Separator />
+            </div>
+          ))}
+        </div>
+      </section>
     </main>
   );
 }

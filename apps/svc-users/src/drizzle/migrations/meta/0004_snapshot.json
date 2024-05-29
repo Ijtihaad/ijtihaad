@@ -79,9 +79,7 @@
         "users_value_unique": {
           "name": "users_value_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "value"
-          ]
+          "columns": ["value"]
         }
       }
     }

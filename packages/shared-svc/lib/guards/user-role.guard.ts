@@ -2,7 +2,7 @@ import {
   CanActivate,
   ExecutionContext,
   ForbiddenException,
-  Logger
+  Logger,
 } from '@nestjs/common';
 import { AccessTokenPayload, UserRole } from '@repo/common';
 import { ContextHelper } from '../helpers/context.helper';
@@ -14,7 +14,9 @@ export function UserRoleGuard(roles: UserRole[]) {
     async canActivate(context: ExecutionContext) {
       this.logger.log(this.canActivate.name);
 
-      const request = ContextHelper.getCurrentUser<{ user: AccessTokenPayload }>(context);
+      const request = ContextHelper.getCurrentUser<{
+        user: AccessTokenPayload;
+      }>(context);
 
       if (request?.user.role && !roles.includes(request?.user.role)) {
         throw new ForbiddenException('Forbidden Access');
@@ -22,5 +24,5 @@ export function UserRoleGuard(roles: UserRole[]) {
 
       return true;
     }
-  }
+  };
 }

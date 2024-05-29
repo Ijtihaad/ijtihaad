@@ -1,4 +1,4 @@
-import 'dotenv/config'
+import 'dotenv/config';
 
 export const googleAuthConstants = {
   clientID: process.env.GOOGLE_CLIENT_ID!,

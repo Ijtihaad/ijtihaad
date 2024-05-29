@@ -1,16 +1,19 @@
-import ShareButton from '@web/components/actions/share-button';
-import VoteButtons from '@web/components/actions/vote-buttons';
-import cn from '@web/utils/cn';
-import { CalendarDays, MessageSquare } from 'lucide-react';
-import Link from 'next/link';
-import PostOptions from '../actions/post-options';
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+  Button,
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
-} from '../ui/hover-card';
-import { LinkButton } from '../ui/link-button';
+  LinkButton,
+  cn,
+} from '@repo/shared-ui';
+import { CalendarDays, MessageSquare } from 'lucide-react';
+import Link from 'next/link';
+import PostOptions from './post-options';
+import ShareButton from './share-button';
+import VoteButtons from './vote-buttons';
 
 export default function PostCard({
   post,
@@ -27,7 +30,7 @@ export default function PostCard({
         <div className="flex items-center gap-2">
           <HoverCard>
             <HoverCardTrigger asChild>
-              <button
+              <Button
                 className={cn(
                   '[outline:unset]',
                   'relative flex items-center gap-2',
@@ -38,7 +41,7 @@ export default function PostCard({
                   <AvatarFallback>SC</AvatarFallback>
                 </Avatar>
                 <span className="text-subtitle hover:underline">User name</span>
-              </button>
+              </Button>
             </HoverCardTrigger>
             <HoverCardContent className="w-80">
               <div className="flex justify-between space-x-4">
@@ -61,7 +64,7 @@ export default function PostCard({
               </div>
             </HoverCardContent>
           </HoverCard>
-          <span>{`5min ago`}</span>
+          <span>{'5min ago'}</span>
         </div>
         <PostOptions />
       </div>
@@ -74,6 +77,7 @@ export default function PostCard({
           <VoteButtons />
           <ShareButton />
           <LinkButton
+            Link={Link}
             size={'sm'}
             rounded={'both'}
             className="flex items-center gap-2 pe-4"

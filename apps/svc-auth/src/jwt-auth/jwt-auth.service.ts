@@ -1,31 +1,42 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { AccessTokenPayload, JwtAuthToken, RefreshTokenPayload, UserRole } from '@repo/common';
+import {
+  AccessTokenPayload,
+  JwtAuthToken,
+  RefreshTokenPayload,
+  UserRole,
+} from '@repo/common';
 import { jwtConstants } from './jwt-auth.constant';
 
 @Injectable()
 export class JwtAuthService {
   private readonly logger = new Logger(JwtAuthService.name);
-  constructor(private readonly jwtService: JwtService) { }
+  constructor(private readonly jwtService: JwtService) {}
 
-  encryptAuthTokens(user: { id: string, role: UserRole }): JwtAuthToken {
+  encryptAuthTokens(user: { id: string; role: UserRole }): JwtAuthToken {
     this.logger.log(this.encryptAuthTokens.name);
 
     const jwt = {
-      accessToken: this.jwtService.sign({
-        userId: user.id,
-        role: user.role,
-      }, {
-        secret: jwtConstants.accessSecretKey,
-        expiresIn: jwtConstants.accessTokenLifetime,
-      }),
+      accessToken: this.jwtService.sign(
+        {
+          userId: user.id,
+          role: user.role,
+        },
+        {
+          secret: jwtConstants.accessSecretKey,
+          expiresIn: jwtConstants.accessTokenLifetime,
+        },
+      ),
 
-      refreshToken: this.jwtService.sign({
-        userId: user.id,
-      }, {
-        secret: jwtConstants.refreshSecretKey,
-        expiresIn: jwtConstants.refreshTokenLifetime,
-      }),
+      refreshToken: this.jwtService.sign(
+        {
+          userId: user.id,
+        },
+        {
+          secret: jwtConstants.refreshSecretKey,
+          expiresIn: jwtConstants.refreshTokenLifetime,
+        },
+      ),
     };
 
     return jwt;

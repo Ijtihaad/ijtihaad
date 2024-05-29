@@ -1,7 +1,7 @@
 import {
   ConflictException,
   Injectable,
-  NotFoundException
+  NotFoundException,
 } from '@nestjs/common';
 import {
   LocalRegister,
@@ -11,7 +11,7 @@ import {
   User,
   UserWhereInput,
   UserWhereUniqueInput,
-  VerifyUserPassword
+  VerifyUserPassword,
 } from '@repo/common';
 
 import * as argon from 'argon2';
@@ -25,10 +25,9 @@ export class UsersService {
   constructor(
     private readonly drizzle: DrizzleService,
     private readonly userQueryParser: UserQueryParser,
-  ) { }
+  ) {}
 
   async create(data: LocalRegister | OAuthRegister): Promise<User> {
-
     const userExist = await this.drizzle.db.query.usersTable.findFirst({
       where: eq(usersTable.email, data.email),
     });
@@ -37,16 +36,13 @@ export class UsersService {
       throw new ConflictException('User already exists with this Email');
     }
 
-    if ("password" in data) {
+    if ('password' in data) {
       data.password = await argon.hash(data.password);
     }
     console.log({ data });
 
     const user = (
-      await this.drizzle.db
-        .insert(usersTable)
-        .values(data)
-        .returning()
+      await this.drizzle.db.insert(usersTable).values(data).returning()
     )[0];
 
     if (!user) {
@@ -55,7 +51,6 @@ export class UsersService {
 
     return user;
   }
-
 
   async findMany(where?: UserWhereInput, search?: string): Promise<User[]> {
     const whereOpr = this.userQueryParser.where(where);
@@ -81,7 +76,10 @@ export class UsersService {
     return user;
   }
 
-  async updateUser(where: UserWhereUniqueInput, data: UpdateUser): Promise<User> {
+  async updateUser(
+    where: UserWhereUniqueInput,
+    data: UpdateUser,
+  ): Promise<User> {
     const whereOpr = this.userQueryParser.whereUnique(where);
     const user = (
       await this.drizzle.db
@@ -95,7 +93,7 @@ export class UsersService {
       throw new NotFoundException('User not found');
     }
 
-    return user
+    return user;
   }
 
   async updateMe(where: UserWhereUniqueInput, data: UpdateMe): Promise<User> {
@@ -112,7 +110,7 @@ export class UsersService {
       throw new NotFoundException('User not found');
     }
 
-    return user
+    return user;
   }
 
   async delete(where: UserWhereUniqueInput): Promise<User> {
@@ -130,7 +128,10 @@ export class UsersService {
       throw new NotFoundException('User Not Found');
     }
 
-    const verifiedPassword = await argon.verify(user.password ?? "", data.password);
+    const verifiedPassword = await argon.verify(
+      user.password ?? '',
+      data.password,
+    );
 
     return verifiedPassword;
   }

@@ -17,7 +17,7 @@ export class RpcExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
 
-    const details = exception?.response
+    const details = exception?.response;
 
     const message =
       exception?.message ??
@@ -30,11 +30,11 @@ export class RpcExceptionFilter implements ExceptionFilter {
       exception?.response?.statusCode ??
       HttpStatus.INTERNAL_SERVER_ERROR;
 
-    const error = ({
+    const error = {
       statusCode: statusCode,
       message: message,
       details: details,
-    });
+    };
 
     this.logger.debug(error);
     return throwError(() => error);

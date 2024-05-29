@@ -5,22 +5,26 @@ import {
   Get,
   Param,
   Patch,
-  UseGuards
+  UseGuards,
 } from '@nestjs/common';
-import { User, } from '@repo/common';
-import { CurrentUser, RpcClient, UserAuthGuard, UserRpcService } from '@repo/shared-svc';
+import { User } from '@repo/common';
+import {
+  CurrentUser,
+  RpcClient,
+  UserAuthGuard,
+  UserRpcService,
+} from '@repo/shared-svc';
 
 @Controller('users')
 export class UsersController {
   private usersRpc: UserRpcService;
   constructor(private rpcClient: RpcClient) {
-    this.usersRpc = this.rpcClient.createRpcClient('users')
+    this.usersRpc = this.rpcClient.createRpcClient('users');
   }
 
   @Get()
   findMany() {
-    return this.usersRpc('findMany', {
-    });
+    return this.usersRpc('findMany', {});
   }
 
   @Get('me')

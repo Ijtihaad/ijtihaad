@@ -1,9 +1,4 @@
-import {
-  boolean,
-  pgEnum,
-  pgTable,
-  varchar
-} from 'drizzle-orm/pg-core';
+import { boolean, pgEnum, pgTable, varchar } from 'drizzle-orm/pg-core';
 import { v4 as uuidV4 } from 'uuid';
 
 export const userRole = pgEnum('userRole', ['ADMIN', 'BASIC']);

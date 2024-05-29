@@ -1,5 +1,5 @@
-import { Rpc } from "@/core/rpc-client";
-import { JwtAuthToken, LocalLogin, LocalRegister, User } from "@repo/common";
+import { Rpc } from '@/core/rpc-client';
+import { JwtAuthToken, LocalLogin, LocalRegister, User } from '@repo/common';
 
 export interface AuthServiceController {
   localRegister(payload: LocalRegister): Promise<{
@@ -19,18 +19,14 @@ export interface AuthServiceController {
     jwt: JwtAuthToken;
   }>;
 
-  refreshAccessToken(
-    payload: { refreshToken: string },
-  ): Promise<{
+  refreshAccessToken(payload: { refreshToken: string }): Promise<{
     user: User;
     jwt: JwtAuthToken;
   }>;
 
-  verifyAccessToken(
-    payload: {
-      accessToken: string;
-    },
-  ): Promise<User>;
+  verifyAccessToken(payload: {
+    accessToken: string;
+  }): Promise<User>;
 }
 
-export type AuthRpcService = Rpc<AuthServiceController>
+export type AuthRpcService = Rpc<AuthServiceController>;

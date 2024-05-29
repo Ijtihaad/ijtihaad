@@ -1,7 +1,7 @@
 import {
   Controller,
   NotFoundException,
-  UnauthorizedException
+  UnauthorizedException,
 } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { LocalLogin, LocalRegister, User } from '@repo/common';
@@ -16,38 +16,40 @@ export class AuthController implements AuthServiceController {
     private readonly authService: AuthService,
     private readonly googleAuthService: GoogleAuthService,
     private readonly jwtAuthService: JwtAuthService,
-  ) { }
+  ) {}
 
-  @MessagePattern("auth:localRegister")
-  async localRegister(@Payload("data") data: LocalRegister) {
+  @MessagePattern('auth:localRegister')
+  async localRegister(@Payload('data') data: LocalRegister) {
     const user = await this.authService.localRegister(data);
-    const jwt = this.jwtAuthService.encryptAuthTokens(user)
+    const jwt = this.jwtAuthService.encryptAuthTokens(user);
     return { user, jwt };
   }
 
-  @MessagePattern("auth:localLogin")
-  async localLogin(@Payload("data") data: LocalLogin) {
+  @MessagePattern('auth:localLogin')
+  async localLogin(@Payload('data') data: LocalLogin) {
     const user = await this.authService.localLogin(data);
 
-    const jwt = this.jwtAuthService.encryptAuthTokens(user)
+    const jwt = this.jwtAuthService.encryptAuthTokens(user);
 
     return { user, jwt };
   }
 
-  @MessagePattern("auth:googleUrl")
+  @MessagePattern('auth:googleUrl')
   async googleUrl() {
     const url = await this.googleAuthService.getAuthUrl();
     return { authUrl: url };
   }
 
-  @MessagePattern("auth:googleLogin")
-  async googleLogin(@Payload("data") data: { code: string }) {
+  @MessagePattern('auth:googleLogin')
+  async googleLogin(@Payload('data') data: { code: string }) {
     const googleUser = await this.googleAuthService.validateUser(data.code);
     if (!googleUser) {
       throw new UnauthorizedException('Google Auth Filled');
     }
 
-    let user: User = await this.authService.findUser({ email: googleUser.email });
+    let user: User = await this.authService.findUser({
+      email: googleUser.email,
+    });
 
     if (!user) {
       user = await this.authService.oauthRegister({
@@ -63,15 +65,13 @@ export class AuthController implements AuthServiceController {
       throw new UnauthorizedException('User Blocked By Admin');
     }
 
-    const jwt = this.jwtAuthService.encryptAuthTokens(user)
+    const jwt = this.jwtAuthService.encryptAuthTokens(user);
 
     return { user, jwt };
   }
 
-  @MessagePattern("auth:verifyAccessToken")
-  async verifyAccessToken(
-    @Payload("data") data: { accessToken: string },
-  ) {
+  @MessagePattern('auth:verifyAccessToken')
+  async verifyAccessToken(@Payload('data') data: { accessToken: string }) {
     const result = this.jwtAuthService.decryptJwtAccessToken(data.accessToken);
 
     if (!result) {
@@ -89,13 +89,13 @@ export class AuthController implements AuthServiceController {
     return user;
   }
 
-  @MessagePattern("auth:refreshAccessToken")
-  async refreshAccessToken(
-    @Payload("data") data: { refreshToken: string }
-  ) {
+  @MessagePattern('auth:refreshAccessToken')
+  async refreshAccessToken(@Payload('data') data: { refreshToken: string }) {
     console.log(data);
 
-    const result = this.jwtAuthService.decryptJwtRefreshToken(data.refreshToken);
+    const result = this.jwtAuthService.decryptJwtRefreshToken(
+      data.refreshToken,
+    );
 
     if (!result) {
       throw new UnauthorizedException('Access Token Invalid or Expired!');
@@ -109,7 +109,7 @@ export class AuthController implements AuthServiceController {
       throw new NotFoundException('User not found');
     }
 
-    const jwt = this.jwtAuthService.encryptAuthTokens(user)
+    const jwt = this.jwtAuthService.encryptAuthTokens(user);
     return { user, jwt };
   }
 }

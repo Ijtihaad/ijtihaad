@@ -27,9 +27,12 @@ export const localLoginSchema = z.object({
 });
 
 export const accessTokenPayloadSchema = z.object({
+  email: z.string().email(),
+  image: z.string().nullable(),
+  fullName: z.string(),
   userId: z.string(),
-  role: userRole
-})
+  role: userRole,
+});
 
 export const refreshTokenPayloadSchema = z.object({
   userId: z.string(),
@@ -37,13 +40,13 @@ export const refreshTokenPayloadSchema = z.object({
 
 export type JwtAuthToken = {
   accessToken: string;
-  refreshToken: string
-}
+  refreshToken: string;
+};
 
 export type JwtAuthTokenPayload = {
   accessToken: AccessTokenPayload;
-  refreshToken: RefreshTokenPayload
-}
+  refreshToken: RefreshTokenPayload;
+};
 
 export type LocalLogin = z.infer<typeof localLoginSchema>;
 export type LocalRegister = z.infer<typeof localRegisterSchema>;

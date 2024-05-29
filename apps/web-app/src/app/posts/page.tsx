@@ -1,6 +1,5 @@
-import PostCard from '@web/components/posts/post-card';
-import { Separator } from '@web/components/ui/separator';
-import cn from '@web/utils/cn';
+import PostCard from '@/components/posts/post-card';
+import { Separator, cn } from '@repo/shared-ui';
 
 export default function Page() {
   const posts = [

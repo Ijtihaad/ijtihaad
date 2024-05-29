@@ -19,7 +19,7 @@
   "[typescript]": {
     "editor.defaultFormatter": "vscode.typescript-language-features"
   },
-  "cSpell.words": ["topbar", "Waitlist"],
+  "cSpell.words": ["Auths", "topbar", "Waitlist"],
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma"
   }

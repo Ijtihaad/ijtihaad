@@ -2,7 +2,7 @@ import {
   CanActivate,
   ExecutionContext,
   Logger,
-  UnauthorizedException
+  UnauthorizedException,
 } from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
 import { ContextHelper } from '../helpers/context.helper';

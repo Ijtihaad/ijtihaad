@@ -1,13 +1,12 @@
 'use client';
 
-import cn from '@web/utils/cn';
+import { Button, cn } from '@repo/shared-ui';
 import { MessageSquare, Minus, Plus } from 'lucide-react';
 import { useState } from 'react';
-import AvatarButton from '../actions/avatar-button';
-import CommentOptions from '../actions/comment-options';
-import VoteButtons from '../actions/vote-buttons';
+import AvatarButton from '../common/avatar-button';
 import CommentForm from '../forms/comment/comment-form';
-import { Button } from '../ui/button';
+import VoteButtons from '../posts/vote-buttons';
+import CommentOptions from './comment-options';
 
 type Comment = {
   id: string;
@@ -34,7 +33,7 @@ export function Comment({ comment }: { comment: Comment }) {
       <div className="w-full -translate-x-[0.1rem] flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <AvatarButton showName />
-          <span className="text-xs"> {`5min ago`}</span>
+          <span className="text-xs"> {'5min ago'}</span>
         </div>
       </div>
       <div className={cn('flex mt-1')}>
@@ -46,6 +45,7 @@ export function Comment({ comment }: { comment: Comment }) {
           >
             <div className="shrink-0 bg-border h-full w-[1px] group-hover:bg-muted" />
             <button
+              type="button"
               onClick={() => setCollapsed((prev) => !prev)}
               className="-translate-y-[1.4rem] w-6 h-6 p-1 flex justify-center items-center rounded-full bg-default border border-border hover:bg-muted"
             >

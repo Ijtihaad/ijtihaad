@@ -1,4 +1,13 @@
-import { LocalRegister, OAuthRegister, UpdateMe, UpdateUser, User, UserWhereInput, UserWhereUniqueInput, VerifyUserPassword } from '@repo/common';
+import {
+  LocalRegister,
+  OAuthRegister,
+  UpdateMe,
+  UpdateUser,
+  User,
+  UserWhereInput,
+  UserWhereUniqueInput,
+  VerifyUserPassword,
+} from '@repo/common';
 import { Rpc } from '../core/rpc-client';
 
 export interface UsersServiceController {
@@ -17,4 +26,4 @@ export interface UsersServiceController {
   verifyUserPassword(payload: VerifyUserPassword): Promise<boolean>;
 }
 
-export type UserRpcService = Rpc<UsersServiceController>
+export type UserRpcService = Rpc<UsersServiceController>;

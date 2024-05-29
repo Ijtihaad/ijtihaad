@@ -20,6 +20,7 @@
     "@swc/core": "^1.5.7",
     "@types/express": "^4.17.21",
     "@types/node": "^20.12.12",
+    "concurrently": "^8.2.2",
     "nx": "19.0.6"
   }
 }

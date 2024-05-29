@@ -1,4 +1,3 @@
-
 export * from './filters/http.filter';
 export * from './filters/rpc.filter';
 
@@ -17,4 +16,3 @@ export * from './pipes/validation.pipe';
 
 export * from './decorators/auth-token-decorator';
 export * from './decorators/current-user-decorator';
-

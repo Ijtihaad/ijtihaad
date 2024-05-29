@@ -1,15 +1,14 @@
 'use client';
-import useMediaQuery from '@web/components/hooks/use-media-query';
-import { Button } from '@web/components/ui/button';
+import { cn, useMediaQuery } from '@repo/shared-ui';
+import { Button } from '@repo/shared-ui';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@web/components/ui/select';
-import { Textarea } from '@web/components/ui/textarea';
-import cn from '@web/utils/cn';
+} from '@repo/shared-ui';
+import { Textarea } from '@repo/shared-ui';
 import { useState } from 'react';
 
 export default function CommentForm() {
@@ -18,15 +17,15 @@ export default function CommentForm() {
 
   return (
     <div className={cn('border rounded-xl px-1')}>
-      <Textarea variant={'ghost'} />
+      <Textarea />
       <div className="flex justify-between items-center gap-2 py-1">
         <div className="flex items-center ga-2">
-          <Button rounded={'full'} width={'icon'} variant={'ghost'}>
+          <Button rounded={'full'} width={'icon'}>
             T
           </Button>
         </div>
         <div className="flex items-center gap-2">
-          {/* <Select defaultValue={'replay'} onValueChange={setCommentType}>
+          <Select defaultValue={'replay'} onValueChange={setCommentType}>
             <SelectTrigger className={cn('h-8')} aria-label="Select account">
               <SelectValue placeholder="Select an account">
                 <span className={cn('ml-2')}>{commentType}</span>
@@ -44,11 +43,9 @@ export default function CommentForm() {
                 </div>
               </SelectItem>
             </SelectContent>
-          </Select> */}
+          </Select>
           <Button size={'sm'}>Cancel</Button>
-          <Button variant={'primary'} size={'sm'}>
-            Comment
-          </Button>
+          <Button size={'sm'}>Comment</Button>
         </div>
       </div>
     </div>

@@ -1,14 +1,12 @@
-import AvatarButton from '@web/components/actions/avatar-button';
-import BackButton from '@web/components/actions/back-button';
-import CommentButton from '@web/components/actions/comment-button';
-import PostOptions from '@web/components/actions/post-options';
-import ShareButton from '@web/components/actions/share-button';
-import VoteButtons from '@web/components/actions/vote-buttons';
-import Comments from '@web/components/comments/comments';
-import CommentForm from '@web/components/forms/comment/comment-form';
-import { Button } from '@web/components/ui/button';
-import { Textarea } from '@web/components/ui/textarea';
-import cn from '@web/utils/cn';
+import Comments from '@/components/comments/comments';
+import AvatarButton from '@/components/common/avatar-button';
+import BackButton from '@/components/common/back-button';
+import CommentForm from '@/components/forms/comment/comment-form';
+import CommentButton from '@/components/posts/comment-button';
+import PostOptions from '@/components/posts/post-options';
+import ShareButton from '@/components/posts/share-button';
+import VoteButtons from '@/components/posts/vote-buttons';
+import { cn } from '@repo/shared-ui';
 
 export default function Page({
   params: { postId },
@@ -83,13 +81,13 @@ export default function Page({
     ],
   };
   return (
-    <main className={cn('w-full md:max-w-2xl xl:max-w-4xl mx-auto')}>
-      <div className="w-full flex flex-col gap-2 py-4">
+    <main className={cn('w-full ')}>
+      <section className="w-full max-w-3xl mx-auto border rounded-xl">
         <div className="w-full flex items-center justify-between gap-2 px-2">
           <div className="flex items-center gap-2">
             <BackButton />
             <AvatarButton showName className="h-8 w-8 md:h-8 md:w-8" />
-            <span className="text-xs">{`5 day ago`}</span>
+            <span className="text-xs">{'5 day ago'}</span>
           </div>
           <PostOptions />
         </div>
@@ -113,7 +111,7 @@ export default function Page({
         <div className="py-4 px-2">
           <Comments comments={post.comments} />
         </div>
-      </div>
+      </section>
     </main>
   );
 }

@@ -25,4 +25,4 @@ import { UsersController } from './users.controller';
   controllers: [UsersController, AuthController],
   providers: [RpcClient],
 })
-export class AppModule { }
+export class AppModule {}

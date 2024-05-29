@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@web/components/ui/button';
+import { Button } from '@repo/shared-ui';
 import Image from 'next/image';
 
 export default function GlobalError({
@@ -23,11 +23,7 @@ export default function GlobalError({
             priority={false}
           />
           <h4 className="text-title">Something went wrong!</h4>
-          <Button
-            onClick={() => reset()}
-            className="btn-primary py-4 px-6"
-            variant="default"
-          >
+          <Button onClick={() => reset()} className="btn-primary py-4 px-6">
             Try again
           </Button>
         </div>

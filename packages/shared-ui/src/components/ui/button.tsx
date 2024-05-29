@@ -96,9 +96,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ) => {
     const Comp = asChild ? Slot : 'button';
     const selectedVariant = variant ? variants[variant] : variants.contain;
-    const selectedColor = color
-      ? selectedVariant[color]
-      : 'hover:bg-accent/80 dark:hover:bg-accent/80 text-foreground';
+    const selectedColor = color ? selectedVariant[color] : '';
 
     return (
       <Comp

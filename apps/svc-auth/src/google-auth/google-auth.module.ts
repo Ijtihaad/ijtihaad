@@ -31,4 +31,4 @@ export const GOOGLE_OAUTH20 = 'GOOGLE_OAUTH20';
   ],
   exports: [GOOGLE_OAUTH20],
 })
-export class GoogleAuthModule { }
+export class GoogleAuthModule {}

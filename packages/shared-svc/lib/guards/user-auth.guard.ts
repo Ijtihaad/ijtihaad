@@ -3,7 +3,7 @@ import {
   ExecutionContext,
   Injectable,
   Logger,
-  UnauthorizedException
+  UnauthorizedException,
 } from '@nestjs/common';
 import { AuthRpcService } from 'lib/interfaces/auth.interface';
 import { lastValueFrom } from 'rxjs';
@@ -15,7 +15,7 @@ export class UserAuthGuard implements CanActivate {
   private readonly logger = new Logger(UserAuthGuard.name);
   private authRpc: AuthRpcService;
   constructor(private rpcClient: RpcClient) {
-    this.authRpc = this.rpcClient.createRpcClient('auth')
+    this.authRpc = this.rpcClient.createRpcClient('auth');
   }
 
   async canActivate(context: ExecutionContext) {
