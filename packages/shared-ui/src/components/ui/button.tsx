@@ -26,6 +26,13 @@ const variants = {
     warning: 'text-warning bg-warning/5 ',
     error: 'text-error bg-error/5 ',
   },
+  ghost: {
+    primary: '',
+    secondary: '',
+    success: '',
+    warning: '',
+    error: '',
+  },
 };
 
 const buttonVariants = cva(
@@ -50,6 +57,7 @@ const buttonVariants = cva(
         contain: '',
         outline: 'border',
         link: 'underline-offset-4 hover:underline',
+        ghost: 'hover:bg-accent/80 text-foreground',
       },
       color: {
         primary: '',
@@ -131,9 +139,7 @@ const LinkButton = React.forwardRef<HTMLAnchorElement, LinkButtonProps>(
     ref,
   ) => {
     const selectedVariant = variant ? variants[variant] : variants.contain;
-    const selectedColor = color
-      ? selectedVariant[color]
-      : 'hover:bg-accent/80 dark:hover:bg-accent/80 text-foreground';
+    const selectedColor = color ? selectedVariant[color] : '';
 
     return (
       <Link
