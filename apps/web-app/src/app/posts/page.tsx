@@ -59,15 +59,15 @@ export default function Page() {
     },
   ];
   return (
-    <main className={cn('w-full py-4 md:max-w-2xl xl:max-w-4xl mx-auto')}>
-      <div className={cn('w-full flex flex-col gap-1')}>
+    <main className={cn('w-full')}>
+      <section className="w-full max-w-3xl mx-auto border rounded-xl">
         {posts.map((post) => (
           <div key={post.id} className={cn('flex flex-col gap-1 px-2')}>
             <PostCard post={post} />
             <Separator />
           </div>
         ))}
-      </div>
+      </section>
     </main>
   );
 }

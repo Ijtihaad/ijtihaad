@@ -13,7 +13,7 @@ export type Rpc<ObjectType> = <P extends keyof ObjectType>(
 ) => Observable<ReturnType<ObjectType[P]>>;
 
 export class RpcClient implements OnModuleInit, OnModuleDestroy {
-  constructor(@Inject('RPC_SERVICE') private client: ClientProxy) {}
+  constructor(@Inject('RPC_SERVICE') private client: ClientProxy) { }
 
   async onModuleInit() {
     await this.client.connect();
@@ -30,6 +30,7 @@ export class RpcClient implements OnModuleInit, OnModuleDestroy {
       const authorization = jwt.sign(
         { requestId: uuidV4() },
         process.env.JWT_SERVICE_SECRETE_KEY!,
+        { expiresIn: '2s' }
       );
       return this.client.send(`${namespace}:${path as string}`, {
         data: args,

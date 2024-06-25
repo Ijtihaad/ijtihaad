@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-db-service
+spec:
+  selector:
+    app: postgres-db
+  ports:
+  - name: postgres
+    protocol: TCP
+    port: 5432
+    targetPort: 5432
+  - name: pg-admin
+    protocol: TCP
+    port: 5050
+    targetPort: 5050
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: pg-admin-external-service
+spec:
+  selector:
+    app: postgres-db
+  type: LoadBalancer
+  ports:
+  - name: postgres
+    protocol: TCP
+    port: 5432
+    targetPort: 5432
+    nodePort: 30001
+  - name: pg-admin
+    protocol: TCP
+    port: 5050
+    targetPort: 5050
+    nodePort: 30021

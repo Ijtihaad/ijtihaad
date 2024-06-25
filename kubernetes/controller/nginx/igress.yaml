@@ -1,0 +1,37 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: main-ijtihad-manager-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: marketplace.ozonetechtech.com
+      http:
+        paths:
+          # - path: /users(/|$)(.*)
+          #   pathType: ImplementationSpecific
+          #   backend:
+          #     service:
+          #       name: users-manager-service
+          #       port:
+          #         number: 8000
+
+          # - path: /pg-admin(/|$)(.*)
+          #   pathType: ImplementationSpecific
+          #   backend:
+          #     service:
+          #       name: postgres-db-service
+          #       port:
+          #         number: 5050
+          - path: /mongo-express(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: mongo-db-service
+                port:
+                  number: 8081

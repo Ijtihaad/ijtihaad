@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-db
+  labels:
+    app: postgres-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres-db
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 3
+  template:
+    metadata:
+      labels:
+        app: postgres-db
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:alpine3.18
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            cpu: "1"
+            memory: "1Gi"
+        ports:
+        - containerPort: 5432
+        volumeMounts:
+        - name: postgres-data-volume
+          mountPath: /var/lib/postgres/data
+        env:
+          - name: POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                name: postgres-db-secret
+                key: POSTGRES_USER
+
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: postgres-db-secret
+                key: POSTGRES_PASSWORD
+                
+        
+      - name: pg-admin
+        image: dpage/pgadmin4:7.7
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5050
+        resources:
+          limits:
+            cpu: "1"
+            memory: "1Gi"
+        env:
+          - name: PGADMIN_LISTEN_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: postgres-db-configmap
+                key: PGADMIN_LISTEN_PORT
+          - name: PGADMIN_DEFAULT_EMAIL
+            valueFrom:
+              secretKeyRef:
+                name: postgres-db-secret
+                key: PGADMIN_DEFAULT_EMAIL
+
+          - name: PGADMIN_DEFAULT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: postgres-db-secret
+                key: PGADMIN_DEFAULT_PASSWORD
+
+        volumeMounts:
+        - name: pg-admin-data-volume
+          mountPath: /var/lib/pg-admin/data
+          
+      volumes:
+      - name: postgres-data-volume
+        persistentVolumeClaim:
+          claimName: postgres-data-pcv
+      - name: pg-admin-data-volume
+        persistentVolumeClaim:
+          claimName: pg-admin-data-pcv
+       
+       

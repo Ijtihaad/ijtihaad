@@ -1,5 +1,5 @@
+import { server_host } from '@/config/host.config';
 import { Fetcher } from '@repo/fetcher';
-import { server_host } from '../config/host.config';
 import { getToken, refreshTokens } from './token.service';
 
 const fetcher = new Fetcher({

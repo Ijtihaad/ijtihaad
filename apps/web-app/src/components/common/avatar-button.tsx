@@ -17,7 +17,7 @@ export default function AvatarButton({
 }) {
   return (
     <div className="flex items-center gap-2">
-      <Button width="icon" rounded={'full'} size={'xs'} className="relative">
+      <Button width="icon" rounded={'full'} className="relative px-2">
         <Avatar className={cn('h-6 w-6 md:h-8 md:w-8', className)}>
           <AvatarImage src="/avatars/01.png" alt="@shadcn" />
           <AvatarFallback>SC</AvatarFallback>

@@ -63,7 +63,7 @@ export default function Page() {
       <section className="w-full max-w-3xl mx-auto border rounded-xl">
         <div className={cn('w-full flex flex-col gap-1')}>
           {posts.map((post) => (
-            <div key={post.id} className={cn('flex flex-col gap-1 px-2')}>
+            <div key={post.id} className={cn('flex flex-col gap-1')}>
               <PostCard post={post} />
               <Separator />
             </div>

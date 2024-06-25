@@ -1,8 +1,9 @@
+import MainBottomBar from '@/components/common/main-bottom-bar';
+import MainSideBar from '@/components/common/main-side-bar';
+import MainTopBar from '@/components/common/main-top-bar';
 import { Toaster, TooltipProvider, cn } from '@repo/shared-ui';
 import { ThemeProvider } from '../components/contexts/theme-provider';
 import './globals.css';
-import MainSidebar from '@/components/common/main-sidebar';
-import MainTopBar from '@/components/common/main-topbar';
 
 export default function RootLayout({
   children,
@@ -16,9 +17,13 @@ export default function RootLayout({
           <TooltipProvider>
             <MainTopBar />
             <div className="w-full flex">
-              <MainSidebar />
-              {children}
+              <MainSideBar />
+              <div className="w-full">
+                {children}
+                <div className='py-12 lg:py-0' />
+              </div>
             </div>
+            <MainBottomBar />
           </TooltipProvider>
           <Toaster />
         </ThemeProvider>

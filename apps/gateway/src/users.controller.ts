@@ -11,9 +11,9 @@ import { User } from '@repo/common';
 import {
   CurrentUser,
   RpcClient,
-  UserAuthGuard,
   UserRpcService,
 } from '@repo/shared-svc';
+import { UserAuthGuard } from './guards/user-auth.guard';
 
 @Controller('users')
 export class UsersController {

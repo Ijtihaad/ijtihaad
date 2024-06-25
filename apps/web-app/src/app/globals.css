@@ -4,6 +4,22 @@
 
 @layer base {
   :root {
+    /* CSS HEX */
+    --indigo-dye: #033f63ff;
+    --caribbean-current: #28666eff;
+    --cambridge-blue: #7c9885ff;
+    --sage: #b5b682ff;
+    --peach-yellow: #fedc97ff;
+
+    /* CSS HSL */
+    --indigo-dye: hsla(203, 94%, 20%, 1);
+    --caribbean-current: hsla(187, 47%, 29%, 1);
+    --cambridge-blue: hsla(139, 12%, 54%, 1);
+    --sage: hsla(61, 26%, 61%, 1);
+    --peach-yellow: hsla(40, 98%, 79%, 1);
+
+
+
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
 

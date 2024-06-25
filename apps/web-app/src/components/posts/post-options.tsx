@@ -13,7 +13,7 @@ export default function PostOptions() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button width={'icon'} rounded={'full'} size={'xs'}>
+        <Button width={'icon'} rounded={'full'}>
           <MoreHorizontal />
         </Button>
       </DropdownMenuTrigger>

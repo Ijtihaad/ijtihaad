@@ -10,7 +10,7 @@ import {
 } from '@files-ui/react';
 import { useState } from 'react';
 
-export default function AdvancedDropzone({
+export function FileDropzone({
   upload_url,
   onUploaded,
 }: {
@@ -24,9 +24,9 @@ export default function AdvancedDropzone({
   const [videoSrc, setVideoSrc] = useState<File | string | undefined>(
     undefined,
   );
-  const updateFiles = (incommingFiles: ExtFile[]) => {
-    console.log('incomming files', incommingFiles);
-    setExtFiles(incommingFiles);
+  const updateFiles = (incomingFiles: ExtFile[]) => {
+    console.log('incoming files', incomingFiles);
+    setExtFiles(incomingFiles);
   };
   const onDelete = (id: FileMosaicProps['id']) => {
     setExtFiles(extFiles.filter((x) => x.id !== id));

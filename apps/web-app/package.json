@@ -1,5 +1,5 @@
 {
-  "name": "web-app",
+  "name": "@repo/web-app",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,33 +9,34 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@files-ui/react": "^1.2.4",
     "@hookform/resolvers": "^3.4.0",
     "@radix-ui/react-icons": "^1.3.0",
     "@tanstack/react-table": "^8.17.3",
     "date-fns": "^3.6.0",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.378.0",
+    "next": "14.2.3",
     "next-themes": "^0.3.0",
+    "react": "^18",
+    "react-dom": "^18",
     "react-hook-form": "^7.51.4",
+    "react-quill": "^2.0.0",
     "recharts": "^2.12.7",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.23.8",
-    "zustand": "^4.5.2",
-    "react": "^18",
-    "react-dom": "^18",
-    "next": "14.2.3"
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
     "@repo/common": "workspace:*",
-    "@repo/fetcher": "workspace:*",
-    "@repo/shared-ui": "workspace:*",
     "@repo/config": "workspace:*",
-    "typescript": "^5",
+    "@repo/shared-ui": "workspace:*",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "postcss": "^8",
-    "tailwindcss": "^3.4.1"
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
   }
 }

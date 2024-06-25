@@ -13,7 +13,7 @@ export default function CommentOptions() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button width={'icon'} rounded={'full'} size={'xs'}>
+        <Button width={'icon'} rounded={'full'} size={'sm'} variant={'ghost'}>
           <MoreHorizontal />
         </Button>
       </DropdownMenuTrigger>

@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  postgres-db:
+    image: postgres:alpine3.18
+    container_name: postgres-db
+    restart: always
+    ports:
+      - ${POSTGRES_PORT}:5432
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres-data-volume:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  pg-admin:
+    image: dpage/pgadmin4:7.7
+    container_name: pg-admin
+    restart: always
+    ports:
+      - 5050:5050
+    environment:
+      - PGADMIN_LISTEN_PORT=5050
+      - PGADMIN_DEFAULT_EMAIL=${POSTGRES_USER}@gmail.com
+      - PGADMIN_DEFAULT_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - pg-admin-data-volume:/var/lib/pgadmin
+    depends_on:
+      postgres-db:
+        condition: service_healthy
+
+volumes:
+  postgres-data-volume:
+  pg-admin-data-volume:
