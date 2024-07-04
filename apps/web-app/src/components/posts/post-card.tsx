@@ -33,7 +33,7 @@ export default function PostCard({
               <Button
                 className={cn(
                   '[outline:unset]',
-                  'relative flex items-center gap-4 px-2',
+                  'relative flex items-center gap-4 px-0',
                 )}
               >
                 <Avatar className={cn('size-11')}>
@@ -72,34 +72,36 @@ export default function PostCard({
         </div>
         <PostOptions />
       </div>
-      <Link
-        href={`/posts/${post.id}`}
-        className={cn('flex flex-col-reverse md:flex-row gap-2 px-2 md:px-6')}
-      >
-        <div className="flex flex-col gap-2">
-          <h6 className="text-2xl font-bold">{post.title}</h6>
-          <p className="text-md">{post.body}</p>
+      <div className={cn('flex flex-col gap-2')}>
+        <Link href={`/posts/${post.id}`}>
+          <div className="flex flex-col gap-2">
+            <h6 className="text-2xl font-bold">{post.title}</h6>
+            <p className="text-md">{post.body}</p>
+          </div>
+        </Link>
+        <div className={cn('flex items-center  gap-1')}>
+          {['#salat', '#zakah', '#ramadan'].map((tag) => (
+            <Button
+              key={tag}
+              variant={'outline'}
+              size={'xs'}
+              className=" hover:bg-muted"
+            >
+              {tag}
+            </Button>
+          ))}
         </div>
-        <div className="flex">
-          <span className="w-full md:w-60 bg-muted aspect-video rounded-2xl" />
-        </div>
-      </Link>
-      <div className={cn('flex items-center px-2 md:px-4 gap-6')}>
-        {['#salat', '#zakah', '#ramadan'].map((tag) => (
-          <Button key={tag} variant={'outline'} size={'xs'}>
-            {tag}
-          </Button>
-        ))}
+        <Link href={`/posts/${post.id}`} className="w-full flex aspect-video">
+          <span className="w-full bg-muted aspect-video rounded-2xl" />
+        </Link>
       </div>
-      <div
-        className={cn('flex items-center justify-between gap-2 px-2 md:px-4')}
-      >
+      <div className={cn('flex items-center justify-between gap-2')}>
         <div className={cn('flex items-center gap-2')}>
           <VoteButtons />
           <LinkButton
             Link={Link}
             variant={'ghost'}
-            className="flex items-center gap-2 pe-4 bg-muted/50 rounded-2xl hover:bg-success/30 hover:text-success duration-200"
+            className="flex items-center gap-2 pe-4 bg-muted/50 rounded-xl hover:bg-success/30 hover:text-success duration-200"
             href={`/posts/${post.id}`}
           >
             <MessageSquare size={'1.2rem'} />

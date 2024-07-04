@@ -12,6 +12,7 @@ import { Bell, MessageCircleMore, PanelLeft, Plus, Search } from 'lucide-react';
 import Link from 'next/link';
 import { useMainSideBar } from './main-side-bar';
 import NavLink from './nav-link';
+import { ThemeToggle } from './theme-toggle';
 import { UserNav } from './user-nav';
 
 export default function MainTopBar() {
@@ -33,7 +34,7 @@ export default function MainTopBar() {
           )}
         >
           <form>
-            <div className="relative">
+            <div className="relative rounded-2xl">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-muted-foreground" />
               <Input placeholder="Search" className={'px-10 h-10'} />
               <Badge className="bg-accent absolute right-8 top-1/2 -translate-y-1/2 h-5 w-fit px-2 py-1 text-muted-foreground">
@@ -43,6 +44,7 @@ export default function MainTopBar() {
           </form>
         </div>
         <div className="flex items-center gap-2">
+          <ThemeToggle />
           <NavLink
             className="hidden lg:flex gap-2"
             label={
