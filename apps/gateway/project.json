@@ -6,14 +6,14 @@
   "targets": {
     "dev": {
       "dependsOn": [
-        { "projects": "@repo/shared-svc", "target": "build" },
-        { "projects": "@repo/common", "target": "build" }
+        { "projects": "@repo/common", "target": "build" },
+        { "projects": "@repo/shared-svc", "target": "build" }
       ]
     },
     "build": {
       "dependsOn": [
-        { "projects": "@repo/shared-svc", "target": "build" },
-        { "projects": "@repo/common", "target": "build" }
+        { "projects": "@repo/common", "target": "build" },
+        { "projects": "@repo/shared-svc", "target": "build" }
       ]
     }
   }

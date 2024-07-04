@@ -5,9 +5,9 @@
     "baseUrl": "./",
     "outDir": "./dist",
     "paths": {
-      "@/*": ["lib/*"]
+      "@/*": ["src/*"]
     }
   },
-  "include": ["lib"],
+  "include": ["src"],
   "exclude": ["node_modules", "dist"]
 }

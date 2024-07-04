@@ -23,7 +23,7 @@ const SideBarMenuContext = React.createContext<{
 }>({
   collapsed: false,
   isBraked: false,
-  setCollapsed: (...arg: any) => { },
+  setCollapsed: (...arg: any) => {},
   onCollapseChange: (callback) => {
     callback(false);
   },
@@ -93,15 +93,19 @@ const SideBarCollapse = React.forwardRef<
   );
 });
 
-export interface SideBarMenuProps extends React.HTMLAttributes<HTMLElement> { }
+export interface SideBarMenuProps extends React.HTMLAttributes<HTMLElement> {}
 
 const SideBarMenu = React.forwardRef<HTMLElement, SideBarMenuProps>(
   ({ className, children, ...props }, ref) => {
-    const { collapsed } = React.useContext(SideBarMenuContext)
+    const { collapsed } = React.useContext(SideBarMenuContext);
     return (
       <nav
         ref={ref}
-        className={cn('flex flex-col items-start gap-2', collapsed ? "px-1" : "px-2", className)}
+        className={cn(
+          'flex flex-col items-start gap-2',
+          collapsed ? 'px-1' : 'px-2',
+          className,
+        )}
         {...props}
       >
         {children}
@@ -125,7 +129,7 @@ const SideBarMenuItem = React.forwardRef<HTMLDivElement, SideBarMenuItemProps>(
           <div
             className={cn(
               'w-full flex items-center gap-3 text-start',
-              collapsed ? "justify-center" : "justify-start",
+              collapsed ? 'justify-center' : 'justify-start',
               className,
             )}
             ref={ref}
@@ -181,7 +185,7 @@ const sidebarVariants = cva(
 
 interface SideBarContentProps
   extends React.ComponentPropsWithoutRef<typeof SideBarPrimitive.Content>,
-  VariantProps<typeof sidebarVariants> {
+    VariantProps<typeof sidebarVariants> {
   maxWidth?: string;
 }
 

@@ -86,7 +86,7 @@ export function Comment({
   return (
     <div
       className={cn(
-        'w-full bg-background shadow-md flex flex-col gap-2 px-1 pt-4 pb-1 border rounded-2xl',
+        'w-full bg-background shadow-md flex flex-col gap-2 px-0 pt-4 pb-1 border rounded-2xl',
         (focused && !currentFocused) || !collapsed
           ? 'border-success/50 bg-muted/20'
           : '',
