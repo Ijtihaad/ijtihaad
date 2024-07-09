@@ -21,7 +21,7 @@ export interface UsersServiceController {
 
   updateUser(payload: UpdateUser & UserWhereUniqueInput): Promise<User>;
 
-  delete(payload: any): Promise<User>;
+  delete(payload: any): Promise<any>;
 
   verifyUserPassword(payload: VerifyUserPassword): Promise<boolean>;
 }

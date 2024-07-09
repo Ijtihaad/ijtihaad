@@ -3,16 +3,18 @@ import { z } from 'zod';
 export const userRole = z.union([z.literal('ADMIN'), z.literal('BASIC')]);
 
 export const userSchema = z.object({
-  id: z.string(),
-  blocked: z.boolean(),
-  emailVerified: z.boolean(),
+  _id: z.any(),
+  blocked: z.boolean().default(false),
+  emailVerified: z.boolean().default(false),
   firstName: z.string().min(3).max(100),
   lastName: z.string().min(3).max(100),
   username: z.string().min(3).max(100).nullable(),
-  picture: z.string().max(255).nullable(),
+  picture: z.string().max(255).nullable().default(null),
   email: z.string().email().max(100),
-  role: userRole,
+  role: userRole.default('BASIC'),
 });
+
+export const usersSchema = z.array(userSchema)
 
 export const updateMeSchema = userSchema.pick({
   firstName: true,
@@ -26,7 +28,7 @@ export const updateUserSchema = z.object({
 });
 
 export const userWhereUniqueInputSchema = z.object({
-  id: z.string().optional(),
+  _id: z.string().optional(),
   email: z.string().email().optional(),
   username: z.string().optional(),
 });
@@ -41,8 +43,9 @@ export const verifyUserPasswordSchema = z.object({
   password: z.string(),
 });
 
-export type UserRole = z.infer<typeof userRole>;
 export type User = z.infer<typeof userSchema>;
+export type Users = z.infer<typeof usersSchema>;
+export type UserRole = z.infer<typeof userRole>;
 export type UpdateMe = z.infer<typeof updateMeSchema>;
 export type UpdateUser = z.infer<typeof updateUserSchema>;
 export type UserWhereInput = z.infer<typeof userWhereInputSchema>;

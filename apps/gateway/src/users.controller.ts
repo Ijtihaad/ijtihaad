@@ -30,21 +30,21 @@ export class UsersController {
   @Get('me')
   @UseGuards(UserAuthGuard)
   findMe(@CurrentUser() user: User) {
-    return this.usersRpc('findOne', { id: user.id });
+    return this.usersRpc('findOne', { _id: user._id });
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersRpc('findOne', { id });
+  @Get(':_id')
+  findOne(@Param('_id') _id: string) {
+    return this.usersRpc('findOne', { _id });
   }
 
-  @Patch(':id')
-  updateUser(@Param('id') id: string, @Body() data: any) {
-    return this.usersRpc('updateUser', { ...data, id });
+  @Patch(':_id')
+  updateUser(@Param('_id') _id: string, @Body() data: any) {
+    return this.usersRpc('updateUser', { ...data, _id });
   }
 
-  @Delete(':id')
-  delete(@Param('id') id: string) {
-    return this.usersRpc('delete', { id });
+  @Delete(':_id')
+  delete(@Param('_id') _id: string) {
+    return this.usersRpc('delete', { _id });
   }
 }

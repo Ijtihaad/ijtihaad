@@ -61,7 +61,7 @@ export class AuthService {
     }
 
     const verifiedPassword = await this.verifyUserPassword({
-      userId: user.id,
+      userId: user._id,
       password: data.password,
     });
 

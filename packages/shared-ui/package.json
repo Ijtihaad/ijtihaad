@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "dev": "tsc && (concurrently \"tsc -w\" \"tsc-alias -w\")",
+    "build:watch": "tsc && (concurrently \"tsc -w\" \"tsc-alias -w\")",
     "build": "rm -rf dist && tsc && tsc-alias"
   },
   "keywords": [],

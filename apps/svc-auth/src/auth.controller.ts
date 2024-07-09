@@ -79,7 +79,7 @@ export class AuthController implements AuthServiceController {
     }
 
     const user = await this.authService.findUser({
-      id: result.userId,
+      _id: result.userId,
     });
 
     if (!user) {
@@ -102,7 +102,7 @@ export class AuthController implements AuthServiceController {
     }
 
     const user = await this.authService.findUser({
-      id: result.userId,
+      _id: result.userId,
     });
 
     if (!user) {

@@ -1,7 +1,3 @@
-export * from './mongoose-abstract/mongoose-config.module';
-export * from './mongoose-abstract/abstract.repository';
-export * from './mongoose-abstract/abstract.schema';
-
 export * from './filters/http.filter';
 export * from './filters/rpc.filter';
 

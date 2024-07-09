@@ -11,15 +11,15 @@ import { jwtConstants } from './jwt-auth.constant';
 @Injectable()
 export class JwtAuthService {
   private readonly logger = new Logger(JwtAuthService.name);
-  constructor(private readonly jwtService: JwtService) {}
+  constructor(private readonly jwtService: JwtService) { }
 
-  encryptAuthTokens(user: { id: string; role: UserRole }): JwtAuthToken {
+  encryptAuthTokens(user: { _id?: string; role: UserRole }): JwtAuthToken {
     this.logger.log(this.encryptAuthTokens.name);
 
     const jwt = {
       accessToken: this.jwtService.sign(
         {
-          userId: user.id,
+          userId: user._id,
           role: user.role,
         },
         {
@@ -30,7 +30,7 @@ export class JwtAuthService {
 
       refreshToken: this.jwtService.sign(
         {
-          userId: user.id,
+          userId: user._id,
         },
         {
           secret: jwtConstants.refreshSecretKey,

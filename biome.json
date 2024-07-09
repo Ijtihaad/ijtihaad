@@ -1,7 +1,12 @@
 {
   "$schema": "https://biomejs.dev/schemas/1.7.3/schema.json",
   "files": {
-    "ignore": ["scripts/*.js", "*/dist/**/*", "*/.next/**/*", "*/public/**/*"]
+    "ignore": [
+      "scripts/*.js",
+      "*/dist/**/*",
+      "*/.next/**/*",
+      "*/public/**/*"
+    ]
   },
   "javascript": {
     "parser": {

@@ -5,8 +5,8 @@
   "compilerOptions": {
     "module": "commonjs",
     "removeComments": true,
-    "declaration": false,
-    "declarationMap": false,
+    "declaration": true,
+    "declarationMap": true,
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "noImplicitAny": false,

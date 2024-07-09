@@ -4,7 +4,7 @@ import { HttpExceptionFilter } from '@repo/shared-svc';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const logger = new Logger('app-ijtihaad::App');
+  const logger = new Logger('ijtihaad::gateway');
 
   const app = await NestFactory.create(AppModule);
 
