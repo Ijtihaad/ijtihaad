@@ -24,7 +24,7 @@ import { JwtAuthService } from './jwt-auth/jwt-auth.service';
         JWT_REFRESH_LIFETIME: Joi.string().required(),
         JWT_SERVICE_SECRETE_KEY: Joi.string().required(),
       }),
-      envFilePath: ['./.env'],
+      envFilePath: ['./.env', '../../../.env'],
     }),
     ClientsModule.register([
       {
