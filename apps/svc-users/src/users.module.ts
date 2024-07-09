@@ -15,6 +15,7 @@ import { UsersService } from './users.service';
         NATS_SERVER_URL: Joi.string().required(),
         JWT_SERVICE_SECRETE_KEY: Joi.string().required(),
         MONGODB_URI: Joi.string().required(),
+        DATABASE_NAME: Joi.string().required(),
       }),
       envFilePath: ['./.env', '../../../.env'],
     }),

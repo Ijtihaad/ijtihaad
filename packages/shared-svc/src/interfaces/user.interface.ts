@@ -17,9 +17,9 @@ export interface UsersServiceController {
 
   findOne(payload: UserWhereUniqueInput): Promise<User>;
 
-  updateMe(payload: UpdateMe & UserWhereUniqueInput): Promise<User>;
+  updateMe(payload: UserWhereUniqueInput & UpdateMe): Promise<User>;
 
-  updateUser(payload: UpdateUser & UserWhereUniqueInput): Promise<User>;
+  updateUser(payload: UserWhereUniqueInput & UpdateUser): Promise<User>;
 
   delete(payload: any): Promise<any>;
 

@@ -4,6 +4,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import { RpcClient } from '@repo/shared-svc';
 import Joi from 'joi';
 import { AuthController } from './auth.controller';
+import { JamasController } from './jamas.controller';
 import { UsersController } from './users.controller';
 
 @Module({
@@ -27,7 +28,11 @@ import { UsersController } from './users.controller';
       },
     ]),
   ],
-  controllers: [UsersController, AuthController],
+  controllers: [
+    AuthController,
+    UsersController,
+    JamasController,
+  ],
   providers: [RpcClient],
 })
 export class AppModule { }

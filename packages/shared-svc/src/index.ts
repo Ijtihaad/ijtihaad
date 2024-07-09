@@ -9,6 +9,8 @@ export * from './core/rpc-client';
 
 export * from './interfaces/auth.interface';
 export * from './interfaces/user.interface';
+export * from './interfaces/jama.interface';
+export * from './interfaces/post.interface';
 
 export * from './pipes/validation.pipe';
 
