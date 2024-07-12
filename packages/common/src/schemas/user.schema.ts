@@ -1,53 +1,85 @@
 import { z } from 'zod';
+import { AssetType, assetSchema } from './asset.schema';
 
-export const userRole = z.union([z.literal('ADMIN'), z.literal('BASIC')]);
+export enum UserRole {
+  user = "user",
+  admin = "admin",
+  superAdmin = "superAdmin",
+}
+
+export enum Gender {
+  male = "male",
+  female = "female",
+}
+
+export const userPermissionSchema = z.object({
+  askTahqiq: z.boolean(),
+  answerTahqiq: z.boolean(),
+  postThought: z.boolean(),
+  postReels: z.boolean(),
+  postVideo: z.boolean(),
+  createJama: z.boolean(),
+  createChannel: z.boolean(),
+})
 
 export const userSchema = z.object({
   _id: z.any(),
   blocked: z.boolean().default(false),
+  firstName: z.string(),
+  lastName: z.string(),
+  username: z.string().nullable(),
+  gender: z.nativeEnum(Gender),
+  age: z.number().min(7).max(100),
+  picture: assetSchema.extend({
+    assetType: z.literal(AssetType.image)
+  }),
+  role: z.nativeEnum(UserRole),
+  email: z.string().email(),
   emailVerified: z.boolean().default(false),
-  firstName: z.string().min(3).max(100),
-  lastName: z.string().min(3).max(100),
-  username: z.string().min(3).max(100).nullable(),
-  picture: z.string().max(255).nullable().default(null),
-  email: z.string().email().max(100),
-  role: userRole.default('BASIC'),
 });
 
-export const usersSchema = z.array(userSchema)
 
-export const updateMeSchema = userSchema.pick({
-  firstName: true,
-  lastName: true,
-  email: true,
+export type User = z.infer<typeof userSchema>;
+
+// ================API======================
+
+
+// =====================SVC=================
+
+export const _updateMeSchema = z.object({
+  firstName: z.string().optional(),
+  lastName: z.string().optional(),
+  username: z.string().optional(),
+  picture: z.string().optional(),
+  email: z.string().email().optional(),
 });
 
-export const updateUserSchema = z.object({
+
+export const _updateUserSchema = z.object({
+  role: z.nativeEnum(UserRole).optional(),
   blocked: z.boolean().optional(),
-  role: userRole.optional(),
+  emailVerified: z.boolean().default(false),
+  permission: userPermissionSchema.optional(),
 });
 
-export const userWhereUniqueInputSchema = z.object({
+export const _userQueryUniqueSchema = z.object({
   _id: z.string().optional(),
   email: z.string().email().optional(),
   username: z.string().optional(),
 });
 
-export const userWhereInputSchema = z.object({
+export const _userQuerySchema = z.object({
   blocked: z.boolean().optional(),
-  role: userRole.optional(),
+  role: z.nativeEnum(UserRole).optional(),
 });
 
-export const verifyUserPasswordSchema = z.object({
+export const _verifyUserPasswordSchema = z.object({
   userId: z.string(),
   password: z.string(),
 });
 
-export type User = z.infer<typeof userSchema>;
-export type Users = z.infer<typeof usersSchema>;
-export type UserRole = z.infer<typeof userRole>;
-export type UpdateMe = z.infer<typeof updateMeSchema>;
-export type UpdateUser = z.infer<typeof updateUserSchema>;
-export type UserWhereInput = z.infer<typeof userWhereInputSchema>;
-export type UserWhereUniqueInput = z.infer<typeof userWhereUniqueInputSchema>;
-export type VerifyUserPassword = z.infer<typeof verifyUserPasswordSchema>;
+export type _UpdateMe = z.infer<typeof _updateMeSchema>;
+export type _UpdateUser = z.infer<typeof _updateUserSchema>;
+export type _UserQuery = z.infer<typeof _userQuerySchema>;
+export type _UserQueryUnique = z.infer<typeof _userQueryUniqueSchema>;
+export type _VerifyUserPassword = z.infer<typeof _verifyUserPasswordSchema>;

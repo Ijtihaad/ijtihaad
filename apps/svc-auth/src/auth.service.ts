@@ -6,10 +6,10 @@ import {
 import {
   LocalLogin,
   LocalRegister,
-  OAuthRegister,
   User,
-  UserWhereUniqueInput,
-  VerifyUserPassword,
+  _OAuthRegister,
+  _UserQueryUnique,
+  _VerifyUserPassword
 } from '@repo/common';
 
 import { RpcClient, UserRpcService } from '@repo/shared-svc';
@@ -22,8 +22,8 @@ export class AuthService {
     this.usersRpc = this.rpcClient.createRpcClient('users');
   }
 
-  async findUser(where: UserWhereUniqueInput) {
-    const user = await lastValueFrom(this.usersRpc('findOne', where));
+  async findUser(query: _UserQueryUnique) {
+    const user = await lastValueFrom(this.usersRpc('findOne', query));
     return user;
   }
 
@@ -72,13 +72,13 @@ export class AuthService {
     return user;
   }
 
-  async oauthRegister(data: OAuthRegister) {
+  async oauthRegister(data: _OAuthRegister) {
     const user = this.usersRpc('create', data);
 
     return lastValueFrom(user);
   }
 
-  async verifyUserPassword(data: VerifyUserPassword) {
+  async verifyUserPassword(data: _VerifyUserPassword) {
     const verifiedPassword = this.usersRpc('verifyUserPassword', data);
 
     return lastValueFrom(verifiedPassword);

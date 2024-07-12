@@ -19,7 +19,7 @@
   "[typescript]": {
     "editor.defaultFormatter": "vscode.typescript-language-features"
   },
-  "cSpell.words": ["jama", "Jamas", "Tahqiq", "topbar", "Waitlist"],
+  "cSpell.words": ["jama", "Jamas", "Tahqiq", "tahqiqs", "topbar", "Waitlist"],
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma"
   }

@@ -7,12 +7,17 @@ export * from './helpers/context.helper';
 
 export * from './core/rpc-client';
 
-export * from './interfaces/auth.interface';
-export * from './interfaces/user.interface';
-export * from './interfaces/jama.interface';
-export * from './interfaces/post.interface';
-
 export * from './pipes/validation.pipe';
 
 export * from './decorators/auth-token-decorator';
 export * from './decorators/current-user-decorator';
+
+export * from './interfaces/auth.interface';
+export * from './interfaces/user.interface';
+export * from './interfaces/tahqiq.interface';
+export * from './interfaces/thought.interface';
+export * from './interfaces/thought.interface';
+export * from './interfaces/comment.interface';
+
+
+

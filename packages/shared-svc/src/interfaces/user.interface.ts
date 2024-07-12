@@ -1,29 +1,29 @@
 import {
-  LocalRegister,
-  OAuthRegister,
-  UpdateMe,
-  UpdateUser,
   User,
-  UserWhereInput,
-  UserWhereUniqueInput,
-  VerifyUserPassword,
+  _LocalRegister,
+  _OAuthRegister,
+  _UpdateMe,
+  _UpdateUser,
+  _UserQuery,
+  _UserQueryUnique,
+  _VerifyUserPassword,
 } from '@repo/common';
 import { Rpc } from '../core/rpc-client';
 
 export interface UsersServiceController {
-  create(payload: LocalRegister | OAuthRegister): Promise<User>;
+  create(payload: _LocalRegister | _OAuthRegister): Promise<User>;
 
-  findMany(payload: UserWhereInput): Promise<User[]>;
+  findMany(payload: _UserQuery): Promise<User[]>;
 
-  findOne(payload: UserWhereUniqueInput): Promise<User>;
+  findOne(payload: _UserQueryUnique): Promise<User>;
 
-  updateMe(payload: UserWhereUniqueInput & UpdateMe): Promise<User>;
+  updateMe(payload: _UserQueryUnique & _UpdateMe): Promise<User>;
 
-  updateUser(payload: UserWhereUniqueInput & UpdateUser): Promise<User>;
+  updateUser(payload: _UserQueryUnique & _UpdateUser): Promise<User>;
 
   delete(payload: any): Promise<any>;
 
-  verifyUserPassword(payload: VerifyUserPassword): Promise<boolean>;
+  verifyUserPassword(payload: _VerifyUserPassword): Promise<boolean>;
 }
 
 export type UserRpcService = Rpc<UsersServiceController>;

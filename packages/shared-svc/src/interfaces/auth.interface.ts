@@ -1,13 +1,13 @@
 import { Rpc } from '@/core/rpc-client';
-import { JwtAuthToken, LocalLogin, LocalRegister, User } from '@repo/common';
+import { JwtAuthToken, User, _LocalLogin, _LocalRegister } from '@repo/common';
 
 export interface AuthServiceController {
-  localRegister(payload: LocalRegister): Promise<{
+  localRegister(payload: _LocalRegister): Promise<{
     user: User;
     jwt: JwtAuthToken;
   }>;
 
-  localLogin(payload: LocalLogin): Promise<{
+  localLogin(payload: _LocalLogin): Promise<{
     user: User;
     jwt: JwtAuthToken;
   }>;

@@ -1,0 +1,32 @@
+{
+  "name": "@repo/svc-thought",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/svc-thought/src",
+  "projectType": "application",
+  "targets": {
+    "dev": {
+      "dependsOn": [
+        {
+          "projects": "@repo/shared-svc",
+          "target": "build"
+        },
+        {
+          "projects": "@repo/common",
+          "target": "build"
+        }
+      ]
+    },
+    "build": {
+      "dependsOn": [
+        {
+          "projects": "@repo/shared-svc",
+          "target": "build"
+        },
+        {
+          "projects": "@repo/common",
+          "target": "build"
+        }
+      ]
+    }
+  }
+}

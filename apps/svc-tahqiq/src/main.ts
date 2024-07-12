@@ -3,11 +3,10 @@ import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { RpcExceptionFilter } from '@repo/shared-svc';
 import { AppModule } from './app.module';
-import { UsersModule } from './users/users.module';
 
 async function bootstrap() {
-  const logger = new Logger('Users::Microservice');
-  const users = await NestFactory.createMicroservice<MicroserviceOptions>(
+  const logger = new Logger('Jama::Microservice');
+  const tahqiq = await NestFactory.createMicroservice<MicroserviceOptions>(
     AppModule,
     {
       transport: Transport.NATS,
@@ -16,8 +15,8 @@ async function bootstrap() {
       },
     },
   );
-  users.useGlobalFilters(new RpcExceptionFilter());
-  await users.listen();
+  tahqiq.useGlobalFilters(new RpcExceptionFilter());
+  await tahqiq.listen();
   logger.debug('Microservice is listening...');
 }
 bootstrap();

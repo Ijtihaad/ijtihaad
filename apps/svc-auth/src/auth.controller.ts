@@ -4,7 +4,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { LocalLogin, LocalRegister, User } from '@repo/common';
+import { User, _LocalLogin, _LocalRegister } from '@repo/common';
 import { AuthServiceController } from '@repo/shared-svc';
 import { AuthService } from './auth.service';
 import { GoogleAuthService } from './google-auth/google-auth.service';
@@ -19,14 +19,14 @@ export class AuthController implements AuthServiceController {
   ) { }
 
   @MessagePattern('auth:localRegister')
-  async localRegister(@Payload('data') data: LocalRegister) {
+  async localRegister(@Payload('data') data: _LocalRegister) {
     const user = await this.authService.localRegister(data);
     const jwt = this.jwtAuthService.encryptAuthTokens(user);
     return { user, jwt };
   }
 
   @MessagePattern('auth:localLogin')
-  async localLogin(@Payload('data') data: LocalLogin) {
+  async localLogin(@Payload('data') data: _LocalLogin) {
     const user = await this.authService.localLogin(data);
 
     const jwt = this.jwtAuthService.encryptAuthTokens(user);

@@ -3,9 +3,8 @@ import { ConfigModule } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { RpcClient } from '@repo/shared-svc';
 import Joi from 'joi';
-import { AuthController } from './auth.controller';
-import { JamasController } from './jamas.controller';
-import { UsersController } from './users.controller';
+import { AuthController } from './auth/auth.controller';
+import { UsersController } from './users/users.controller';
 
 @Module({
   imports: [
@@ -31,7 +30,6 @@ import { UsersController } from './users.controller';
   controllers: [
     AuthController,
     UsersController,
-    JamasController,
   ],
   providers: [RpcClient],
 })
