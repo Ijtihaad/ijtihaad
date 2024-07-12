@@ -24,18 +24,69 @@ export const userPermissionSchema = z.object({
 
 export const userSchema = z.object({
   _id: z.any(),
-  blocked: z.boolean().default(false),
+
+  // ==========basicEligibility=============
   firstName: z.string(),
   lastName: z.string(),
-  username: z.string().nullable(),
+  username: z.string(),
   gender: z.nativeEnum(Gender),
   age: z.number().min(7).max(100),
-  picture: assetSchema.extend({
-    assetType: z.literal(AssetType.image)
-  }),
-  role: z.nativeEnum(UserRole),
   email: z.string().email(),
   emailVerified: z.boolean().default(false),
+  password: z.string().nullable(),
+
+  // =========standardEligibility============
+  picture: assetSchema.extend({
+    assetType: z.literal(AssetType.image)
+  }).nullable(),
+  phone: z.string().nullable(),
+  phoneVerified: z.boolean().default(false),
+  address: z.object({
+    country: z.string(),
+    state: z.string(),
+    street: z.string(),
+  }).nullable(),
+
+
+  // =========intermediateEligibility============
+  frontIdCard: assetSchema.extend({
+    assetType: z.literal(AssetType.image)
+  }).nullable(),
+  backIdCard: assetSchema.extend({
+    assetType: z.literal(AssetType.image)
+  }).nullable(),
+
+  frontPassport: assetSchema.extend({
+    assetType: z.literal(AssetType.image)
+  }).nullable(),
+  backPassport: assetSchema.extend({
+    assetType: z.literal(AssetType.image)
+  }).nullable(),
+
+  frontDriverLicence: assetSchema.extend({
+    assetType: z.literal(AssetType.image)
+  }).nullable(),
+  backDriverLicence: assetSchema.extend({
+    assetType: z.literal(AssetType.image)
+  }).nullable(),
+
+  faceVideo: assetSchema.extend({
+    assetType: z.literal(AssetType.video)
+  }).nullable(),
+
+  // =============advancedEligibility===============
+
+
+  // =============tahqiqEligibility===============
+
+
+  // ==========Status================
+  blocked: z.boolean().default(false),
+  basicEligibility: z.boolean().default(false),
+  standardEligibility: z.boolean().default(false),
+  intermediateEligibility: z.boolean().default(false),
+  advancedEligibility: z.boolean().default(false),
+  tahqiqEligibility: z.boolean().default(false),
 });
 
 
@@ -59,7 +110,6 @@ export const _updateUserSchema = z.object({
   role: z.nativeEnum(UserRole).optional(),
   blocked: z.boolean().optional(),
   emailVerified: z.boolean().default(false),
-  permission: userPermissionSchema.optional(),
 });
 
 export const _userQueryUniqueSchema = z.object({
