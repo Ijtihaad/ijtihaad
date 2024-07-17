@@ -1,7 +1,6 @@
 import {
   User,
-  _LocalRegister,
-  _OAuthRegister,
+  _Register,
   _UpdateMe,
   _UpdateUser,
   _UserQuery,
@@ -11,7 +10,7 @@ import {
 import { Rpc } from '../core/rpc-client';
 
 export interface UsersServiceController {
-  create(payload: _LocalRegister | _OAuthRegister): Promise<User>;
+  create(payload: _Register): Promise<User>;
 
   findMany(payload: _UserQuery): Promise<User[]>;
 
