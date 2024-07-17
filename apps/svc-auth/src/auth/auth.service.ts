@@ -4,10 +4,9 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import {
-  LocalLogin,
-  LocalRegister,
+  Login,
+  Register,
   User,
-  _OAuthRegister,
   _UserQueryUnique,
   _VerifyUserPassword
 } from '@repo/common';
@@ -27,13 +26,13 @@ export class AuthService {
     return user;
   }
 
-  async localRegister(data: LocalRegister) {
+  async register(data: Register) {
     const user = this.usersRpc('create', data);
 
     return lastValueFrom(user);
   }
 
-  async localLogin(data: LocalLogin) {
+  async login(data: Login) {
     let user: User;
 
     if (data.identifier.includes('@')) {
@@ -70,12 +69,6 @@ export class AuthService {
     }
 
     return user;
-  }
-
-  async oauthRegister(data: _OAuthRegister) {
-    const user = this.usersRpc('create', data);
-
-    return lastValueFrom(user);
   }
 
   async verifyUserPassword(data: _VerifyUserPassword) {

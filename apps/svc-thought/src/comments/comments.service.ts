@@ -1,4 +1,4 @@
-import { COMMENT_MODEL_NAME, CommentDoc } from '@/schemas/comment.schema';
+import { COMMENT_MODEL_NAME, CommentModel } from '@/schemas/comment.schema';
 import {
   Injectable,
   NotFoundException
@@ -10,7 +10,7 @@ import { FilterQuery, Model } from 'mongoose';
 @Injectable()
 export class CommentsService {
   constructor(
-    @InjectModel(COMMENT_MODEL_NAME) private commentModel: Model<CommentDoc>,
+    @InjectModel(COMMENT_MODEL_NAME) private commentModel: Model<CommentModel>,
   ) { }
 
   async create(data: any) {

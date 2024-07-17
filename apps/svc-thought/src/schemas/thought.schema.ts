@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel, Prop, Schema, SchemaFactory, raw } from '@nestjs/mongoose';
-import { Account, Asset, AssetType, Bookmark, Comment, Reaction, Thought, Vote } from '@repo/common';
+import { AssetType, Thought } from '@repo/common';
 import { ClientSession, type Connection, Types } from 'mongoose';
 import { ACCOUNT_MODEL_NAME } from './account.schema';
 import { COMMENT_MODEL_NAME } from './comment.schema';
@@ -8,10 +8,10 @@ import { COMMENT_MODEL_NAME } from './comment.schema';
 
 export const THOUGHT_MODEL_NAME = "thought"
 @Schema({ versionKey: false })
-export class ThoughtDoc implements Omit<Thought, '_id'> {
+export class ThoughtModel implements Omit<Thought, '_id'> {
 
     @Prop({ type: String })
-    content: string
+    content: Thought['content']
 
     @Prop(raw({
         assetUrl: String,
@@ -21,16 +21,16 @@ export class ThoughtDoc implements Omit<Thought, '_id'> {
             enum: Object.values(AssetType)
         },
     }))
-    asset: Asset
+    asset: Thought['asset']
 
     @Prop({ type: Types.ObjectId, ref: ACCOUNT_MODEL_NAME })
-    author: Account
+    author: Thought['author']
 
     @Prop({ type: Types.ObjectId, ref: ACCOUNT_MODEL_NAME })
-    account: Account
+    account: Thought['account']
 
     @Prop([{ type: Types.ObjectId, ref: COMMENT_MODEL_NAME }])
-    comments: Comment[]
+    comments: Thought['comments']
 
     @Prop(raw([{
         type: String,
@@ -39,16 +39,7 @@ export class ThoughtDoc implements Omit<Thought, '_id'> {
             ref: ACCOUNT_MODEL_NAME
         },
     }]))
-    reactions: Reaction[]
-
-    @Prop(raw([{
-        upVote: Boolean,
-        user: {
-            type: Types.ObjectId,
-            ref: ACCOUNT_MODEL_NAME
-        },
-    }]))
-    votes: Vote[]
+    reactions: Thought['reactions']
 
     @Prop(raw([{
         user: {
@@ -56,7 +47,7 @@ export class ThoughtDoc implements Omit<Thought, '_id'> {
             ref: ACCOUNT_MODEL_NAME
         },
     }]))
-    bookmarks: Bookmark[]
+    bookmarks: Thought['bookmarks']
 
     @Prop({ type: Date, default: Date.now })
     createdAt?: Date;
@@ -79,4 +70,4 @@ export class ThoughtRepository {
     }
 }
 
-export const ThoughtSchema = SchemaFactory.createForClass(ThoughtDoc);
+export const ThoughtSchema = SchemaFactory.createForClass(ThoughtModel);

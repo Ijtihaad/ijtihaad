@@ -1,15 +1,14 @@
 import {
   CanActivate,
   ExecutionContext,
-  ForbiddenException,
-  Logger,
+  Logger
 } from '@nestjs/common';
-import { AccessTokenPayload, UserRole } from '@repo/common';
+import { AccessTokenPayload, UserRolePermission } from '@repo/common';
 import { ContextHelper } from '@repo/shared-svc';
 
-export function UserRoleGuard(roles: UserRole[]) {
+export function UserRolePermissionGuard(permissions: UserRolePermission[]) {
   return class Guard implements CanActivate {
-    readonly logger = new Logger(UserRoleGuard.name);
+    readonly logger = new Logger(UserRolePermissionGuard.name);
 
     async canActivate(context: ExecutionContext) {
       this.logger.log(this.canActivate.name);
@@ -18,9 +17,9 @@ export function UserRoleGuard(roles: UserRole[]) {
         user: AccessTokenPayload;
       }>(context);
 
-      if (request?.user.role && !roles.includes(request?.user.role)) {
-        throw new ForbiddenException('Forbidden Access');
-      }
+      //  if(check if user not have role access permission){
+      //   throw new ForbiddenException('Forbidden Access');
+      //   }
 
       return true;
     }

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { AccountType, accountSchema } from './account.schema';
-import { voteSchema } from './vote.schema';
+import { reactionSchema } from './reaction.schema';
 
 export const commentSchema = z.object({
   _id: z.any(),
@@ -9,7 +9,7 @@ export const commentSchema = z.object({
     accountType: z.literal(AccountType.user)
   }),
   comments: z.array(z.any()),
-  votes: z.array(voteSchema),
+  reactions: z.array(reactionSchema),
 })
 
 export type Comment = { comments: Comment[] } & Omit<z.infer<typeof commentSchema>, 'comments'>

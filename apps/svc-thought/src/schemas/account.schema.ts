@@ -5,21 +5,21 @@ import { ClientSession, Connection, Types } from 'mongoose';
 
 export const ACCOUNT_MODEL_NAME = "account"
 @Schema({ versionKey: false })
-export class AccountDoc implements Omit<Account, '_id'> {
+export class AccountModel implements Omit<Account, '_id'> {
     @Prop(String)
-    accountId: string;
+    accountId: Account["accountId"]
 
     @Prop(String)
-    uniqueName: string;
+    uniqueName: Account["uniqueName"]
 
     @Prop(String)
-    displayName: string;
+    displayName: Account["displayName"]
 
     @Prop(raw({
         type: String,
         enum: Object.values(AccountType)
     }))
-    accountType: AccountType;
+    accountType: Account["accountType"];
 
     @Prop(raw({
         assetUrl: String,
@@ -29,7 +29,7 @@ export class AccountDoc implements Omit<Account, '_id'> {
             default: AssetType.image
         },
     }))
-    picture: Asset;
+    picture: Account["picture"];
 }
 
 
@@ -46,4 +46,4 @@ export class AccountRepository {
     }
 }
 
-export const AccountSchema = SchemaFactory.createForClass(AccountDoc);
+export const AccountSchema = SchemaFactory.createForClass(AccountModel);

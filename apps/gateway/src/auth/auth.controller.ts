@@ -1,9 +1,9 @@
-import { Body, Controller, Get, Post, UsePipes } from '@nestjs/common';
+import { Body, Controller, Post, UsePipes } from '@nestjs/common';
 import {
-  LocalLogin,
-  LocalRegister,
-  localLoginSchema,
-  localRegisterSchema,
+  Login,
+  Register,
+  loginSchema,
+  registerSchema,
 } from '@repo/common';
 import { AuthRpcService, RpcClient, ValidationPipe } from '@repo/shared-svc';
 
@@ -14,26 +14,16 @@ export class AuthController {
     this.authRpc = this.rpcClient.createRpcClient('auth');
   }
 
-  @Post('local/register')
-  @UsePipes(ValidationPipe(localRegisterSchema))
-  async localRegister(@Body() data: LocalRegister) {
-    return this.authRpc('localRegister', data);
+  @Post('register')
+  @UsePipes(ValidationPipe(registerSchema))
+  async register(@Body() data: Register) {
+    return this.authRpc('register', data);
   }
 
-  @Post('local/login')
-  @UsePipes(ValidationPipe(localLoginSchema))
-  async localLogin(@Body() data: LocalLogin) {
-    return this.authRpc('localLogin', data);
-  }
-
-  @Get('google/url')
-  async googleUrl() {
-    return this.authRpc('googleUrl', {});
-  }
-
-  @Post('google/login')
-  async googleLogin(@Body() data: { code: string }) {
-    return this.authRpc('googleLogin', data);
+  @Post('login')
+  @UsePipes(ValidationPipe(loginSchema))
+  async login(@Body() data: Login) {
+    return this.authRpc('login', data);
   }
 
   @Post('token/refresh')

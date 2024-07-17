@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { Gender, UserRole } from './user.schema';
+import { Gender } from './user.schema';
 
 export const passwordSchema = z
   .string()
@@ -10,7 +10,7 @@ export const passwordSchema = z
 
 // ===========================================================
 
-export const localRegisterSchema = z.object({
+export const registerSchema = z.object({
   firstName: z.string().min(3).max(100),
   lastName: z.string().min(3).max(100),
   email: z.string().email().max(100),
@@ -19,27 +19,19 @@ export const localRegisterSchema = z.object({
   password: passwordSchema,
 });
 
-export const localLoginSchema = z.object({
+export const loginSchema = z.object({
   identifier: z.string(),
   password: z.string(),
 });
 
 
-export type LocalLogin = z.infer<typeof localLoginSchema>;
-export type LocalRegister = z.infer<typeof localRegisterSchema>;
+export type Login = z.infer<typeof loginSchema>;
+export type Register = z.infer<typeof registerSchema>;
 
 // ================SVC=========================
 
-export const _oauthRegisterSchema = z.object({
-  firstName: z.string().min(3).max(100),
-  lastName: z.string().min(3).max(100),
-  email: z.string().email().max(100),
-  picture: z.string().optional(),
-  emailVerified: z.boolean(),
-});
 
-
-export const _localRegisterSchema = z.object({
+export const _registerSchema = z.object({
   firstName: z.string().min(3).max(100),
   lastName: z.string().min(3).max(100),
   email: z.string().email().max(100),
@@ -49,15 +41,14 @@ export const _localRegisterSchema = z.object({
 });
 
 
-export const _localLoginSchema = z.object({
+export const _loginSchema = z.object({
   identifier: z.string(),
   password: z.string(),
 });
 
 
-export type _LocalLogin = z.infer<typeof _localLoginSchema>;
-export type _LocalRegister = z.infer<typeof _localRegisterSchema>;
-export type _OAuthRegister = z.infer<typeof _oauthRegisterSchema>;
+export type _Login = z.infer<typeof _loginSchema>;
+export type _Register = z.infer<typeof _registerSchema>;
 
 // =========================GBL===================================
 
@@ -68,7 +59,6 @@ export const accessTokenPayloadSchema = z.object({
   fullName: z.string(),
   gender: z.nativeEnum(Gender),
   age: z.number().min(7).max(100),
-  role: z.nativeEnum(UserRole),
   userId: z.string(),
 });
 

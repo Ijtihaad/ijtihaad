@@ -7,22 +7,22 @@ import { COMMENT_MODEL_NAME } from './comment.schema';
 
 export const ANSWER_MODEL_NAME = "answer"
 @Schema({ versionKey: false })
-export class AnswerDoc implements Omit<Answer, '_id'> {
+export class AnswerModel implements Omit<Answer, '_id'> {
 
     @Prop({ type: String })
-    body: string
+    body: Answer['body']
 
     @Prop(raw([{
         type: Types.ObjectId,
         ref: COMMENT_MODEL_NAME
     }]))
-    comments: Comment[];
+    comments: Answer['comments'];
 
     @Prop({ type: Types.ObjectId, ref: ACCOUNT_MODEL_NAME })
-    author: Account
+    author: Answer["author"]
 
     @Prop({ type: Types.ObjectId, ref: ACCOUNT_MODEL_NAME })
-    account: Account
+    account: Answer['account']
 
     @Prop(raw([{
         upVote: Boolean,
@@ -31,7 +31,7 @@ export class AnswerDoc implements Omit<Answer, '_id'> {
             ref: ACCOUNT_MODEL_NAME
         },
     }]))
-    votes: Vote[]
+    votes: Answer['votes']
 
     @Prop({ type: Date, default: Date.now })
     createdAt?: Date;
@@ -53,4 +53,4 @@ export class AnswerRepository {
     }
 }
 
-export const AnswerSchema = SchemaFactory.createForClass(AnswerDoc);
+export const AnswerSchema = SchemaFactory.createForClass(AnswerModel);

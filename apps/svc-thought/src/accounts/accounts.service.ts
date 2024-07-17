@@ -1,4 +1,4 @@
-import { ACCOUNT_MODEL_NAME, AccountDoc } from '@/schemas/account.schema';
+import { ACCOUNT_MODEL_NAME, AccountModel } from '@/schemas/account.schema';
 import {
   Injectable,
   NotFoundException
@@ -10,7 +10,7 @@ import { FilterQuery, Model } from 'mongoose';
 @Injectable()
 export class AccountsService {
   constructor(
-    @InjectModel(ACCOUNT_MODEL_NAME) private accountsModel: Model<AccountDoc>,
+    @InjectModel(ACCOUNT_MODEL_NAME) private accountsModel: Model<AccountModel>,
   ) { }
 
   async create(data: any) {
@@ -19,7 +19,7 @@ export class AccountsService {
   }
 
   async findMany(query?: any, search?: string) {
-    const filterQuery: FilterQuery<AccountDoc> = query ? query : {}
+    const filterQuery: FilterQuery<AccountModel> = query ? query : {}
 
     if (search) {
       filterQuery.$text = {
@@ -52,8 +52,8 @@ export class AccountsService {
   }
 
   async upsert(
-    filterQuery: FilterQuery<AccountDoc>,
-    document: Partial<AccountDoc>,
+    filterQuery: FilterQuery<AccountModel>,
+    document: Partial<AccountModel>,
   ) {
     const account = await this.accountsModel.findOneAndUpdate(filterQuery, document, {
       lean: true,

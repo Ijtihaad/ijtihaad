@@ -4,7 +4,6 @@ import { assetSchema } from './asset.schema';
 import { bookmarkSchema } from './bookmark.schema';
 import { commentSchema } from './comment.schema';
 import { reactionSchema } from './reaction.schema';
-import { voteSchema } from './vote.schema';
 
 
 export const thoughtSchema = z.object({
@@ -17,7 +16,6 @@ export const thoughtSchema = z.object({
   account: accountSchema,
   comments: z.array(commentSchema),
   reactions: z.array(reactionSchema),
-  votes: z.array(voteSchema),
   bookmarks: z.array(bookmarkSchema),
 });
 

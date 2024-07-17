@@ -5,8 +5,7 @@ import {
 } from '@nestjs/common';
 
 import {
-  _LocalRegister,
-  _OAuthRegister,
+  _Register,
   _UpdateMe,
   _UpdateUser,
   _UserQuery,
@@ -17,15 +16,15 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import * as argon from 'argon2';
 import { FilterQuery, Model } from 'mongoose';
-import { USER_MODEL_NAME, UserDoc } from '../schemas/user.schema';
+import { USER_MODEL_NAME, UserModel } from '../schemas/user.schema';
 
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectModel(USER_MODEL_NAME) private userModel: Model<UserDoc>,
+    @InjectModel(USER_MODEL_NAME) private userModel: Model<UserModel>,
   ) { }
 
-  async create(data: _LocalRegister | _OAuthRegister): Promise<UserDoc> {
+  async create(data: _Register): Promise<UserModel> {
     const userExist = await this.userModel.findOne({
       email: data.email
     });
@@ -43,8 +42,8 @@ export class UsersService {
     return user;
   }
 
-  async findMany(query?: _UserQuery, search?: string): Promise<UserDoc[]> {
-    const filterQuery: FilterQuery<UserDoc> = query ? query : {}
+  async findMany(query?: _UserQuery, search?: string): Promise<UserModel[]> {
+    const filterQuery: FilterQuery<UserModel> = query ? query : {}
 
     if (search) {
       filterQuery.$text = {
@@ -57,7 +56,7 @@ export class UsersService {
     return users;
   }
 
-  async findOne(query: _UserQueryUnique): Promise<UserDoc> {
+  async findOne(query: _UserQueryUnique): Promise<UserModel> {
     const user = await this.userModel.findOne(query);
 
     if (!user) {
@@ -66,7 +65,7 @@ export class UsersService {
     return user;
   }
 
-  async updateUser(query: _UserQueryUnique, data: _UpdateMe | _UpdateUser): Promise<UserDoc> {
+  async updateUser(query: _UserQueryUnique, data: _UpdateMe | _UpdateUser): Promise<UserModel> {
     const user = await this.userModel.findOneAndUpdate(query, data);
 
     if (!user) {

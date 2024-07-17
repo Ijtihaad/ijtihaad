@@ -1,26 +1,52 @@
 import { z } from 'zod';
 import { AssetType, assetSchema } from './asset.schema';
 
-export enum UserRole {
-  user = "user",
-  admin = "admin",
-  superAdmin = "superAdmin",
-}
-
 export enum Gender {
   male = "male",
   female = "female",
 }
 
-export const userPermissionSchema = z.object({
-  askTahqiq: z.boolean(),
-  answerTahqiq: z.boolean(),
-  postThought: z.boolean(),
-  postReels: z.boolean(),
-  postVideo: z.boolean(),
-  createJama: z.boolean(),
-  createChannel: z.boolean(),
+export enum UserEligibilityPermission {
+  askTahqiq = "askTahqiq",
+  answerTahqiq = "answerTahqiq",
+  postThought = "postThought",
+  postReels = "postReels",
+  postVideo = "postVideo",
+  createJama = "createJama",
+  createChannel = "createChannel",
+}
+
+
+export const userEligibilitySchema = z.object({
+  name: z.string().min(4).max(16),
+  description: z.string().min(4).max(255),
+  activated: z.boolean(),
+  permissions: z.object({
+    askTahqiq: z.boolean(),
+    answerTahqiq: z.boolean(),
+    postThought: z.boolean(),
+    postReels: z.boolean(),
+    postVideo: z.boolean(),
+    createJama: z.boolean(),
+    createChannel: z.boolean(),
+  }),
 })
+
+export enum UserRolePermission {
+  addRole = "addRole",
+  verifyEligibility = "verifyEligibility"
+}
+
+
+export const userRoleSchema = z.object({
+  name: z.string().min(4).max(16),
+  description: z.string().min(4).max(255),
+  permissions: z.object({
+    addRole: z.boolean(),
+    verifyEligibility: z.boolean(),
+  }),
+})
+
 
 export const userSchema = z.object({
   _id: z.any(),
@@ -63,13 +89,6 @@ export const userSchema = z.object({
     assetType: z.literal(AssetType.image)
   }).nullable(),
 
-  frontDriverLicence: assetSchema.extend({
-    assetType: z.literal(AssetType.image)
-  }).nullable(),
-  backDriverLicence: assetSchema.extend({
-    assetType: z.literal(AssetType.image)
-  }).nullable(),
-
   faceVideo: assetSchema.extend({
     assetType: z.literal(AssetType.video)
   }).nullable(),
@@ -79,14 +98,10 @@ export const userSchema = z.object({
 
   // =============tahqiqEligibility===============
 
-
   // ==========Status================
+  roles: z.array(userRoleSchema),
+  eligibilities: z.array(userEligibilitySchema),
   blocked: z.boolean().default(false),
-  basicEligibility: z.boolean().default(false),
-  standardEligibility: z.boolean().default(false),
-  intermediateEligibility: z.boolean().default(false),
-  advancedEligibility: z.boolean().default(false),
-  tahqiqEligibility: z.boolean().default(false),
 });
 
 
@@ -107,7 +122,6 @@ export const _updateMeSchema = z.object({
 
 
 export const _updateUserSchema = z.object({
-  role: z.nativeEnum(UserRole).optional(),
   blocked: z.boolean().optional(),
   emailVerified: z.boolean().default(false),
 });
@@ -120,7 +134,6 @@ export const _userQueryUniqueSchema = z.object({
 
 export const _userQuerySchema = z.object({
   blocked: z.boolean().optional(),
-  role: z.nativeEnum(UserRole).optional(),
 });
 
 export const _verifyUserPasswordSchema = z.object({
@@ -128,6 +141,8 @@ export const _verifyUserPasswordSchema = z.object({
   password: z.string(),
 });
 
+export type UserRole = z.infer<typeof userRoleSchema>;
+export type UserEligibility = z.infer<typeof userEligibilitySchema>;
 export type _UpdateMe = z.infer<typeof _updateMeSchema>;
 export type _UpdateUser = z.infer<typeof _updateUserSchema>;
 export type _UserQuery = z.infer<typeof _userQuerySchema>;

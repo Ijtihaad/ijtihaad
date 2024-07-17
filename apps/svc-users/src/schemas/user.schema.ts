@@ -1,46 +1,72 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel, Prop, Schema, SchemaFactory, raw } from '@nestjs/mongoose';
-import { AssetType, Gender, UserRole, User as UserType } from '@repo/common';
-import { ClientSession, type Connection } from 'mongoose';
+import { AssetType, Gender, User, UserEligibility, UserRole, UserRolePermission } from '@repo/common';
+import { ClientSession, type Connection, Types } from 'mongoose';
+import { USER_ELIGIBILITY_MODEL_NAME } from './eligibility.schema';
+import { USER_ROLE_MODEL_NAME } from './role.schema';
 
 export const USER_MODEL_NAME = "user"
 @Schema({ versionKey: false })
-export class UserDoc implements Omit<UserType, "_id"> {
+export class UserModel implements Omit<User, "_id"> {
   // ==========basicEligibility=============
 
   @Prop(String)
-  firstName: string;
+  firstName: User["firstName"];
 
   @Prop(String)
-  lastName: string;
+  lastName: User["lastName"]
 
   @Prop({ type: String })
-  username: string;
+  username: User['username'];
 
   @Prop(String)
-  email: string;
+  email: User["email"]
 
-  @Prop({ type: Boolean, default: false })
-  emailVerified: boolean;
+  @Prop({
+    type: Boolean,
+    default: false
+  })
+  emailVerified: User["emailVerified"];
 
-  @Prop({ type: String, required: false, select: false })
-  password: string | null;
+  @Prop({
+    type: String,
+    required: false,
+    select: false
+  })
+  password: User["password"];
 
-  @Prop({ type: String, enum: Object.values(Gender) })
-  gender: Gender;
+  @Prop({
+    type: String,
+    enum: Object.values(Gender)
+  })
+  gender: User["gender"];
 
-  @Prop({ type: Number, min: 7, max: 100 })
-  age: number;
+  @Prop({
+    type: Number,
+    min: 7,
+    max: 100
+  })
+  age: User["age"];
 
   // =========standardEligibility============
-  @Prop({ type: String, required: false })
-  phone: string | null;
+  @Prop({
+    type: String,
+    required: false
+  })
+  phone: User['phone'];
 
-  @Prop({ type: String, required: false })
-  phoneVerified: boolean;
+  @Prop({
+    type: String,
+    required: false
+  })
+  phoneVerified: User['phoneVerified'];
 
-  @Prop(raw({ country: String, state: String, street: String, }))
-  address: { country: string; state: string; street: string; } | null;
+  @Prop(raw({
+    country: String,
+    state: String,
+    street: String,
+  }))
+  address: User['address'];
 
   @Prop(raw({
     assetUrl: String,
@@ -50,11 +76,7 @@ export class UserDoc implements Omit<UserType, "_id"> {
       default: AssetType.image
     },
   }))
-  picture: {
-    assetUrl: string;
-    originalName: string,
-    assetType: AssetType.image
-  };
+  picture: User['picture'];
 
   // =========intermediateEligibility============
   @Prop(raw({
@@ -65,7 +87,7 @@ export class UserDoc implements Omit<UserType, "_id"> {
       default: AssetType.image
     },
   }))
-  frontIdCard: { assetUrl: string; originalName: string; assetType: AssetType.image; } | null;
+  frontIdCard: User['frontIdCard'];
 
   @Prop(raw({
     assetUrl: String,
@@ -75,7 +97,7 @@ export class UserDoc implements Omit<UserType, "_id"> {
       default: AssetType.image
     },
   }))
-  backIdCard: { assetUrl: string; originalName: string; assetType: AssetType.image; } | null;
+  backIdCard: User['backIdCard'];
 
   @Prop(raw({
     assetUrl: String,
@@ -85,7 +107,7 @@ export class UserDoc implements Omit<UserType, "_id"> {
       default: AssetType.image
     },
   }))
-  frontPassport: { assetUrl: string; originalName: string; assetType: AssetType.image; } | null;
+  frontPassport: User['frontPassport'];
 
   @Prop(raw({
     assetUrl: String,
@@ -95,27 +117,7 @@ export class UserDoc implements Omit<UserType, "_id"> {
       default: AssetType.image
     },
   }))
-  backPassport: { assetUrl: string; originalName: string; assetType: AssetType.image; } | null;
-
-  @Prop(raw({
-    assetUrl: String,
-    originalName: String,
-    assetType: {
-      type: String,
-      default: AssetType.image
-    },
-  }))
-  frontDriverLicence: { assetUrl: string; originalName: string; assetType: AssetType.image; } | null;
-
-  @Prop(raw({
-    assetUrl: String,
-    originalName: String,
-    assetType: {
-      type: String,
-      default: AssetType.image
-    },
-  }))
-  backDriverLicence: { assetUrl: string; originalName: string; assetType: AssetType.image; } | null;
+  backPassport: User['backPassport'];
 
   @Prop(raw({
     assetUrl: String,
@@ -125,7 +127,7 @@ export class UserDoc implements Omit<UserType, "_id"> {
       default: AssetType.video
     },
   }))
-  faceVideo: { assetUrl: string; originalName: string; assetType: AssetType.video; } | null;
+  faceVideo: User['faceVideo'];
 
   // =============advancedEligibility===============
 
@@ -134,29 +136,29 @@ export class UserDoc implements Omit<UserType, "_id"> {
 
 
   // ==========Status================
-  @Prop({ type: Boolean, default: false })
-  basicEligibility: boolean;
+  @Prop({ type: Types.ObjectId, ref: USER_ROLE_MODEL_NAME })
+  roles: User["roles"];
 
-  @Prop({ type: Boolean, default: false })
-  standardEligibility: boolean;
+  @Prop({ type: Types.ObjectId, ref: USER_ELIGIBILITY_MODEL_NAME })
+  eligibilities: User["eligibilities"];
 
-  @Prop({ type: Boolean, default: false })
-  intermediateEligibility: boolean;
+  @Prop({
+    type: Boolean,
+    default: false
+  })
+  blocked: User["blocked"];
 
-  @Prop({ type: Boolean, default: false })
-  advancedEligibility: boolean;
-
-  @Prop({ type: Boolean, default: false })
-  tahqiqEligibility: boolean;
-
-  @Prop({ type: Boolean, default: false })
-  blocked: boolean;
-
-
-  @Prop({ type: Date, default: Date.now })
+  @Prop({
+    type: Date,
+    default: Date.now
+  })
   createdAt?: Date;
 
-  @Prop({ type: Date, default: Date.now, immutable: true })
+  @Prop({
+    type: Date,
+    default: Date.now,
+    immutable: true
+  })
   updatedAt?: Date;
 }
 
@@ -173,4 +175,4 @@ export class UserRepository {
   }
 }
 
-export const UserSchema = SchemaFactory.createForClass(UserDoc);
+export const UserSchema = SchemaFactory.createForClass(UserModel);

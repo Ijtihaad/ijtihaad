@@ -2,13 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel, Prop, Schema, SchemaFactory, raw } from '@nestjs/mongoose';
 import { Account, Answer, Asset, AssetType, Bookmark, Reaction, Tahqiq, Vote } from '@repo/common';
 import { ClientSession, type Connection, Types } from 'mongoose';
-import { ACCOUNT_MODEL_NAME, AccountDoc } from './account.schema';
+import { ACCOUNT_MODEL_NAME, AccountModel } from './account.schema';
 import { ANSWER_MODEL_NAME } from './answer.schema';
 
 export const TAHQIQ_MODEL_NAME = 'tahqiq'
 
 @Schema({ versionKey: false })
-export class TahqiqDoc implements Omit<Tahqiq, '_id'> {
+export class TahqiqModel implements Omit<Tahqiq, '_id'> {
 
     @Prop()
     question: string;
@@ -29,7 +29,7 @@ export class TahqiqDoc implements Omit<Tahqiq, '_id'> {
 
     @Prop({
         type: Types.ObjectId,
-        ref: AccountDoc
+        ref: AccountModel
     })
     user: Account
 
@@ -89,4 +89,4 @@ export class TahqiqRepository {
     }
 }
 
-export const TahqiqSchema = SchemaFactory.createForClass(TahqiqDoc);
+export const TahqiqSchema = SchemaFactory.createForClass(TahqiqModel);

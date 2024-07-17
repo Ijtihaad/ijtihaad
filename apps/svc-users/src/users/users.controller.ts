@@ -1,8 +1,7 @@
 import { Controller, Logger, UseGuards } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import {
-  LocalRegister,
-  _OAuthRegister,
+  _Register,
   _UpdateMe,
   _UpdateUser,
   _UserQuery,
@@ -19,7 +18,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 
   @MessagePattern('users:create')
-  create(@Payload('data') data: LocalRegister | _OAuthRegister) {
+  create(@Payload('data') data: _Register) {
     this.logger.log('users:create');
     return this.usersService.create(data);
   }

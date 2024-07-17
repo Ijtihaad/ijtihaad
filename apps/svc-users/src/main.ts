@@ -3,7 +3,6 @@ import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { RpcExceptionFilter } from '@repo/shared-svc';
 import { AppModule } from './app.module';
-import { UsersModule } from './users/users.module';
 
 async function bootstrap() {
   const logger = new Logger('Users::Microservice');
